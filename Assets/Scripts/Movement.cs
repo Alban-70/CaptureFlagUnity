@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Mouvement : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     [Header("Player Settings")]
     [SerializeField] private float jumpForce = 5f;

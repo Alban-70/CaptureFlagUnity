@@ -2,7 +2,7 @@ using UnityEngine;
 
 [ExecuteInEditMode] 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class CreatePyramid : MonoBehaviour
+public class Pyramid : MonoBehaviour
 {
     public float baseSize = 1f;
     public float height = 1f;
