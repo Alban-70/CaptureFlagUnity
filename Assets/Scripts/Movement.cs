@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -5,6 +6,7 @@ public class Movement : MonoBehaviour
     [Header("Player Settings")]
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float speedDeplacement = 7f;
+    [SerializeField] private float speedDeplacementBackwardAndSide = 3f;
     [SerializeField] private float speedDeplacementRunning = 12f;
     [SerializeField] private float speedRotation = 3f;
     [SerializeField] private LayerMask groundMask;
@@ -31,28 +33,7 @@ public class Movement : MonoBehaviour
     void Update()
     {
         PlayerOrientation();
-        // Inputs
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        inputVector = new Vector3(horizontal, 0, vertical);
-
-        bool moving = inputVector.magnitude > 0.1f;
-        anim.SetBool("isMoving", moving);
-
-        anim.SetFloat("xVelocity", inputVector.x, 0.1f, Time.deltaTime);
-        anim.SetFloat("yVelocity", inputVector.z, 0.1f, Time.deltaTime);
-
-        // Sprint
-        if (Input.GetKey(KeyCode.LeftShift) && moving)
-        {
-            anim.SetBool("isRunning", true);
-            currentSpeed = speedDeplacementRunning;
-        }
-        else
-        {
-            anim.SetBool("isRunning", false);
-            currentSpeed = speedDeplacement;
-        }
+        PlayerMovement();
 
         // Saut
         isGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, groundMask);
@@ -72,11 +53,14 @@ public class Movement : MonoBehaviour
 
     private void PlayerMovement()
     {
-        // Récupération de l'input
-        // float horizontal = Input.GetAxisRaw("Horizontal");       // permet d'avoir que -1 ou 0 ou 1, pas d'entre deux
+        // Inputs
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-        inputVector = new Vector3(horizontal, 0, vertical);
+        // Pour ralentir le personnage 
+        if (vertical < 0) 
+            vertical = speedDeplacementBackwardAndSide;
+        
+        inputVector = new Vector3(speedDeplacementBackwardAndSide, 0, vertical);
 
         bool moving = inputVector.magnitude > 0.1f;
         anim.SetBool("isMoving", moving);
@@ -84,19 +68,16 @@ public class Movement : MonoBehaviour
         anim.SetFloat("xVelocity", inputVector.x, 0.1f, Time.deltaTime);
         anim.SetFloat("yVelocity", inputVector.z, 0.1f, Time.deltaTime);
 
-        // Pour que la vitesse soit constante en diagonale
-        if (inputVector.magnitude > 1f)
-            inputVector.Normalize();
-
-        PlayerSprint(horizontal, vertical);
-    }
-
-    private void PlayerSprint(float horizontal, float vertical)
-    {
-        if (Input.GetKey(KeyCode.LeftShift))
+        // Sprint
+        if (Input.GetKey(KeyCode.LeftShift) && moving && vertical > 0)
         {
             anim.SetBool("isRunning", true);
-            rb.linearVelocity = new Vector3(horizontal * speedDeplacementRunning, 0, vertical * speedDeplacementRunning);
+            currentSpeed = speedDeplacementRunning;
+        }
+        else
+        {
+            anim.SetBool("isRunning", false);
+            currentSpeed = speedDeplacement;
         }
     }
 
