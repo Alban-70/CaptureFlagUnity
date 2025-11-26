@@ -1,32 +1,32 @@
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    
+
     [Header("Player Settings")]
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float speedDeplacement = 7f;
     [SerializeField] private float multipleSpeedDeplacementBackwardAndSide = 0.4f;
     [SerializeField] private float speedDeplacementRunning = 12f;
-    [SerializeField] private float speedRotation = 3f;
+    [SerializeField] private float speedRotation = 40f;
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private Animator anim;
+
 
     private float currentSpeed;
     private bool isGrounded;
     private Transform groundCheck;
     private Rigidbody rb;
-    [SerializeField] private Animator anim;
     private Vector3 inputVector; // Stocke l’input pour FixedUpdate
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
         groundCheck = transform.Find("GroundCheck");
         if (groundCheck == null)
             Debug.Log("GroundCheck est null");
-        Debug.Log("GroundCheck is not null !");
     }
 
     // Update is called once per frame
