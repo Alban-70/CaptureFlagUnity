@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
 
 
     private Rigidbody rb;
+    [SerializeField] private Animator anim;
     private Vector3 inputVector; // Stocke l’input pour FixedUpdate
 
 
@@ -26,6 +27,12 @@ public class Movement : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         inputVector = new Vector3(horizontal, 0, vertical);
+        
+        bool moving = inputVector.magnitude > 0.1f;
+        anim.SetBool("isMoving", moving);
+
+        anim.SetFloat("xVelocity", inputVector.x, 0.1f, Time.deltaTime);
+        anim.SetFloat("yVelocity", inputVector.z, 0.1f, Time.deltaTime);
 
         // Pour que la vitesse soit constante en diagonale
         if(inputVector.magnitude > 1f)
