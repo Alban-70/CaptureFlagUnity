@@ -6,7 +6,7 @@ public class Movement : MonoBehaviour
     [Header("Player Settings")]
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float speedDeplacement = 7f;
-    [SerializeField] private float speedDeplacementBackwardAndSide = 3f;
+    [SerializeField] private float multipleSpeedDeplacementBackwardAndSide = 0.4f;
     [SerializeField] private float speedDeplacementRunning = 12f;
     [SerializeField] private float speedRotation = 3f;
     [SerializeField] private LayerMask groundMask;
@@ -58,9 +58,9 @@ public class Movement : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         // Pour ralentir le personnage 
         if (vertical < 0) 
-            vertical = speedDeplacementBackwardAndSide;
+            vertical *= multipleSpeedDeplacementBackwardAndSide;
         
-        inputVector = new Vector3(speedDeplacementBackwardAndSide, 0, vertical);
+        inputVector = new Vector3(horizontal * multipleSpeedDeplacementBackwardAndSide, 0, vertical);
 
         bool moving = inputVector.magnitude > 0.1f;
         anim.SetBool("isMoving", moving);
