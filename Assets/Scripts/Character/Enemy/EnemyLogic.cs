@@ -51,7 +51,6 @@ public class EnemyLogic : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & playerLayer.value) != 0)
         {
-            Debug.Log("Joueur dans la zone d'arrêt !");
             inputVector = Vector3.zero;
             followPlayer = false;
         }
@@ -60,7 +59,6 @@ public class EnemyLogic : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & playerLayer.value) != 0)
         {
-            Debug.Log("Joueur sorti de la zone !");
             followPlayer = true;
         }
     }

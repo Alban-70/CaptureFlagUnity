@@ -347,9 +347,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 1.5279198
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0.26395988, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &544394169 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3251817784161524916, guid: a04bcb5cfe24b4892b6581126e910523, type: 3}
@@ -367,9 +367,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56625cd4eca2a81449106a04221563f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 10
   damageOnHit: 5
-  damageSourceLayer: Enemy
 --- !u!1 &630287337
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,7 +514,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3, y: 1, z: 3}
+  m_Size: {x: 3.5, y: 1, z: 3.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2109287088
 GameObject:
@@ -648,6 +647,22 @@ PrefabInstance:
     - target: {fileID: 377397448488751905, guid: a04bcb5cfe24b4892b6581126e910523, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874772871307803924, guid: a04bcb5cfe24b4892b6581126e910523, type: 3}
+      propertyPath: m_Height
+      value: 2.0078344
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874772871307803924, guid: a04bcb5cfe24b4892b6581126e910523, type: 3}
+      propertyPath: m_Radius
+      value: 0.25486726
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874772871307803924, guid: a04bcb5cfe24b4892b6581126e910523, type: 3}
+      propertyPath: m_Center.y
+      value: 0.92978144
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874772871307803924, guid: a04bcb5cfe24b4892b6581126e910523, type: 3}
+      propertyPath: m_Center.z
+      value: -0.042674005
       objectReference: {fileID: 0}
     - target: {fileID: 3251817784161524916, guid: a04bcb5cfe24b4892b6581126e910523, type: 3}
       propertyPath: m_Name

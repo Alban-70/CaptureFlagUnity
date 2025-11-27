@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -13,8 +14,13 @@ public class Movement : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private Animator anim;
 
-
+    // Movements
+    private float horizontal;
+    private float vertical;
     private float currentSpeed;
+
+
+    private bool isAttacking = false;
     private bool isGrounded;
     private Transform groundCheck;
     private Rigidbody rb;
@@ -32,12 +38,12 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlayerOrientation();
-        PlayerMovement();
+        HandleInput();
+        HandleOrientation();
+        HandleMovement();
 
         // Saut
-        isGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, groundMask);
-        PlayerJump();
+        isGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, groundMask);   
     }
 
     // 50 fois par seconde (évite de perdre des fps avec les calculs)
@@ -49,13 +55,45 @@ public class Movement : MonoBehaviour
             Vector3 move = transform.TransformDirection(inputVector) * currentSpeed * Time.fixedDeltaTime;
             rb.MovePosition(rb.position + move);
         }
+        
     }
 
-    private void PlayerMovement()
+    private IEnumerator WaitForAttackAnimation()
     {
-        // Inputs
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        isAttacking = true;
+        // On attend que l'animation Attack commence
+        yield return null;
+
+        while (!anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        {
+            yield return null;
+        }
+
+        // On attend que l'animation Attack soit terminée
+        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+        {
+            yield return null;
+        }
+        isAttacking = false;
+    }
+
+
+    private void HandleInput()
+    {
+        horizontal = Input.GetAxis("Horizontal");
+        vertical = Input.GetAxis("Vertical");
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            TryToJump();
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+            TryToAttack();
+    }
+
+    private void HandleMovement()
+    {
+        if (isAttacking) return;
+
         // Pour ralentir le personnage 
         if (vertical < 0) 
             vertical *= multipleSpeedDeplacementBackwardAndSide;
@@ -81,18 +119,29 @@ public class Movement : MonoBehaviour
         }
     }
 
-    private void PlayerOrientation()
+    private void HandleOrientation()
     {
         if (Input.GetKey(KeyCode.A)) transform.Rotate(0, -speedRotation * Time.deltaTime, 0);
         if (Input.GetKey(KeyCode.E)) transform.Rotate(0, speedRotation * Time.deltaTime, 0);
     }
 
-    private void PlayerJump()
+    private void TryToJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (isAttacking) return;
+
+        if (isGrounded)
         {
             anim.SetTrigger("Jump");
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
+        }
+    }
+
+    private void TryToAttack()
+    {
+        if (isGrounded && horizontal == 0 && vertical == 0 && !isAttacking)
+        {
+            anim.SetTrigger("Attack");
+            StartCoroutine(WaitForAttackAnimation());
         }
     }
 

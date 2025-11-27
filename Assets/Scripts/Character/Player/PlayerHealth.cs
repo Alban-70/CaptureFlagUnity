@@ -8,13 +8,15 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("Damage Settings")]
     [SerializeField] private float damageOnHit = 10f;
-    [SerializeField] private string damageSourceLayer = "Enemy"; 
+    private string damageSourceLayer = "Enemy"; 
 
     private float currentHealth;
     private int damageSourceLayerInt;
+    private GameObject playerCamera;
 
     void Awake()
     {
+        playerCamera = this.gameObject.transform.GetChild(0).GetChild(0).gameObject;
         currentHealth = maxHealth;
         damageSourceLayerInt = LayerMask.NameToLayer(damageSourceLayer);
     }
@@ -37,12 +39,15 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Health = " + currentHealth);
 
         if (currentHealth <= 0f)
+        {
+            playerCamera.transform.SetParent(null);
             Die();
+        }
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collider)
     {
-        if (collision.gameObject.layer != damageSourceLayerInt)
+        if (collider.gameObject.layer != damageSourceLayerInt)
             return;
 
         ApplyDamage(damageOnHit);
