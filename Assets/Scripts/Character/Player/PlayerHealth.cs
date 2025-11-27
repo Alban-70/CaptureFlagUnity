@@ -35,7 +35,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void ApplyDamage(float damage)
     {
-        currentHealth -= damage;
+        // currentHealth -= damage;
         Debug.Log("Health = " + currentHealth);
 
         if (currentHealth <= 0f)

@@ -1,31 +1,30 @@
 using System.Collections;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-    
-
-    [Header("Player Settings")]
+    [Header("Movement details")]
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float speedDeplacement = 7f;
     [SerializeField] private float multipleSpeedDeplacementBackwardAndSide = 0.4f;
     [SerializeField] private float speedDeplacementRunning = 12f;
     [SerializeField] private float speedRotation = 40f;
-    [SerializeField] private LayerMask groundMask;
-    [SerializeField] private Animator anim;
 
-    // Movements
     private float horizontal;
     private float vertical;
     private float currentSpeed;
+    private bool moving;
+    private bool canMove = true;
+    private bool canJump = true;
 
+    [Header("Collision details")]
+    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private Animator anim;
 
-    private bool isAttacking = false;
     private bool isGrounded;
     private Transform groundCheck;
     private Rigidbody rb;
     private Vector3 inputVector; // Stocke l’input pour FixedUpdate
-
 
     void Awake()
     {
@@ -35,50 +34,31 @@ public class Movement : MonoBehaviour
             Debug.Log("GroundCheck est null");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        HandleInput();
-        HandleOrientation();
-        HandleMovement();
-
-        // Saut
-        isGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, groundMask);   
+        UpdateCollisionStatus();
+        GetPlayerInput();
+        CalculateMovement();
+        HandleAnimations();
+        HandleRotation();
     }
 
-    // 50 fois par seconde (évite de perdre des fps avec les calculs)
     private void FixedUpdate()
     {
-        // S'occupe du déplacement du personnage
-        if (inputVector.magnitude > 0.1f)
-        {
-            Vector3 move = transform.TransformDirection(inputVector) * currentSpeed * Time.fixedDeltaTime;
-            rb.MovePosition(rb.position + move);
-        }
-        
+        ApplyMovement();
     }
 
-    private IEnumerator WaitForAttackAnimation()
+    #region Public methods 
+    public void EnableMovementAndJump(bool enable)
     {
-        isAttacking = true;
-        // On attend que l'animation Attack commence
-        yield return null;
-
-        while (!anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
-        {
-            yield return null;
-        }
-
-        // On attend que l'animation Attack soit terminée
-        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
-        {
-            yield return null;
-        }
-        isAttacking = false;
+        Debug.Log("enable : " + enable);
+        canMove = enable;
+        canJump = enable;
     }
+    #endregion
 
-
-    private void HandleInput()
+    #region Input & Collision
+    private void GetPlayerInput()
     {
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
@@ -90,23 +70,34 @@ public class Movement : MonoBehaviour
             TryToAttack();
     }
 
-    private void HandleMovement()
+    private void UpdateCollisionStatus()
     {
-        if (isAttacking) return;
+        isGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, groundMask);
+    }
+    #endregion
 
-        // Pour ralentir le personnage 
-        if (vertical < 0) 
-            vertical *= multipleSpeedDeplacementBackwardAndSide;
-        
-        inputVector = new Vector3(horizontal * multipleSpeedDeplacementBackwardAndSide, 0, vertical);
+    #region Movement
+    private void CalculateMovement()
+    {
+        CalculateInputVector();
+        moving = inputVector.magnitude > 0.1f;
+        HandleSprint();
+    }
 
-        bool moving = inputVector.magnitude > 0.1f;
-        anim.SetBool("isMoving", moving);
+    private void CalculateInputVector()
+    {
+        if (canMove)
+        {
+            float adjustedVertical = vertical < 0 ? vertical * multipleSpeedDeplacementBackwardAndSide : vertical;
+            inputVector = new Vector3(horizontal * multipleSpeedDeplacementBackwardAndSide, 0, adjustedVertical);
+        } else
+        {
+            inputVector = Vector3.zero;
+        }
+    }
 
-        anim.SetFloat("xVelocity", inputVector.x, 0.1f, Time.deltaTime);
-        anim.SetFloat("yVelocity", inputVector.z, 0.1f, Time.deltaTime);
-
-        // Sprint
+    private void HandleSprint()
+    {
         if (Input.GetKey(KeyCode.LeftShift) && moving && vertical > 0)
         {
             anim.SetBool("isRunning", true);
@@ -119,17 +110,26 @@ public class Movement : MonoBehaviour
         }
     }
 
-    private void HandleOrientation()
+    private void ApplyMovement()
+    {
+        if (inputVector.magnitude > 0.1f)
+        {
+            Vector3 move = transform.TransformDirection(inputVector) * currentSpeed * Time.fixedDeltaTime;
+            rb.MovePosition(rb.position + move);
+        }
+    }
+
+    private void HandleRotation()
     {
         if (Input.GetKey(KeyCode.A)) transform.Rotate(0, -speedRotation * Time.deltaTime, 0);
         if (Input.GetKey(KeyCode.E)) transform.Rotate(0, speedRotation * Time.deltaTime, 0);
     }
+    #endregion
 
+    #region Actions
     private void TryToJump()
     {
-        if (isAttacking) return;
-
-        if (isGrounded)
+        if (isGrounded && canJump)
         {
             anim.SetTrigger("Jump");
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
@@ -138,12 +138,19 @@ public class Movement : MonoBehaviour
 
     private void TryToAttack()
     {
-        if (isGrounded && horizontal == 0 && vertical == 0 && !isAttacking)
+        if (isGrounded)
         {
             anim.SetTrigger("Attack");
-            StartCoroutine(WaitForAttackAnimation());
         }
     }
+    #endregion
 
-
+    #region Animations
+    private void HandleAnimations()
+    {
+        anim.SetFloat("xVelocity", inputVector.x, 0.1f, Time.deltaTime);
+        anim.SetFloat("yVelocity", inputVector.z, 0.1f, Time.deltaTime);
+        anim.SetBool("isMoving", moving);
+    }
+    #endregion
 }
