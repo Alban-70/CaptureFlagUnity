@@ -13,4 +13,7 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     private void DisableMovementAndJump() => player.EnableMovementAndJump(false);
     private void EnableMovementAndJump() => player.EnableMovementAndJump(true);
+    private void BeginAirAttackFall() => player.PrepareAirAttackFall();
+    private void ResetContinueAttackInAirAnim() => player.ResetContinueAttackInAir();
+
 }

@@ -38,12 +38,12 @@ public class EnemyLogic : MonoBehaviour
 
     private void FollowPlayer()
     {
-        if (playerTransform != null && followPlayer)
-        {
-            Vector3 direction = playerTransform.position - transform.position;
-            direction.y = 0;
-            inputVector = direction.normalized;
-        }
+        // if (playerTransform != null && followPlayer)
+        // {
+        //     Vector3 direction = playerTransform.position - transform.position;
+        //     direction.y = 0;
+        //     inputVector = direction.normalized;
+        // }
 
     }
 
