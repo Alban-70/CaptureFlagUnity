@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     private float currentSpeed; // Vitesse actuelle (variable selon course ou marche)
     private bool moving; // Est-ce que le joueur bouge ?
     private Vector3 inputVector; // Direction de déplacement calculée
+    private int attackCount = 1;
     #endregion
 
     #region Components
@@ -173,8 +174,6 @@ public class PlayerMovement : MonoBehaviour
         if (Mathf.Abs(mouseX) > 0.01f)
             rotationVelocity = mouseX * speedRotation;
 
-
-        
         transform.Rotate(0, rotationVelocity * Time.deltaTime, 0);
         rotationVelocity = Mathf.Lerp(rotationVelocity, 0f, 5f * Time.deltaTime);
     }
@@ -198,7 +197,10 @@ public class PlayerMovement : MonoBehaviour
     private void TryToAttackInGround()
     {
         anim.SetTrigger("Attack"); // Animation d’attaque au sol
-        
+        anim.SetFloat("attackCount", attackCount);
+        attackCount++;
+        if (attackCount >= 3)
+            attackCount = 1;
     }
 
     private void TryToAttackInAir()
