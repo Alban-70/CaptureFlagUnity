@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
     #region Private State
+    private enum WeaponType { Sword, Bow };
+    private WeaponType currentWeapon = WeaponType.Sword;
     private float rotationVelocity = 0f; // vitesse de rotation actuelle
     private bool isGrounded; // Est-ce que le joueur touche le sol ?
     private bool wasGrounded; // Pour détecter l’atterrissage
@@ -60,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
         CalculateMovement();     // Calcule la direction et vitesse de déplacement
         HandleAnimations();      // Met à jour les paramètres de l’animator
         HandleRotation();        // Gère la rotation du joueur
+        SwitchWeapons();         // Change l'arme à la main
 
         // Détection descente après avoir attaqué en l'air
         if (airAttackRequested && rb.linearVelocity.y < 0)
@@ -210,6 +213,26 @@ public class PlayerMovement : MonoBehaviour
         canMove = false; // On bloque le mouvement pendant l’attaque
         anim.applyRootMotion = false; // Désactive le root motion pour contrôler le mouvement via script
         airAttackRequested = true; // On marque qu’une attaque aérienne est en cours
+    }
+
+    private void SwitchWeapons()
+    {
+        // Récupère l'Input (&) et switch sur l'épée si elle n'est pas déjà active
+        if (Input.GetKeyDown(KeyCode.Ampersand))
+        {
+            if (currentWeapon == WeaponType.Sword) return;
+
+            currentWeapon = WeaponType.Sword;
+            anim.SetTrigger("SwitchToSword");
+        }
+        // Récupère l'Input (é) et switch sur l'arc si il n'est pas déjà actif
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            if (currentWeapon == WeaponType.Bow) return;
+
+            currentWeapon = WeaponType.Bow;
+            anim.SetTrigger("SwitchToBow");
+        }
     }
     #endregion
 
