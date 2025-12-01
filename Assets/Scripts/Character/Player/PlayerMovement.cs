@@ -15,56 +15,54 @@ public class PlayerMovement : MonoBehaviour
     [Header("Collision")]
     [SerializeField] private LayerMask groundMask; // Layer pour détecter le sol
 
-    [Header("Animations")]
+    [Header("Components")]
     [SerializeField] private Animator anim; // Animator pour gérer les animations
+    private Transform groundCheck; // Point de référence pour checker le sol
+    private Rigidbody rb; // Rigidbody du joueur
 
     #endregion
     #region Private State
-    private enum WeaponType { Sword, Bow };
-    private WeaponType currentWeapon = WeaponType.Sword;
-    private float rotationVelocity = 0f; // vitesse de rotation actuelle
     private bool isGrounded; // Est-ce que le joueur touche le sol ?
     private bool wasGrounded; // Pour détecter l’atterrissage
     private bool isFalling; // Est-ce que le joueur est en train de tomber ?
     private bool canMove = true; // Est-ce que le joueur peut bouger ?
     private bool canJump = true; // Est-ce que le joueur peut sauter ?
-    private bool airAttackRequested = false; // Est-ce qu’on a demandé une attaque en l’air ?
-    private bool continueAirAttack = false; // Pour continuer l’animation d’attaque en chute
-    private bool isHoldingBow = false;
 
     private float horizontal; // Input horizontal
     private float vertical;   // Input vertical
+    private Vector3 inputVector; // Direction de déplacement calculée
     private float currentSpeed; // Vitesse actuelle (variable selon course ou marche)
     private bool moving; // Est-ce que le joueur bouge ?
-    private Vector3 inputVector; // Direction de déplacement calculée
-    private int attackCount = 1;
+    private float rotationVelocity = 0f; // vitesse de rotation actuelle
+    private bool isHoldingBow = false;
+
+    [SerializeField] private PlayerInputs inputs;
     #endregion
 
-    #region Components
-    private Transform groundCheck; // Point de référence pour checker le sol
-    private Rigidbody rb; // Rigidbody du joueur
-    #endregion
+    [HideInInspector] public bool airAttackRequested = false;
 
     #region Unity Methods
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         groundCheck = transform.Find("GroundCheck"); // On cherche l’objet GroundCheck
-        if (groundCheck == null)
-            Debug.Log("GroundCheck est null"); // Attention si le GameObject n’existe pas
     }
 
     void Update()
     {
+        ReadInputs();
         UpdateCollisionStatus(); // Vérifie si le joueur est au sol
-        GetPlayerInput();        // Récupère les inputs du joueur
+        // GetPlayerInput();        // Récupère les inputs du joueur
         CalculateMovement();     // Calcule la direction et vitesse de déplacement
-        HandleAnimations();      // Met à jour les paramètres de l’animator
         HandleRotation();        // Gère la rotation du joueur
+        HandleAnimations();      // Met à jour les paramètres de l’animator
+
+        if (inputs.IsJumpPressed())
+            TryToJump();
 
         // Détection descente après avoir attaqué en l'air
-        if (airAttackRequested && rb.linearVelocity.y < 0)
-            continueAirAttack = true;
+        // if (airAttackRequested && rb.linearVelocity.y < 0)
+        //     continueAirAttack = true;
     }
 
     private void FixedUpdate()
@@ -72,6 +70,14 @@ public class PlayerMovement : MonoBehaviour
         ApplyMovement(); // Applique le mouvement calculé
     }
     #endregion
+
+    private void ReadInputs()
+    {
+        horizontal = inputs.GetHorizontal();
+        vertical = inputs.GetVertical();
+
+        isFalling = rb.linearVelocity.y < -0.1f && !isGrounded;
+    }
 
     #region Collision
     private void UpdateCollisionStatus()
@@ -86,143 +92,107 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnLand()
     {
-        if (!airAttackRequested) return; // Si aucune attaque aérienne en cours, on sort
-
-        anim.SetTrigger("AttackAirFall"); // Lance l’animation d’attaque en chute
-
-        airAttackRequested = false;
-        continueAirAttack = false;
-
+        if (airAttackRequested)
+        {
+            anim.SetTrigger("AttackAirFall"); // Lance l’animation d’attaque en chute
+            airAttackRequested = false;
+        }
         canMove = true; // On peut se déplacer de nouveau
+ 
     }
     #endregion
 
     #region Input - Main
-    private void GetPlayerInput()
+    public void SetBowHold(bool value)
     {
-        ReadMovementInput();
-        HandleJumpInput();
-        HandleWeaponSwitchInput();
-
-        if (currentWeapon == WeaponType.Bow)
-        {
-            HandleBowHoldingAndShooting();
-        }
-        else
-        {
-            HandleMeleeAttacks();
-        }
+        isHoldingBow = value;
     }
+    // private void GetPlayerInput()
+    // {
+    //     ReadMovementInput();
+    //     HandleJumpInput();
+    //     HandleWeaponSwitchInput();
+
+    //     if (currentWeapon == WeaponType.Bow)
+    //     {
+    //         HandleBowHoldingAndShooting();
+    //     }
+    //     else
+    //     {
+    //         HandleMeleeAttacks();
+    //     }
+    // }
     #endregion
 
+    // private void HandleMeleeAttacks()
+    // {
+    //     if (!Input.GetKeyDown(KeyCode.Mouse0))
+    //         return;
 
-    #region Input - Sub Methods
-    private void ReadMovementInput()
-    {
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
+    //     if (!isGrounded)
+    //         TryToAttackSwordInAir();
+    //     else
+    //         TryToAttackSwordInGround();
+    // }
 
-        isFalling = rb.linearVelocity.y < -0.1f && !isGrounded;
-    }
+    // private void HandleBowHoldingAndShooting()
+    // {
+    //     bool mouse1 = Input.GetKey(KeyCode.Mouse1);
+    //     bool mouse0 = Input.GetKeyDown(KeyCode.Mouse0);
 
-    private void HandleJumpInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            TryToJump();
-    }
+    //     if (mouse1)
+    //     {
+    //         EnterBowHold();
 
-    private void HandleWeaponSwitchInput()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-            SwitchToSword();
+    //         if (mouse0)
+    //             TryToAttackWhileHolding();
 
-        if (Input.GetKeyDown(KeyCode.T))
-            SwitchToBow();
-    }
+    //         return; 
+    //     }
 
-    private void HandleMeleeAttacks()
-    {
-        if (!Input.GetKeyDown(KeyCode.Mouse0))
-            return;
+    //     ExitBowHold();
 
-        if (!isGrounded)
-            TryToAttackSwordInAir();
-        else
-            TryToAttackSwordInGround();
-    }
-
-    private void HandleBowHoldingAndShooting()
-    {
-        bool mouse1 = Input.GetKey(KeyCode.Mouse1);
-        bool mouse0 = Input.GetKeyDown(KeyCode.Mouse0);
-
-        if (mouse1)
-        {
-            EnterBowHold();
-
-            if (mouse0)
-                TryToAttackWhileHolding();
-
-            return; 
-        }
-
-        ExitBowHold();
-
-        if (mouse0)
-            TryToAttackBow();
-    }
-    #endregion
-
-    #region Bow Holding Helpers
-    private void EnterBowHold()
-    {
-        isHoldingBow = true;
-        anim.SetBool("isHolding", true);
-
-        inputVector = new Vector3(
-            horizontal * multipleSpeedDeplacementBackwardAndSide,
-            0,
-            vertical * multipleSpeedDeplacementBackwardAndSide
-        );
-    }
-
-    private void ExitBowHold()
-    {
-        isHoldingBow = false;
-        anim.SetBool("isHolding", false);
-        // Recalcul le mouvement
-        CalculateMovement();
-    }
-    #endregion
+    //     if (mouse0)
+    //         TryToAttackBow();
+    // }
+    // #endregion
 
     #region Movement
     private void CalculateMovement()
     {
-        if (currentWeapon == WeaponType.Bow && isHoldingBow)
+        if (!canMove) 
+        { 
+            inputVector = Vector3.zero; 
+            moving = false; 
             return; 
-        
-        if (canMove)
-        {
-            float adjustedVertical =
-                vertical < 0 ? vertical * multipleSpeedDeplacementBackwardAndSide : vertical; // On ralentit si marche arrière
-
-            inputVector = new Vector3(
-                horizontal * multipleSpeedDeplacementBackwardAndSide, // Ralentit sur le côté
-                0,
-                adjustedVertical
-            );
         }
-        else inputVector = Vector3.zero; // Si on ne peut pas bouger, pas de déplacement
+        // if (currentWeapon == WeaponType.Bow && isHoldingBow)
+        //     return; 
+        
+        float adjustedVertical =
+                vertical < 0 ? vertical * multipleSpeedDeplacementBackwardAndSide : vertical; // On ralentit si marche arrière
+    
+        float sideMultiplier = isHoldingBow ? multipleSpeedDeplacementBackwardAndSide : 1f;
+        
+        inputVector = new Vector3(
+                horizontal * sideMultiplier, // Ralentit sur le côté
+                0,
+                adjustedVertical * sideMultiplier);
 
         moving = inputVector.magnitude > 0.1f; // Est-ce qu’on bouge ?
-
         HandleSprint(); // Vérifie si le joueur court
     }
 
     private void HandleSprint()
     {
+        if (inputs.IsJumpPressed() || !moving)
+        {
+            currentSpeed = speedDeplacement;
+            anim.SetBool("isRunning", false);
+            return;
+        }
         // On court si on appuie sur Left Shift, qu'on bouge et qu'on avance
-        if (Input.GetKey(KeyCode.LeftShift) && moving && vertical > 0)
+        if (inputs.IsRunPressed() && vertical > 0)
         {
             anim.SetBool("isRunning", true);
             currentSpeed = speedDeplacementRunning;
@@ -236,20 +206,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyMovement()
     {
-        if (moving)
-        {
-            Vector3 move = transform.TransformDirection(inputVector)
-                            * currentSpeed * Time.fixedDeltaTime;
+        if (!moving) return;
+        Vector3 move = transform.TransformDirection(inputVector) * currentSpeed * Time.fixedDeltaTime;
+        rb.MovePosition(rb.position + move); // Déplace le joueur
 
-            rb.MovePosition(rb.position + move); // Déplace le joueur
-        }
     }
 
     private void HandleRotation()
     {
         if (!canMove) return;
 
-        float mouseX = Input.GetAxis("Mouse X");
+        float mouseX = inputs.GetMouseX();
         if (Mathf.Abs(mouseX) > 0.01f)
             rotationVelocity = mouseX * speedRotation;
 
@@ -261,71 +228,14 @@ public class PlayerMovement : MonoBehaviour
     #region Actions
     private void TryToJump()
     {
-        airAttackRequested = false;
-        continueAirAttack = false;
+        if (!isGrounded || !canJump) return; // On ne peut sauter que si on touche le sol
+
         anim.ResetTrigger("SwordAttack");
         anim.ResetTrigger("SwordAttackInAir");
         anim.ResetTrigger("AttackAirFall");
 
-        if (!isGrounded || !canJump) return; // On ne peut sauter que si on touche le sol
-
         anim.SetTrigger("Jump"); // Animation de saut
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z); // Applique la force de saut
-    }
-
-    private void TryToAttackSwordInGround()
-    {
-        anim.SetTrigger("SwordAttack"); // Animation d’attaque au sol
-        anim.SetFloat("attackCount", attackCount);
-        attackCount++;
-        if (attackCount >= 3)
-            attackCount = 1;
-    }
-
-    private void TryToAttackSwordInAir()
-    {
-        anim.SetTrigger("SwordAttackInAir"); // Animation d’attaque aérienne
-
-        canMove = false; // On bloque le mouvement pendant l’attaque
-        anim.applyRootMotion = false; // Désactive le root motion pour contrôler le mouvement via script
-        airAttackRequested = true; // On marque qu’une attaque aérienne est en cours
-    }
-
-    private void TryToAttackBow()
-    {
-        anim.SetTrigger("BowShot");
-
-        anim.applyRootMotion = false;
-    }
-
-    private void TryToHold()
-    {
-        anim.SetBool("isHolding", isHoldingBow);
-    }
-
-    private void TryToAttackWhileHolding()
-    {
-        anim.SetTrigger("ShotWhileHolding");
-    }
-
-    private void SwitchToSword()
-    {   
-        anim.SetLayerWeight(1, 1f);         // Se met sur le Layer WeaponLayer
-        if (currentWeapon == WeaponType.Sword) return;
-
-        currentWeapon = WeaponType.Sword;
-        anim.SetTrigger("SwitchToSword");
-        anim.SetLayerWeight(0, 1f);         // Se met de nouveau sur le Layer par défaut
-    }
-
-    private void SwitchToBow()
-    {
-        anim.SetLayerWeight(1, 1f);         // Se met sur le Layer WeaponLayer
-        if (currentWeapon == WeaponType.Bow) return;
-
-        currentWeapon = WeaponType.Bow;
-        anim.SetTrigger("SwitchToBow");
-        anim.SetLayerWeight(0, 1f);         // Se met de nouveau sur le Layer par défaut
     }
     #endregion
 
@@ -345,16 +255,13 @@ public class PlayerMovement : MonoBehaviour
         canMove = enable;
         canJump = enable;
     }
-
-    public void ResetContinueAttackInAir() {
-        continueAirAttack = false;
-        anim.applyRootMotion = true; // On remet le root motion après l’attaque aérienne
-    } 
-
-    public void PrepareAirAttackFall() => airAttackRequested = true; // Prépare une attaque en chute
     #endregion
 
     
+    #region Getters
 
+    public bool IsGrounded() { return isGrounded; }
+
+    #endregion
     
 }

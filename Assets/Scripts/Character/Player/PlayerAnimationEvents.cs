@@ -3,12 +3,14 @@ using UnityEngine;
 public class PlayerAnimationEvents : MonoBehaviour
 {
     private PlayerMovement player;
+    private PlayerCombat playerCombat;
     private WeaponSwitcher weaponSwitcher;
 
 
     void Awake()
     {
         player = transform.parent.parent.GetComponentInParent<PlayerMovement>();
+        playerCombat = transform.parent.parent.GetComponentInParent<PlayerCombat>();
         weaponSwitcher = transform.parent.parent.GetComponent<WeaponSwitcher>();
         SwitchSwordToHand();
         SwitchBowToBack();
@@ -21,10 +23,10 @@ public class PlayerAnimationEvents : MonoBehaviour
         => player.EnableMovementAndJump(true);
 
     private void BeginAirAttackFall() 
-        => player.PrepareAirAttackFall();
+        => playerCombat.PrepareAirAttackFall();
 
     private void ResetContinueAttackInAirAnim() 
-        => player.ResetContinueAttackInAir();
+        => playerCombat.ResetContinueAttackInAir();
 
     private void SwitchSwordToHand() 
         => weaponSwitcher.SwitchSwordToHand();
