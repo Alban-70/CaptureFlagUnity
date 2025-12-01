@@ -1,5 +1,3 @@
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -62,7 +60,6 @@ public class PlayerMovement : MonoBehaviour
         CalculateMovement();     // Calcule la direction et vitesse de déplacement
         HandleAnimations();      // Met à jour les paramètres de l’animator
         HandleRotation();        // Gère la rotation du joueur
-        SwitchWeapons();         // Change l'arme à la main
 
         // Détection descente après avoir attaqué en l'air
         if (airAttackRequested && rb.linearVelocity.y < 0)
@@ -114,11 +111,24 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (!isGrounded)
-                TryToAttackInAir(); // Clique gauche en l’air -> attaque aérienne
-            else
-                TryToAttackInGround(); // Clique gauche au sol -> attaque classique
+            if (currentWeapon == WeaponType.Sword)
+            {
+                if (!isGrounded)
+                    TryToAttackSwordInAir(); // Clique gauche en l’air -> attaque aérienne
+                else
+                    TryToAttackSwordInGround(); // Clique gauche au sol -> attaque classique 
+            } 
+            else if (currentWeapon == WeaponType.Bow)
+            {
+                TryToAttackBow();
+            }
         }
+
+        if (Input.GetKeyDown(KeyCode.R))        // Récupère l'Input (&) et switch sur l'épée si elle n'est pas déjà active
+            SwitchToSword();
+
+        if (Input.GetKeyDown(KeyCode.T))        // Récupère l'Input (é) et switch sur l'arc si il n'est pas déjà actif
+            SwitchToBow();
     }
     #endregion
 
@@ -187,8 +197,8 @@ public class PlayerMovement : MonoBehaviour
     {
         airAttackRequested = false;
         continueAirAttack = false;
-        anim.ResetTrigger("Attack");
-        anim.ResetTrigger("AttackInAir");
+        anim.ResetTrigger("SwordAttack");
+        anim.ResetTrigger("SwordAttackInAir");
         anim.ResetTrigger("AttackAirFall");
 
         if (!isGrounded || !canJump) return; // On ne peut sauter que si on touche le sol
@@ -197,42 +207,49 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z); // Applique la force de saut
     }
 
-    private void TryToAttackInGround()
+    private void TryToAttackSwordInGround()
     {
-        anim.SetTrigger("Attack"); // Animation d’attaque au sol
+        anim.SetTrigger("SwordAttack"); // Animation d’attaque au sol
         anim.SetFloat("attackCount", attackCount);
         attackCount++;
         if (attackCount >= 3)
             attackCount = 1;
     }
 
-    private void TryToAttackInAir()
+    private void TryToAttackSwordInAir()
     {
-        anim.SetTrigger("AttackInAir"); // Animation d’attaque aérienne
+        anim.SetTrigger("SwordAttackInAir"); // Animation d’attaque aérienne
 
         canMove = false; // On bloque le mouvement pendant l’attaque
         anim.applyRootMotion = false; // Désactive le root motion pour contrôler le mouvement via script
         airAttackRequested = true; // On marque qu’une attaque aérienne est en cours
     }
 
-    private void SwitchWeapons()
+    private void TryToAttackBow()
     {
-        // Récupère l'Input (&) et switch sur l'épée si elle n'est pas déjà active
-        if (Input.GetKeyDown(KeyCode.Ampersand))
-        {
-            if (currentWeapon == WeaponType.Sword) return;
+        anim.SetTrigger("BowShot");
 
-            currentWeapon = WeaponType.Sword;
-            anim.SetTrigger("SwitchToSword");
-        }
-        // Récupère l'Input (é) et switch sur l'arc si il n'est pas déjà actif
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            if (currentWeapon == WeaponType.Bow) return;
+        anim.applyRootMotion = false;
+    }
 
-            currentWeapon = WeaponType.Bow;
-            anim.SetTrigger("SwitchToBow");
-        }
+    private void SwitchToSword()
+    {   
+        anim.SetLayerWeight(1, 1f);         // Se met sur le Layer WeaponLayer
+        if (currentWeapon == WeaponType.Sword) return;
+
+        currentWeapon = WeaponType.Sword;
+        anim.SetTrigger("SwitchToSword");
+        anim.SetLayerWeight(0, 1f);         // Se met de nouveau sur le Layer par défaut
+    }
+
+    private void SwitchToBow()
+    {
+        anim.SetLayerWeight(1, 1f);         // Se met sur le Layer WeaponLayer
+        if (currentWeapon == WeaponType.Bow) return;
+
+        currentWeapon = WeaponType.Bow;
+        anim.SetTrigger("SwitchToBow");
+        anim.SetLayerWeight(0, 1f);         // Se met de nouveau sur le Layer par défaut
     }
     #endregion
 
