@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     private bool canJump = true; // Est-ce que le joueur peut sauter ?
     private bool airAttackRequested = false; // Est-ce qu’on a demandé une attaque en l’air ?
     private bool continueAirAttack = false; // Pour continuer l’animation d’attaque en chute
+    private bool isHoldingBow = false;
 
     private float horizontal; // Input horizontal
     private float vertical;   // Input vertical
@@ -63,9 +64,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Détection descente après avoir attaqué en l'air
         if (airAttackRequested && rb.linearVelocity.y < 0)
-        {
             continueAirAttack = true;
-        }
     }
 
     private void FixedUpdate()
@@ -98,43 +97,110 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    #region Input
+    #region Input - Main
     private void GetPlayerInput()
     {
-        horizontal = Input.GetAxis("Horizontal"); // A/D ou flèches gauche/droite
-        vertical = Input.GetAxis("Vertical");     // Z/S ou flèches haut/bas
+        ReadMovementInput();
+        HandleJumpInput();
+        HandleWeaponSwitchInput();
 
-        isFalling = rb.linearVelocity.y < -0.1f && !isGrounded; // Détecte la chute
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            TryToJump(); // Touche espace -> saut
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (currentWeapon == WeaponType.Bow)
         {
-            if (currentWeapon == WeaponType.Sword)
-            {
-                if (!isGrounded)
-                    TryToAttackSwordInAir(); // Clique gauche en l’air -> attaque aérienne
-                else
-                    TryToAttackSwordInGround(); // Clique gauche au sol -> attaque classique 
-            } 
-            else if (currentWeapon == WeaponType.Bow)
-            {
-                TryToAttackBow();
-            }
+            HandleBowHoldingAndShooting();
         }
+        else
+        {
+            HandleMeleeAttacks();
+        }
+    }
+    #endregion
 
-        if (Input.GetKeyDown(KeyCode.R))        // Récupère l'Input (&) et switch sur l'épée si elle n'est pas déjà active
+
+    #region Input - Sub Methods
+    private void ReadMovementInput()
+    {
+        horizontal = Input.GetAxis("Horizontal");
+        vertical = Input.GetAxis("Vertical");
+
+        isFalling = rb.linearVelocity.y < -0.1f && !isGrounded;
+    }
+
+    private void HandleJumpInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            TryToJump();
+    }
+
+    private void HandleWeaponSwitchInput()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
             SwitchToSword();
 
-        if (Input.GetKeyDown(KeyCode.T))        // Récupère l'Input (é) et switch sur l'arc si il n'est pas déjà actif
+        if (Input.GetKeyDown(KeyCode.T))
             SwitchToBow();
+    }
+
+    private void HandleMeleeAttacks()
+    {
+        if (!Input.GetKeyDown(KeyCode.Mouse0))
+            return;
+
+        if (!isGrounded)
+            TryToAttackSwordInAir();
+        else
+            TryToAttackSwordInGround();
+    }
+
+    private void HandleBowHoldingAndShooting()
+    {
+        bool mouse1 = Input.GetKey(KeyCode.Mouse1);
+        bool mouse0 = Input.GetKeyDown(KeyCode.Mouse0);
+
+        if (mouse1)
+        {
+            EnterBowHold();
+
+            if (mouse0)
+                TryToAttackWhileHolding();
+
+            return; 
+        }
+
+        ExitBowHold();
+
+        if (mouse0)
+            TryToAttackBow();
+    }
+    #endregion
+
+    #region Bow Holding Helpers
+    private void EnterBowHold()
+    {
+        isHoldingBow = true;
+        anim.SetBool("isHolding", true);
+
+        inputVector = new Vector3(
+            horizontal * multipleSpeedDeplacementBackwardAndSide,
+            0,
+            vertical * multipleSpeedDeplacementBackwardAndSide
+        );
+    }
+
+    private void ExitBowHold()
+    {
+        isHoldingBow = false;
+        anim.SetBool("isHolding", false);
+        // Recalcul le mouvement
+        CalculateMovement();
     }
     #endregion
 
     #region Movement
     private void CalculateMovement()
     {
+        if (currentWeapon == WeaponType.Bow && isHoldingBow)
+            return; 
+        
         if (canMove)
         {
             float adjustedVertical =
@@ -230,6 +296,16 @@ public class PlayerMovement : MonoBehaviour
         anim.SetTrigger("BowShot");
 
         anim.applyRootMotion = false;
+    }
+
+    private void TryToHold()
+    {
+        anim.SetBool("isHolding", isHoldingBow);
+    }
+
+    private void TryToAttackWhileHolding()
+    {
+        anim.SetTrigger("ShotWhileHolding");
     }
 
     private void SwitchToSword()
