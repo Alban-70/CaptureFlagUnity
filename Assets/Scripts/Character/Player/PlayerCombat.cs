@@ -7,9 +7,19 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private Animator anim; // L'Animator pour gérer toutes les animations du joueur
     [SerializeField] private PlayerInputs inputs; // Script qui récupère les inputs du joueur
     [SerializeField] private PlayerMovement movement; // Référence au script de mouvement pour contrôler le joueur
+    [SerializeField] private Transform arrowSocket;
+    [SerializeField] private GameObject arrow;
+    [SerializeField] private GameObject arrowPreview;
+    [SerializeField] private Quaternion arrowModelOffset = Quaternion.identity;
+
     #endregion
 
     #region Private State
+    private MeshRenderer mrHead, mrStick;
+    private Vector3 positionHold = new Vector3(0.1562f, -0.0224f, 0.0272f);
+    private Quaternion rotationHold = Quaternion.Euler(77.569f, -275.068f, -362.837f);
+    private Vector3 arrowVector;
+    private float speedLaunchArrow = 20f;
     private float attackCount = 1; // Pour suivre les combos d'attaques au sol
     private bool continueAirAttack = false; // Faire la deuxième partie de l'attaque
     private bool airAttackRequested = false; // Marque qu'une attaque aérienne a été demandée
@@ -19,6 +29,12 @@ public class PlayerCombat : MonoBehaviour
     #endregion
 
     #region Bow Holding & Weapon Switching
+
+    void Awake()
+    {
+        mrHead = arrow.transform.GetChild(0).GetComponent<MeshRenderer>();
+        mrStick = arrow.transform.GetChild(1).GetComponent<MeshRenderer>();
+    }
 
     void Update()
     {
@@ -40,19 +56,27 @@ public class PlayerCombat : MonoBehaviour
         // Gestion des attaques selon l'arme équipée
         if (currentWeapon == WeaponType.Bow)
         {
+            arrow.transform.SetParent(arrowSocket);
             // Si le joueur tient l'arc
             if (inputs.IsBowHold())
             {
+                mrHead.enabled = true;
+                mrStick.enabled = true;
+                arrow.transform.SetLocalPositionAndRotation(positionHold, rotationHold);
                 EnterBowHold(); // Met le joueur en position de tir
                 if (inputs.IsBowShoot())
+                {
+                    arrowPreview.SetActive(false);
                     TryToAttackWhileHolding(); // Tire la flèche
+                }
             }
-            else    
+            else
             {
+                mrHead.enabled = false;
+                mrStick.enabled = false;
                 ExitBowHold(); // On ne tient plus l'arc
-                if (inputs.IsBowShoot())
-                    TryToAttackBow(); // Tir classique depuis position normale
             }
+
         }
         else        // Si l'arme équipée est l'épée
         {
@@ -135,13 +159,6 @@ public class PlayerCombat : MonoBehaviour
     #endregion
 
     #region Bow Attacks
-    // Tir depuis la position normale
-    public void TryToAttackBow()
-    {
-        anim.SetTrigger("BowShot");
-        anim.applyRootMotion = false;
-    }
-
     // Tir depuis la posture de tir
     public void TryToAttackWhileHolding()
     {
@@ -158,5 +175,21 @@ public class PlayerCombat : MonoBehaviour
     }
 
     public void PrepareAirAttackFall() => airAttackRequested = true;
+
+    public void LaunchArrow()
+    {
+        if (arrow == null || arrowSocket == null) return;
+
+        GameObject newArrow = Instantiate(arrow, arrowSocket.position, arrowSocket.rotation);
+        Rigidbody arrowRb = newArrow.GetComponent<Rigidbody>();
+        if (arrowRb == null) return;
+        
+        Vector3 direction = arrowSocket.right;
+        newArrow.transform.rotation = Quaternion.LookRotation(direction) * arrowModelOffset;
+
+        newArrow.transform.SetParent(null);
+        arrowRb.isKinematic = false;
+        arrowRb.linearVelocity = direction * speedLaunchArrow;
+    }
     #endregion
 }

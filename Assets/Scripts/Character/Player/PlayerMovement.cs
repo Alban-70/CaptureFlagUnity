@@ -59,10 +59,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (inputs.IsJumpPressed())
             TryToJump();
-
-        // Détection descente après avoir attaqué en l'air
-        // if (airAttackRequested && rb.linearVelocity.y < 0)
-        //     continueAirAttack = true;
     }
 
     private void FixedUpdate()
@@ -107,55 +103,7 @@ public class PlayerMovement : MonoBehaviour
     {
         isHoldingBow = value;
     }
-    // private void GetPlayerInput()
-    // {
-    //     ReadMovementInput();
-    //     HandleJumpInput();
-    //     HandleWeaponSwitchInput();
-
-    //     if (currentWeapon == WeaponType.Bow)
-    //     {
-    //         HandleBowHoldingAndShooting();
-    //     }
-    //     else
-    //     {
-    //         HandleMeleeAttacks();
-    //     }
-    // }
     #endregion
-
-    // private void HandleMeleeAttacks()
-    // {
-    //     if (!Input.GetKeyDown(KeyCode.Mouse0))
-    //         return;
-
-    //     if (!isGrounded)
-    //         TryToAttackSwordInAir();
-    //     else
-    //         TryToAttackSwordInGround();
-    // }
-
-    // private void HandleBowHoldingAndShooting()
-    // {
-    //     bool mouse1 = Input.GetKey(KeyCode.Mouse1);
-    //     bool mouse0 = Input.GetKeyDown(KeyCode.Mouse0);
-
-    //     if (mouse1)
-    //     {
-    //         EnterBowHold();
-
-    //         if (mouse0)
-    //             TryToAttackWhileHolding();
-
-    //         return; 
-    //     }
-
-    //     ExitBowHold();
-
-    //     if (mouse0)
-    //         TryToAttackBow();
-    // }
-    // #endregion
 
     #region Movement
     private void CalculateMovement()

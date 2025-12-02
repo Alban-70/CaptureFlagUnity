@@ -39,4 +39,14 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     private void SwitchBowToBack()
         => weaponSwitcher.SwitchBowToBack();
+
+    private void TakeArrowFromBack()
+    {
+        
+    }
+
+    private void LaunchArrow()
+    {
+        playerCombat.LaunchArrow();
+    }
 }
