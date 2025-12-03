@@ -19,7 +19,7 @@ public class PlayerCombat : MonoBehaviour
     private Vector3 positionHold = new Vector3(0.1562f, -0.0224f, 0.0272f);
     private Quaternion rotationHold = Quaternion.Euler(77.569f, -275.068f, -362.837f);
     private Vector3 arrowVector;
-    private float speedLaunchArrow = 20f;
+    private float speedLaunchArrow = 35f;
     private float attackCount = 1; // Pour suivre les combos d'attaques au sol
     private bool continueAirAttack = false; // Faire la deuxième partie de l'attaque
     private bool airAttackRequested = false; // Marque qu'une attaque aérienne a été demandée
