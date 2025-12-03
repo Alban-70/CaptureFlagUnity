@@ -969,6 +969,6 @@ AssetOrigin:
   productId: 335880
   packageName: Human Archer Animations FREE
   packageVersion: 1.0
-  assetPath: Assets/Animations/Assets/Kevin Iglesias/Human Animations/Animations/Male/Combat/Bow/HumanM@BowShot01
+  assetPath: Assets/Imports/Animations/Assets/Kevin Iglesias/Human Animations/Animations/Male/Combat/Bow/HumanM@BowShot01
     - Hold.fbx
   uploadId: 825246

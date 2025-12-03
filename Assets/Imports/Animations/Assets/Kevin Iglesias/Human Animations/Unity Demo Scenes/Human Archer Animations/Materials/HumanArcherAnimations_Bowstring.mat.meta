@@ -11,6 +11,6 @@ AssetOrigin:
   productId: 335880
   packageName: Human Archer Animations FREE
   packageVersion: 1.0
-  assetPath: Assets/Animations/Assets/Kevin Iglesias/Human Animations/Unity Demo
-    Scenes/Human Archer Animations/Materials/HumanArcherAnimations_Bowstring.mat
+  assetPath: Assets/Imports/Animations/Assets/Kevin Iglesias/Human Animations/Unity
+    Demo Scenes/Human Archer Animations/Materials/HumanArcherAnimations_Bowstring.mat
   uploadId: 825246
