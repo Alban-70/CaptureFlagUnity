@@ -31,7 +31,7 @@ public class ArrowScript : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Ennemy"))
+        if(collision.gameObject.layer != LayerMask.NameToLayer("Player"))
         {
             Destroy(gameObject);
         }

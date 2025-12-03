@@ -1,15 +1,7 @@
 fileFormatVersion: 2
 guid: 4d37310b1f6a0fb51908c0b801d65a52
-NativeFormatImporter:
+PrefabImporter:
   externalObjects: {}
-  mainObjectFileID: 100100000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 136607
-  packageName: Free pack of medieval weapons
-  packageVersion: 1.3
-  assetPath: Assets/Weapons/Free medieval weapons/Prefabs/Arrow.prefab
-  uploadId: 336898
