@@ -1,41 +1,37 @@
+using System.Collections;
 using UnityEngine;
 
 public class ArrowScript : MonoBehaviour
 {
-    // [SerializeField] private LayerMask enemyLayer;
-
-    // private Rigidbody boxRb;
-    // private BoxCollider boxCollider;
 
     void Awake()
     {
-        // boxRb = gameObject.GetComponent<Rigidbody>();
-        // boxCollider = gameObject.GetComponent<BoxCollider>();
+        
     }
 
-    // private void StickyOnTarget(Transform target)
-    // {
-    //     boxRb.linearVelocity = Vector3.zero;
-    //     boxRb.angularVelocity = Vector3.zero;
-        
-    //     transform.SetParent(target);
-    //     Debug.Log("Flèche plantée dans l'ennemi !");
-    // }
+    private IEnumerator UnFreezeAfterDelay(Rigidbody enemyRb, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (enemyRb != null)
+            enemyRb.constraints = RigidbodyConstraints.FreezeRotation;
+    }
 
-    // private void UnabledRigidAndBox()
-    // {
-    //     boxRb.isKinematic = true;
-    //     boxCollider.isTrigger = true;
-    //     // boxCollider.enabled = false;
-    // }
+
 
     void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.layer != LayerMask.NameToLayer("Player"))
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Enemi"))
+            Rigidbody enemyRb = collision.gameObject.GetComponent<Rigidbody>();
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
+                Debug.Log("Touché");
                 
+                if (enemyRb != null)
+                {
+                    enemyRb.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+                    StartCoroutine(UnFreezeAfterDelay(enemyRb, 0.5f));
+                }
             }
             Destroy(gameObject);
         }
