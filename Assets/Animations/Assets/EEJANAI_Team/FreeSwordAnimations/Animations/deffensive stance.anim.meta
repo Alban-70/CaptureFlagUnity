@@ -11,5 +11,6 @@ AssetOrigin:
   productId: 318172
   packageName: Free Sword Animation
   packageVersion: 1.0
-  assetPath: Assets/EEJANAI_Team/FreeSwordAnimations/Animations/deffensive stance.anim
+  assetPath: Assets/Animations/Assets/EEJANAI_Team/FreeSwordAnimations/Animations/deffensive
+    stance.anim
   uploadId: 751376
