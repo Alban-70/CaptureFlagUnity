@@ -32,8 +32,9 @@ public class PlayerCombat : MonoBehaviour
 
     void Awake()
     {
-        mrHead = arrow.transform.GetChild(0).GetComponent<MeshRenderer>();
-        mrStick = arrow.transform.GetChild(1).GetComponent<MeshRenderer>();
+        mrHead = arrowPreview.transform.GetChild(0).GetComponent<MeshRenderer>();
+        mrStick = arrowPreview.transform.GetChild(1).GetComponent<MeshRenderer>();
+        arrowPreview.SetActive(false);
     }
 
     void Update()
@@ -56,13 +57,14 @@ public class PlayerCombat : MonoBehaviour
         // Gestion des attaques selon l'arme équipée
         if (currentWeapon == WeaponType.Bow)
         {
-            arrow.transform.SetParent(arrowSocket);
             // Si le joueur tient l'arc
             if (inputs.IsBowHold())
             {
+                arrowPreview.SetActive(true);
+                arrowPreview.transform.SetParent(arrowSocket);
                 mrHead.enabled = true;
                 mrStick.enabled = true;
-                arrow.transform.SetLocalPositionAndRotation(positionHold, rotationHold);
+                arrowPreview.transform.SetLocalPositionAndRotation(positionHold, rotationHold);
                 EnterBowHold(); // Met le joueur en position de tir
                 if (inputs.IsBowShoot())
                 {
@@ -72,6 +74,8 @@ public class PlayerCombat : MonoBehaviour
             }
             else
             {
+                arrowPreview.SetActive(false);
+                arrowPreview.transform.SetParent(arrowSocket);
                 mrHead.enabled = false;
                 mrStick.enabled = false;
                 ExitBowHold(); // On ne tient plus l'arc
