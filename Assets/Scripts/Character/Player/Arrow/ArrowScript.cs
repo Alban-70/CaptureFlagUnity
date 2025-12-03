@@ -33,6 +33,10 @@ public class ArrowScript : MonoBehaviour
     {
         if(collision.gameObject.layer != LayerMask.NameToLayer("Player"))
         {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Enemi"))
+            {
+                
+            }
             Destroy(gameObject);
         }
     }
