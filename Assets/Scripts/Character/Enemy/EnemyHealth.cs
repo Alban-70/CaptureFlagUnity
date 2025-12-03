@@ -10,6 +10,7 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private float damageOnHit = 10f;
     [SerializeField] private string damageSourceLayer = "Player"; 
 
+
     private float currentHealth;
     private int damageSourceLayerInt;
 
@@ -46,5 +47,6 @@ public class EnemyHealth : MonoBehaviour
             return;
 
         // ApplyDamage(damageOnHit);
+        
     }
 }
