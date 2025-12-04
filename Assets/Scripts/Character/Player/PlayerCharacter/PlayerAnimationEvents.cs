@@ -9,9 +9,6 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     void Awake()
     {
-        // player = transform.parent.parent.GetComponentInParent<PlayerMovement>();
-        // playerCombat = transform.parent.parent.GetComponentInParent<PlayerCombat>();
-        // weaponSwitcher = transform.parent.parent.GetComponent<WeaponSwitcher>();
         SwitchSwordToHand();
         SwitchBowToBack();
     }

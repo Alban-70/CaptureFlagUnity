@@ -6,11 +6,11 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float speedDeplacement = 7f; // Vitesse de déplacement de base
     [SerializeField] private float speedDeplacementRunning = 12f; // Vitesse quand le joueur court
-    [SerializeField] private float multipleSpeedDeplacementBackwardAndSide = 0.4f; // On ralentit un peu en marche arrière ou sur le côté
-    [SerializeField] private float speedRotation = 100f; // Vitesse de rotation (tournage gauche/droite)
+    [SerializeField] private float multipleSpeedDeplacementBackwardAndSide = 0.4f; // Ralentissement marche arrière/côté
+    [SerializeField] private float speedRotation = 100f; // Vitesse de rotation (gauche/droite)
 
     [Header("Jump Settings")]
-    [SerializeField] private float jumpForce = 5f; // La force appliquée quand le joueur saute
+    [SerializeField] private float jumpForce = 5f; // Force appliquée au saut
 
     [Header("Collision")]
     [SerializeField] private LayerMask groundMask; // Layer pour détecter le sol
@@ -20,53 +20,65 @@ public class PlayerMovement : MonoBehaviour
     private Transform groundCheck; // Point de référence pour checker le sol
     private Rigidbody rb; // Rigidbody du joueur
 
+    [SerializeField] private PlayerInputs inputs; // Référence au script des inputs
     #endregion
-    #region Private State
-    private bool isGrounded; // Est-ce que le joueur touche le sol ?
-    private bool wasGrounded; // Pour détecter l’atterrissage
-    private bool isFalling; // Est-ce que le joueur est en train de tomber ?
-    private bool canMove = true; // Est-ce que le joueur peut bouger ?
-    private bool canJump = true; // Est-ce que le joueur peut sauter ?
 
-    private float horizontal; // Input horizontal
-    private float vertical;   // Input vertical
-    private Vector3 inputVector; // Direction de déplacement calculée
-    private float currentSpeed; // Vitesse actuelle (variable selon course ou marche)
-    private bool moving; // Est-ce que le joueur bouge ?
-    private float rotationVelocity = 0f; // vitesse de rotation actuelle
+    #region Private State
+    private bool isGrounded;
+    private bool wasGrounded;
+    private bool isFalling;
+    private bool canMove = true;
+    private bool canJump = true;
+
+    private float horizontal;
+    private float vertical;
+    private Vector3 inputVector;
+    private float currentSpeed;
+    private bool moving;
+    private float rotationVelocity = 0f;
     private bool isHoldingBow = false;
 
-    [SerializeField] private PlayerInputs inputs;
+    [HideInInspector] public bool airAttackRequested = false;
     #endregion
 
-    [HideInInspector] public bool airAttackRequested = false;
-
     #region Unity Methods
+    /// <summary>
+    /// Initialise le Rigidbody et le point de détection du sol.
+    /// </summary>
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        groundCheck = transform.Find("GroundCheck"); // On cherche l’objet GroundCheck
+        groundCheck = transform.Find("GroundCheck");
     }
 
+    /// <summary>
+    /// Méthode appelée chaque frame pour lire les inputs, gérer les collisions, le mouvement, la rotation et les animations.
+    /// </summary>
     void Update()
     {
         ReadInputs();
-        UpdateCollisionStatus(); // Vérifie si le joueur est au sol
-        // GetPlayerInput();        // Récupère les inputs du joueur
-        CalculateMovement();     // Calcule la direction et vitesse de déplacement
-        HandleRotation();        // Gère la rotation du joueur
-        HandleAnimations();      // Met à jour les paramètres de l’animator
+        UpdateCollisionStatus();
+        CalculateMovement();
+        HandleRotation();
+        HandleAnimations();
 
         if (inputs.IsJumpPressed())
             TryToJump();
     }
 
+    /// <summary>
+    /// Méthode appelée à chaque frame physique pour appliquer le mouvement.
+    /// </summary>
     private void FixedUpdate()
     {
-        ApplyMovement(); // Applique le mouvement calculé
+        ApplyMovement();
     }
     #endregion
 
+    #region Input Handling
+    /// <summary>
+    /// Lit les inputs du joueur via le script PlayerInputs.
+    /// </summary>
     private void ReadInputs()
     {
         horizontal = inputs.GetHorizontal();
@@ -75,91 +87,101 @@ public class PlayerMovement : MonoBehaviour
         isFalling = rb.linearVelocity.y < -0.1f && !isGrounded;
     }
 
-    #region Collision
-    private void UpdateCollisionStatus()
-    {
-        wasGrounded = isGrounded;
-        isGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, groundMask); // Sphere check pour savoir si on touche le sol
-
-        // Détecte l’atterrissage
-        if (!wasGrounded && isGrounded)
-            OnLand();
-    }
-
-    private void OnLand()
-    {
-        if (airAttackRequested)
-        {
-            anim.SetTrigger("AttackAirFall"); // Lance l’animation d’attaque en chute
-            airAttackRequested = false;
-        }
-        canMove = true; // On peut se déplacer de nouveau
- 
-    }
-    #endregion
-
-    #region Input - Main
+    /// <summary>
+    /// Définit si le joueur tient l'arc.
+    /// </summary>
+    /// <param name="value">True si le joueur tient l'arc, false sinon.</param>
     public void SetBowHold(bool value)
     {
         isHoldingBow = value;
     }
     #endregion
 
-    #region Movement
+    #region Collision
+    /// <summary>
+    /// Vérifie si le joueur touche le sol et gère les atterrissages.
+    /// </summary>
+    private void UpdateCollisionStatus()
+    {
+        wasGrounded = isGrounded;
+        isGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, groundMask);
+
+        if (!wasGrounded && isGrounded)
+            OnLand();
+    }
+
+    /// <summary>
+    /// Appelé lorsque le joueur atterrit après un saut ou une chute.
+    /// </summary>
+    private void OnLand()
+    {
+        if (airAttackRequested)
+        {
+            anim.SetTrigger("AttackAirFall");
+            airAttackRequested = false;
+        }
+        canMove = true;
+    }
+    #endregion
+
+    #region Movement Logic
+    /// <summary>
+    /// Calcule la direction et la vitesse de déplacement selon les inputs.
+    /// </summary>
     private void CalculateMovement()
     {
-        if (!canMove) 
+        if (!canMove)
         { 
             inputVector = Vector3.zero; 
             moving = false; 
             return; 
         }
-        // if (currentWeapon == WeaponType.Bow && isHoldingBow)
-        //     return; 
         
-        float adjustedVertical =
-                vertical < 0 ? vertical * multipleSpeedDeplacementBackwardAndSide : vertical; // On ralentit si marche arrière
-    
+        float adjustedVertical = vertical < 0 ? vertical * multipleSpeedDeplacementBackwardAndSide : vertical;
         float sideMultiplier = isHoldingBow ? multipleSpeedDeplacementBackwardAndSide : 1f;
-        
-        inputVector = new Vector3(
-                horizontal * sideMultiplier, // Ralentit sur le côté
-                0,
-                adjustedVertical * sideMultiplier);
 
-        moving = inputVector.magnitude > 0.1f; // Est-ce qu’on bouge ?
-        HandleSprint(); // Vérifie si le joueur court
+        inputVector = new Vector3(horizontal * sideMultiplier, 0, adjustedVertical * sideMultiplier);
+        moving = inputVector.magnitude > 0.1f;
+        HandleSprint();
     }
 
+    /// <summary>
+    /// Gère la vitesse et l'état de course selon les inputs.
+    /// </summary>
     private void HandleSprint()
     {
-        if (inputs.IsJumpPressed() || !moving)
+        if (!moving || inputs.IsJumpPressed())
         {
             currentSpeed = speedDeplacement;
             anim.SetBool("isRunning", false);
             return;
         }
-        // On court si on appuie sur Left Shift, qu'on bouge et qu'on avance
+
         if (inputs.IsRunPressed() && vertical > 0)
         {
-            anim.SetBool("isRunning", true);
             currentSpeed = speedDeplacementRunning;
+            anim.SetBool("isRunning", true);
         }
         else
         {
-            anim.SetBool("isRunning", false);
             currentSpeed = speedDeplacement;
+            anim.SetBool("isRunning", false);
         }
     }
 
+    /// <summary>
+    /// Applique le mouvement calculé au Rigidbody.
+    /// </summary>
     private void ApplyMovement()
     {
         if (!moving) return;
         Vector3 move = transform.TransformDirection(inputVector) * currentSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + move); // Déplace le joueur
-
+        rb.MovePosition(rb.position + move);
     }
 
+    /// <summary>
+    /// Gère la rotation du joueur selon l'input souris.
+    /// </summary>
     private void HandleRotation()
     {
         if (!canMove) return;
@@ -174,30 +196,40 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Actions
+    /// <summary>
+    /// Tente de faire sauter le joueur si possible.
+    /// </summary>
     private void TryToJump()
     {
-        if (!isGrounded || !canJump) return; // On ne peut sauter que si on touche le sol
+        if (!isGrounded || !canJump) return;
 
         anim.ResetTrigger("SwordAttack");
         anim.ResetTrigger("SwordAttackInAir");
         anim.ResetTrigger("AttackAirFall");
 
-        anim.SetTrigger("Jump"); // Animation de saut
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z); // Applique la force de saut
+        anim.SetTrigger("Jump");
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
     }
     #endregion
 
     #region Animations
+    /// <summary>
+    /// Met à jour les paramètres de l'Animator selon le mouvement et la chute.
+    /// </summary>
     private void HandleAnimations()
     {
-        anim.SetFloat("xVelocity", inputVector.x, 0.1f, Time.deltaTime); // Param pour blend tree
-        anim.SetFloat("zVelocity", inputVector.z, 0.1f, Time.deltaTime); // Param pour blend tree
-        anim.SetBool("isFalling", isFalling); // Bool pour animation de chute
-        anim.SetBool("isMoving", moving); // Bool pour animation de marche
+        anim.SetFloat("xVelocity", inputVector.x, 0.1f, Time.deltaTime);
+        anim.SetFloat("zVelocity", inputVector.z, 0.1f, Time.deltaTime);
+        anim.SetBool("isFalling", isFalling);
+        anim.SetBool("isMoving", moving);
     }
     #endregion
 
     #region Public Methods
+    /// <summary>
+    /// Active ou désactive la possibilité de se déplacer et de sauter.
+    /// </summary>
+    /// <param name="enable">True pour autoriser le mouvement et le saut, false pour les bloquer.</param>
     public void EnableMovementAndJump(bool enable)
     {
         canMove = enable;
@@ -205,11 +237,10 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    
     #region Getters
-
+    /// <summary>
+    /// Indique si le joueur touche le sol.
+    /// </summary>
     public bool IsGrounded() { return isGrounded; }
-
     #endregion
-    
 }
