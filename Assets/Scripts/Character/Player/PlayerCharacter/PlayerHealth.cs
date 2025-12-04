@@ -6,7 +6,6 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float maxHealth = 100f; // La vie maximale du joueur
 
     [Header("Damage Settings")]
-    // [SerializeField] private float damageOnHit = 5f; // Dégâts reçus à chaque impact
     private string damageSourceLayer = "Enemy"; // On ne prend des dégâts que des objets de ce layer
 
     private float currentHealth; // La vie actuelle
@@ -47,14 +46,4 @@ public class PlayerHealth : MonoBehaviour
             Die();
         }
     }
-
-    // void OnTriggerEnter(Collider collider)
-    // {
-    //     // On vérifie que l’objet entrant est bien un ennemi
-    //     if (collider.gameObject.layer != damageSourceLayerInt)
-    //         return;
-
-    //     // On applique les dégâts
-    //     // ApplyDamage(damageOnHit);
-    // }
 }

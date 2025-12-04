@@ -40,13 +40,4 @@ public class EnemyHealth : MonoBehaviour
         if (currentHealth <= 0f)
             Die();
     }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.layer != damageSourceLayerInt)
-            return;
-
-        // ApplyDamage(damageOnHit);
-        
-    }
 }
