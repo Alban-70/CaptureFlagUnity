@@ -10,5 +10,6 @@ AssetOrigin:
   productId: 282498
   packageName: Medieval Castle - Modular
   packageVersion: 1.0
-  assetPath: Assets/Advance Studios/Medieval Castle/Prefabs/Double Door Frame.prefab
+  assetPath: Assets/Imports/ImportVillage/Castle/Medieval Castle/Prefabs/Double Door
+    Frame.prefab
   uploadId: 657949
