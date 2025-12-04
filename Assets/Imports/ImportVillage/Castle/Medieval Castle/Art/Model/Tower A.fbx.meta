@@ -112,5 +112,6 @@ AssetOrigin:
   productId: 282498
   packageName: Medieval Castle - Modular
   packageVersion: 1.0
-  assetPath: Assets/Advance Studios/Medieval Castle/Art/Model/Tower A.fbx
+  assetPath: Assets/Imports/ImportVillage/Castle/Medieval Castle/Art/Model/Tower
+    A.fbx
   uploadId: 657949

@@ -11,5 +11,5 @@ AssetOrigin:
   productId: 56402
   packageName: Stylized Cemetery Pack
   packageVersion: 1.0
-  assetPath: Assets/CemeteryPack/Prefabs/Gate/MetObj_Fence3.prefab
+  assetPath: Assets/Imports/ImportVillage/Cemetery/Prefabs/Gate/MetObj_Fence3.prefab
   uploadId: 106261

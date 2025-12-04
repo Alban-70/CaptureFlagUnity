@@ -302,6 +302,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4534147065827568, guid: 359dc9b8c6a7284abb4f919354bee43b, type: 3}
   m_PrefabInstance: {fileID: 326219323}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &425610603 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1959729250425484, guid: 359dc9b8c6a7284abb4f919354bee43b, type: 3}
+  m_PrefabInstance: {fileID: 326219323}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &480199631 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5689273850401907102, guid: a04bcb5cfe24b4892b6581126e910523, type: 3}
@@ -870,7 +875,7 @@ MonoBehaviour:
   movement: {fileID: 3251817783316075218}
   arrowSocket: {fileID: 1192441778}
   arrow: {fileID: 1959729250425484, guid: 5187dfa4d8f19524e8bbf7c6894b7de7, type: 3}
-  arrowPreview: {fileID: 0}
+  arrowPreview: {fileID: 425610603}
   arrowModelOffset: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
 --- !u!1001 &7900913305954811725
 PrefabInstance:

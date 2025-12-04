@@ -60,5 +60,5 @@ AssetOrigin:
   productId: 56402
   packageName: Stylized Cemetery Pack
   packageVersion: 1.0
-  assetPath: Assets/CemeteryPack/Textures/Column_Diffuse.tga
+  assetPath: Assets/Imports/ImportVillage/Cemetery/Textures/Column_Diffuse.tga
   uploadId: 106261

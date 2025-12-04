@@ -11,5 +11,5 @@ AssetOrigin:
   productId: 56402
   packageName: Stylized Cemetery Pack
   packageVersion: 1.0
-  assetPath: Assets/CemeteryPack/Prefabs/Tombstones/Tombstones.prefab
+  assetPath: Assets/Imports/ImportVillage/Cemetery/Prefabs/Tombstones/Tombstones.prefab
   uploadId: 106261
