@@ -17,6 +17,7 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     void Awake()
     {
+        gameManager.SetMaxHealth();
         // gameManager.SetMaxHealth(maxHealth);
         // On récupère la caméra principale du joueur
         playerCamera = this.gameObject.transform.GetChild(0).GetChild(0).gameObject;
@@ -51,7 +52,8 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damage;
 
         Debug.Log("Health = " + currentHealth);
-        gameManager.SetHealth(currentHealth / maxHealth);
+        gameManager.SetText(currentHealth);
+        gameManager.SetHealth(currentHealth, maxHealth);
 
         if (currentHealth <= 0f)
         {
