@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [Header("Damage Settings")]
-    private string damageSourceLayer = "Enemy"; // On ne prend des dégâts que des objets de ce layer
 
+    [Header("Slider")]
+    [SerializeField] private GameManager gameManager;
+
+    private string damageSourceLayer = "Enemy"; // On ne prend des dégâts que des objets de ce layer
     private float maxHealth = 100f; // La vie maximale du joueur
     private float currentHealth; // La vie actuelle
     private int damageSourceLayerInt; // Valeur du layer convertie en int
@@ -15,6 +17,7 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     void Awake()
     {
+        // gameManager.SetMaxHealth(maxHealth);
         // On récupère la caméra principale du joueur
         playerCamera = this.gameObject.transform.GetChild(0).GetChild(0).gameObject;
 
@@ -48,6 +51,7 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damage;
 
         Debug.Log("Health = " + currentHealth);
+        gameManager.SetHealth(currentHealth / maxHealth);
 
         if (currentHealth <= 0f)
         {
