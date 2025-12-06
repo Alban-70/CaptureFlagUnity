@@ -8,7 +8,7 @@ public class GolemLogic : MonoBehaviour
     [SerializeField] private Transform targetPlayer; // Référence au joueur pour le suivi
     [SerializeField] private Animator anim; // Animator pour gérer les animations
     [SerializeField] private NavMeshAgent navMeshAgent; // NavMeshAgent pour le déplacement AI
-    [SerializeField] private PlayerHealth playerHealth; // Référence à la santé du joueur
+    [SerializeField] private HealthSystem healthSystem; // Référence à la santé du joueur
     #endregion
 
     #region Private Variables
@@ -96,8 +96,8 @@ public class GolemLogic : MonoBehaviour
 
         if (distance <= attackDistance)
         {
-            if (playerHealth != null)
-                playerHealth.ApplyDamage(attackDamage);
+            if (healthSystem != null)
+                healthSystem.ApplyDamage(attackDamage);
         }
     }
     #endregion

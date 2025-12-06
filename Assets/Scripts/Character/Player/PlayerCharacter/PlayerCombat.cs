@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
@@ -14,6 +15,7 @@ public class PlayerCombat : MonoBehaviour
     #endregion
 
     #region Private State
+    private HashSet<HealthSystem> enemiesHitThisAttack = new HashSet<HealthSystem>();
     private MeshRenderer mrHead, mrStick; // Composants MeshRenderer du modèle de flèche
     private Vector3 positionHold = new Vector3(0.1562f, -0.0224f, 0.0272f); // Position de prévisualisation
     private Quaternion rotationHold = Quaternion.Euler(77.569f, -275.068f, -362.837f); // Rotation de prévisualisation
@@ -71,8 +73,8 @@ public class PlayerCombat : MonoBehaviour
                 mrHead.enabled = true;
                 mrStick.enabled = true;
                 arrowPreview.transform.SetLocalPositionAndRotation(positionHold, rotationHold); // Position correcte
-                EnterBowHold(); 
-                
+                EnterBowHold();
+
                 if (inputs.IsBowShoot()) // Si le joueur tire
                 {
                     arrowPreview.SetActive(false); // Masque le modèle
@@ -93,9 +95,9 @@ public class PlayerCombat : MonoBehaviour
         {
             if (inputs.IsAttackPressed()) // Vérifie si le joueur attaque
             {
-                if (movement.IsGrounded()) 
+                if (movement.IsGrounded())
                     TryToAttackSwordInGround(); // Attaque au sol
-                else 
+                else
                     TryToAttackSwordInAir(); // Attaque en l'air
             }
         }
@@ -134,7 +136,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (movement == null) return;
 
-        isHoldingBow = true; 
+        isHoldingBow = true;
         anim.SetBool("isHolding", true); // Active l'animation de posture
         movement.SetBowHold(true);       // Informe le script de mouvement
     }
@@ -147,7 +149,7 @@ public class PlayerCombat : MonoBehaviour
         if (movement == null) return;
 
         isHoldingBow = false;
-        anim.SetBool("isHolding", false); 
+        anim.SetBool("isHolding", false);
         movement.SetBowHold(false);
     }
     #endregion
@@ -172,7 +174,7 @@ public class PlayerCombat : MonoBehaviour
         anim.SetTrigger("SwordAttackInAir");
         anim.applyRootMotion = false; // Ne pas appliquer le root motion pendant l'attaque
         airAttackRequested = true; // Permet l'attaque en chute
-        movement.airAttackRequested = true; 
+        movement.airAttackRequested = true;
         movement.EnableMovementAndJump(false); // Bloque le mouvement pendant l'attaque
     }
     #endregion
@@ -211,9 +213,9 @@ public class PlayerCombat : MonoBehaviour
         if (arrow == null || arrowSocket == null) return;
 
         GameObject newArrow = Instantiate(arrow, arrowSocket.position, arrowSocket.rotation); // Crée la flèche
-        Rigidbody arrowRb = newArrow.GetComponent<Rigidbody>(); 
+        Rigidbody arrowRb = newArrow.GetComponent<Rigidbody>();
         if (arrowRb == null) return;
-        
+
         Vector3 direction = arrowSocket.right; // Direction de tir
         newArrow.transform.rotation = Quaternion.LookRotation(direction) * arrowModelOffset; // Ajuste l'orientation
 
@@ -224,23 +226,22 @@ public class PlayerCombat : MonoBehaviour
 
     public void SetDamageToEnemyWithSword()
     {
+        if (enemiesHitThisAttack.Count > 0) return;
+
         float attackRange = 2f;
         float attackRadius = 0.5f;
         Vector3 attackPoint = transform.position + transform.forward * attackRange / 2;
 
         Collider[] hits = Physics.OverlapSphere(attackPoint, attackRadius, LayerMask.GetMask("Enemy"));
-        Debug.Log("Hits count: " + hits.Length);
-
         foreach (Collider hit in hits)
         {
-            EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
+            HealthSystem enemy = hit.GetComponentInParent<HealthSystem>();
             if (enemy != null)
             {
                 enemy.ApplyDamage(25f);
-                Debug.Log("Hit enemy : " + enemy.name);
+                enemiesHitThisAttack.Add(enemy);
             }
         }
-
     }
     #endregion
 }

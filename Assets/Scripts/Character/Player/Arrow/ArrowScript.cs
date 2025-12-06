@@ -5,15 +5,6 @@ public class ArrowScript : MonoBehaviour
 {
     #region Unity Methods
     /// <summary>
-    /// Méthode appelée lors de l'initialisation du script.
-    /// Actuellement vide mais peut être utilisée pour initialiser des valeurs.
-    /// </summary>
-    void Awake()
-    {
-        
-    }
-
-    /// <summary>
     /// Méthode appelée lorsqu'une collision se produit.
     /// Gère la logique de contact avec les ennemis et détruit la flèche après collision.
     /// </summary>
@@ -28,7 +19,8 @@ public class ArrowScript : MonoBehaviour
             // Si c'est un ennemi
             if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                Debug.Log("Touché");
+                HealthSystem enemy = collision.gameObject.GetComponentInParent<HealthSystem>();
+                enemy.ApplyDamage(10);
                 
                 if (enemyRb != null)
                 {
