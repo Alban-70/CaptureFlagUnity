@@ -221,5 +221,26 @@ public class PlayerCombat : MonoBehaviour
         arrowRb.isKinematic = false; // Active la physique
         arrowRb.linearVelocity = direction * speedLaunchArrow; // Applique la vitesse
     }
+
+    public void SetDamageToEnemyWithSword()
+    {
+        float attackRange = 2f;
+        float attackRadius = 0.5f;
+        Vector3 attackPoint = transform.position + transform.forward * attackRange / 2;
+
+        Collider[] hits = Physics.OverlapSphere(attackPoint, attackRadius, LayerMask.GetMask("Enemy"));
+        Debug.Log("Hits count: " + hits.Length);
+
+        foreach (Collider hit in hits)
+        {
+            EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
+            if (enemy != null)
+            {
+                enemy.ApplyDamage(25f);
+                Debug.Log("Hit enemy : " + enemy.name);
+            }
+        }
+
+    }
     #endregion
 }

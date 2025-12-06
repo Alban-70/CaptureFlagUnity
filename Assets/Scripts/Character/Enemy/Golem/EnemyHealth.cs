@@ -39,7 +39,7 @@ public class EnemyHealth : MonoBehaviour
     /// Applique des dégâts à l'ennemi et déclenche la mort si la santé tombe à zéro ou moins.
     /// </summary>
     /// <param name="damage">Montant de dégâts à appliquer à l'ennemi.</param>
-    private void ApplyDamage(float damage)
+    public void ApplyDamage(float damage)
     {
         currentHealth -= damage;
         Debug.Log("Health = " + currentHealth);

@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private Image imageFill;
     [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private EnemyHealthUI enemyHealthUI;
 
     private float targetFill;
     private float speed = 5f;

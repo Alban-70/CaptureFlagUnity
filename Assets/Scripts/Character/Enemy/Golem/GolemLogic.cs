@@ -90,7 +90,7 @@ public class GolemLogic : MonoBehaviour
     /// <summary>
     /// Inflige des dégâts au joueur si celui-ci est à portée.
     /// </summary>
-    public void DealDamage()
+    public void SetDamageToPlayer()
     {
         float distance = Vector3.Distance(transform.position, targetPlayer.position);
 

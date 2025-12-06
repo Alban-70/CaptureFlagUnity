@@ -36,6 +36,9 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     private void SwitchBowToBack()
         => weaponSwitcher.SwitchBowToBack();
+    
+    private void SetDamageToEnemyWithSword()
+        => playerCombat.SetDamageToEnemyWithSword();
 
     private void TakeArrowFromBack()
     {
