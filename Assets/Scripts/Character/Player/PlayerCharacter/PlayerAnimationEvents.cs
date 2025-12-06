@@ -41,6 +41,9 @@ public class PlayerAnimationEvents : MonoBehaviour
     private void SetDamageToEnemyWithSword()
         => playerCombat.SetDamageToEnemyWithSword();
 
+    private void ResetJumpTrigger() 
+        => player.ResetJumpTrigger();
+
     private void TakeArrowFromBack()
     {
         
