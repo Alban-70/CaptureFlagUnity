@@ -12,6 +12,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private GameObject arrow; // Prefab de la flèche
     [SerializeField] private GameObject arrowPreview; // Modèle de prévisualisation de la flèche
     [SerializeField] private Quaternion arrowModelOffset = Quaternion.identity; // Décalage de rotation pour le modèle
+    [SerializeField] private Transform playerCamera;
     #endregion
 
     #region Private State
@@ -216,7 +217,7 @@ public class PlayerCombat : MonoBehaviour
         Rigidbody arrowRb = newArrow.GetComponent<Rigidbody>();
         if (arrowRb == null) return;
 
-        Vector3 direction = arrowSocket.right; // Direction de tir
+        Vector3 direction = playerCamera.forward; // Direction de tir
         newArrow.transform.rotation = Quaternion.LookRotation(direction) * arrowModelOffset; // Ajuste l'orientation
 
         newArrow.transform.SetParent(null); // Détache la flèche du socket
