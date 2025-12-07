@@ -8,5 +8,5 @@ public class GolemAnimationEvents : MonoBehaviour
     private void DisableMovement() => golem.EnableMovement(false);
     private void EnableMovement() => golem.EnableMovement(true);
 
-    private void DealDamage() => golem.DealDamage();
+    private void DealDamage() => golem.SetDamageToPlayer();
 }

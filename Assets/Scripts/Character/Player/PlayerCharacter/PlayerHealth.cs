@@ -2,64 +2,44 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+    private GameObject playerCamera;
 
-    [Header("Slider")]
-    [SerializeField] private GameManager gameManager;
+    private HealthSystem healthSystem;
 
-    private string damageSourceLayer = "Enemy"; // On ne prend des dégâts que des objets de ce layer
-    private float maxHealth = 100f; // La vie maximale du joueur
-    private float currentHealth; // La vie actuelle
-    private int damageSourceLayerInt; // Valeur du layer convertie en int
-    private GameObject playerCamera; // Référence à la caméra du joueur (pour la détacher à la mort)
-
-    /// <summary>
-    /// Initialise la vie du joueur et récupère la caméra principale.
-    /// </summary>
     void Awake()
     {
-        gameManager.SetMaxHealth();
-        // gameManager.SetMaxHealth(maxHealth);
-        // On récupère la caméra principale du joueur
-        playerCamera = this.gameObject.transform.GetChild(0).GetChild(0).gameObject;
+        // Récupère le HealthSystem sur le joueur
+        healthSystem = GetComponent<HealthSystem>();
 
-        currentHealth = maxHealth; // On commence avec la vie max
-        damageSourceLayerInt = LayerMask.NameToLayer(damageSourceLayer); // Convertit le nom du layer en int
+        // Initialise la caméra
+        playerCamera = transform.GetChild(0).GetChild(0).gameObject;
     }
 
-    /// <summary>
-    /// Méthode appelée chaque frame. Actuellement vide mais peut être utilisée pour des mises à jour de santé ou effets.
-    /// </summary>
     void Update()
     {
-        
+        if (healthSystem.IsDead())
+        {
+            // Détache la caméra avant de mourir
+            playerCamera.transform.SetParent(null);
+            Die();
+        }
     }
 
-    /// <summary>
-    /// Gère la mort du joueur en affichant un message et en détruisant le GameObject.
-    /// </summary>
+    // public void ApplyDamage(float damage)
+    // {
+    //     healthSystem.ApplyDamage(damage);
+
+    //     if (healthSystem.IsDead())
+    //     {
+    //         // Détache la caméra avant de mourir
+    //         playerCamera.transform.SetParent(null);
+    //         Die();
+    //     }
+    // }
+
     private void Die()
     {
         Debug.Log("Player is dead");
         Destroy(gameObject);
-    }
-
-    /// <summary>
-    /// Applique des dégâts au joueur et déclenche la mort si la santé tombe à zéro ou moins.
-    /// </summary>
-    /// <param name="damage">Montant de dégâts à appliquer au joueur.</param>
-    public void ApplyDamage(float damage)
-    {
-        currentHealth -= damage;
-
-        Debug.Log("Health = " + currentHealth);
-        gameManager.SetText(currentHealth);
-        gameManager.SetHealth(currentHealth, maxHealth);
-
-        if (currentHealth <= 0f)
-        {
-            // On détache la caméra avant de détruire le joueur
-            playerCamera.transform.SetParent(null);
-            Die();
-        }
     }
 }

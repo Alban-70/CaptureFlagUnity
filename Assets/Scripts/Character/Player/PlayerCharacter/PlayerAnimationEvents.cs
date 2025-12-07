@@ -5,6 +5,7 @@ public class PlayerAnimationEvents : MonoBehaviour
     [SerializeField] private PlayerMovement player;
     [SerializeField] private PlayerCombat playerCombat;
     [SerializeField] private WeaponSwitcher weaponSwitcher;
+    [SerializeField] private ArrowScript arrowScript;
 
 
     void Awake()
@@ -36,6 +37,12 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     private void SwitchBowToBack()
         => weaponSwitcher.SwitchBowToBack();
+    
+    private void SetDamageToEnemyWithSword()
+        => playerCombat.SetDamageToEnemyWithSword();
+
+    private void ResetJumpTrigger() 
+        => player.ResetJumpTrigger();
 
     private void TakeArrowFromBack()
     {

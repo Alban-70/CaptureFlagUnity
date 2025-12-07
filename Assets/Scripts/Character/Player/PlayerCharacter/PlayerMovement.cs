@@ -37,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
     private bool moving;
     private float rotationVelocity = 0f;
     private bool isHoldingBow = false;
+    private bool jumpReady = true;
 
     [HideInInspector] public bool airAttackRequested = false;
     #endregion
@@ -207,9 +208,13 @@ public class PlayerMovement : MonoBehaviour
         anim.ResetTrigger("SwordAttackInAir");
         anim.ResetTrigger("AttackAirFall");
 
+        jumpReady = false;
         anim.SetTrigger("Jump");
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
+        Invoke(nameof(ResetJumpReady), 0.1f);
     }
+
+    private void ResetJumpReady() => jumpReady = true;
     #endregion
 
     #region Animations
@@ -234,6 +239,11 @@ public class PlayerMovement : MonoBehaviour
     {
         canMove = enable;
         canJump = enable;
+    }
+
+    public void ResetJumpTrigger()
+    {
+        anim.ResetTrigger("Jump");
     }
     #endregion
 
