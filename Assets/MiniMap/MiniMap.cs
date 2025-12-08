@@ -10,6 +10,7 @@ public class MiniMap : MonoBehaviour
 
     void Update()
     {
+        
         Vector3 newPosition = player.position;
         newPosition.y = transform.position.y;
         transform.position = newPosition;
