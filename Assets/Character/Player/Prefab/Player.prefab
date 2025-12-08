@@ -4723,11 +4723,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd356edc95adfc04db97bf20d5f92852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedDeplacement: 7
-  speedDeplacementRunning: 12
-  multipleSpeedDeplacementBackwardAndSide: 0.4
-  speedRotation: 100
-  jumpForce: 5
   groundMask:
     serializedVersion: 2
     m_Bits: 64
@@ -5528,7 +5523,6 @@ GameObject:
   - component: {fileID: 6822082739419852116}
   - component: {fileID: 4968330637911736113}
   - component: {fileID: 8556534691789795961}
-  - component: {fileID: 6399582300920869435}
   - component: {fileID: 1125027759767051269}
   m_Layer: 8
   m_Name: Main Camera
@@ -5655,20 +5649,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!114 &6399582300920869435
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6856167129349360144}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02132e0975b35ee3495ed95c03217ef3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mouseSensitivity: 1
-  playerBody: {fileID: 5381417876941324419}
 --- !u!114 &1125027759767051269
 MonoBehaviour:
   m_ObjectHideFlags: 0
