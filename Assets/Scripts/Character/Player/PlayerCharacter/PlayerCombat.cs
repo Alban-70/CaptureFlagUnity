@@ -21,7 +21,7 @@ public class PlayerCombat : MonoBehaviour
     private Vector3 positionHold = new Vector3(0.1562f, -0.0224f, 0.0272f); // Position de prévisualisation
     private Quaternion rotationHold = Quaternion.Euler(77.569f, -275.068f, -362.837f); // Rotation de prévisualisation
     private Vector3 arrowVector; // Direction ou vecteur utilisé pour le tir de la flèche
-    private float speedLaunchArrow = 35f; // Vitesse de lancement des flèches
+    private float speedLaunchArrow = 65f; // Vitesse de lancement des flèches
     private float attackCount = 1; // Pour suivre les combos d'attaques au sol
     private bool continueAirAttack = false; // Indique si la deuxième partie de l'attaque aérienne peut être déclenchée
     private bool airAttackRequested = false; // Marque qu'une attaque aérienne a été demandée

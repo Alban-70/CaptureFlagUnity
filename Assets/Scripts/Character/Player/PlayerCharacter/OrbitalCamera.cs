@@ -4,14 +4,14 @@ public class OrbitCamera : MonoBehaviour
 {
     [SerializeField] private Transform target; // Objet à suivre (le joueur)
 
-    public float distance = 3f;
-    public float xSpeed = 200f;
-    public float ySpeed = 120f;
+    private float distance = 3f;
+    private float xSpeed = 200f;
+    private float ySpeed = 120f;
 
-    public float yMin = -50f;
-    public float yMax = 60f;
+    private float yMin = -50f;
+    private float yMax = 70f;
 
-    public Vector3 targetOffset = new Vector3(0, 1.7f, 0); // hauteur caméra
+    private Vector3 targetOffset = new Vector3(0.3f, 1.7f, 0); // hauteur caméra
 
     private float x; // horizontal camera angle
     private float y; // vertical camera angle
@@ -46,7 +46,9 @@ public class OrbitCamera : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(y, x, 0);
 
         // --------- 6. Placer la caméra autour du joueur -----------
-        Vector3 position = target.position + targetOffset - rotation * Vector3.forward * distance;
+        Vector3 lateralOffset = target.right * 0.2f; // 0.2 = décalage vers la droite
+        Vector3 position = target.position + targetOffset + lateralOffset - rotation * Vector3.forward * distance;
+
 
         transform.rotation = rotation;
         transform.position = position;

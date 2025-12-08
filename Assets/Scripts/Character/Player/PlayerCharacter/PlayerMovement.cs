@@ -3,14 +3,11 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     #region Serialized Fields
-    [Header("Movement Settings")]
-    [SerializeField] private float speedDeplacement = 7f; // Vitesse de déplacement de base
-    [SerializeField] private float speedDeplacementRunning = 12f; // Vitesse quand le joueur court
-    [SerializeField] private float multipleSpeedDeplacementBackwardAndSide = 0.4f; // Ralentissement marche arrière/côté
-    [SerializeField] private float speedRotation = 100f; // Vitesse de rotation (gauche/droite)
-
-    [Header("Jump Settings")]
-    [SerializeField] private float jumpForce = 5f; // Force appliquée au saut
+    private float speedDeplacement = 7f; // Vitesse de déplacement de base
+    private float speedDeplacementRunning = 12f; // Vitesse quand le joueur court
+    private float multipleSpeedDeplacementBackwardAndSide = 0.4f; // Ralentissement marche arrière/côté
+    private float speedRotation = 100f; // Vitesse de rotation (gauche/droite)
+    private float jumpForce = 5f; // Force appliquée au saut
 
     [Header("Collision")]
     [SerializeField] private LayerMask groundMask; // Layer pour détecter le sol
