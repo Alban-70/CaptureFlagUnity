@@ -7,6 +7,7 @@ public class PlayerInputs : MonoBehaviour
     private float vertical;
     private float mouseX;
     private bool isRunning;
+    private bool isStoppingGame;
     private bool jumpPressed;
     private bool attackPressed;
     private bool bowHold;
@@ -19,6 +20,24 @@ public class PlayerInputs : MonoBehaviour
     /// </summary>
     void Update()
     {
+        isStoppingGame = Input.GetKeyDown(KeyCode.Escape);
+        
+        if (Time.timeScale == 0f)
+        {
+            // Réinitialise toutes les actions à false quand le jeu est en pause sauf isStoppingGame
+            horizontal = 0f;
+            vertical = 0f;
+            mouseX = 0f;
+            isRunning = false;
+            jumpPressed = false;
+            attackPressed = false;
+            bowHold = false;
+            bowShoot = false;
+            switchSword = false;
+            switchBow = false;
+            return;
+        }
+
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         mouseX = Input.GetAxis("Mouse X");
@@ -52,6 +71,11 @@ public class PlayerInputs : MonoBehaviour
     /// Indique si le joueur est en train de courir (Shift).
     /// </summary>
     public bool IsRunPressed() { return isRunning; }
+
+    /// <summary>
+    /// Indique si le joueur a mis le jeu en pause (Echap).
+    /// </summary>
+    public bool IsStoppingGame() { return isStoppingGame; }
 
     /// <summary>
     /// Indique si le joueur a appuyé sur la touche de saut (Space).
