@@ -2017,10 +2017,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 1
   playerBody: {fileID: 3251817783316075225}
-  distanceFromPlayer: 5
-  verticalOffset: 2
-  minY: -30
-  maxY: 60
 --- !u!1 &1948215974
 GameObject:
   m_ObjectHideFlags: 0
@@ -2405,6 +2401,11 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 1811291012}
+    - target: {fileID: 4468143555704870399, guid: a04bcb5cfe24b4892b6581126e910523,
+        type: 3}
+      propertyPath: speedRotation
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 5381417876941324419, guid: a04bcb5cfe24b4892b6581126e910523,
         type: 3}
       propertyPath: m_LocalPosition.x
