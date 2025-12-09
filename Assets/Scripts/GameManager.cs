@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -7,13 +8,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Canvas startMenu;
     [SerializeField] private Canvas pauseCanvas;
     [SerializeField] private Sprite customCursor;
-
+    [SerializeField] private AudioClip[] audioClips;
+    
+    private AudioSource beginGame;
     private Texture2D cursorTexture;
     private float cursorScale = 0.5f;
     private bool isPaused = false;
 
     void Awake()
     {
+
+        beginGame = GetComponent<AudioSource>();
+
         if (startMenu != null)
             startMenu.gameObject.SetActive(true);
 
@@ -110,6 +116,7 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         isPaused = false;
+        beginGame.PlayOneShot(audioClips[0]);
     }
 
 
