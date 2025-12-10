@@ -1,8 +1,56 @@
+# ========================================
+# Unity .gitignore pour projet collaboratif
+# ========================================
+
+# VSCode settings
 .vscode/
+
+# Unity generated folders (ne jamais versionner)
 Library/
 Logs/
 Temp/
+Obj/
+Build/
+Builds/
 UserSettings/
+
+# Crash reports
+sysinfo.txt
+
+# IDE / Editor files
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Auto-generated Unity meta files (pour IDE/debug)
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Cache / backups
+*.cache
+*.bak
+*.orig
+
+# Keep these folders tracked:
+# Assets/ -> contient vos modèles, textures, scripts, prefabs, scènes
+# ProjectSettings/ -> contient la configuration du projet
+# Packages/ -> contient manifest.json pour les packages Unity
+
+# Note importante :
+# - Tous les fichiers .meta des assets doivent être commités
+# - Ne jamais ignorer *.meta globalement
+# - Asset Serialization doit être en Force Text pour faciliter le merge
 
 Assembly-CSharp.csproj
 Assembly-CSharp-Editor.csproj

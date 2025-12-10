@@ -2,39 +2,57 @@ using UnityEngine;
 
 public class WeaponSwitcher : MonoBehaviour
 {
-    [SerializeField] GameObject swordHand;
-    [SerializeField] GameObject swordBack;
-    [SerializeField] GameObject bowBack;
-    [SerializeField] GameObject bowHand;
-    [SerializeField] GameObject bowString;
+    [SerializeField] private GameObject swordHand;   // Épée dans la main
+    [SerializeField] private GameObject swordBack;   // Épée dans le dos
+    [SerializeField] private GameObject bowBack;     // Arc dans le dos
+    [SerializeField] private GameObject bowHand;     // Arc dans la main
+    [SerializeField] private GameObject bowString;   // Cordage de l'arc
 
-
+    /// <summary>
+    /// Déplace l'épée du dos vers la main.
+    /// </summary>
     public void SwitchSwordToHand()
     {
         swordBack.SetActive(false);
         swordHand.SetActive(true);
     }
 
+    /// <summary>
+    /// Replace l'épée de la main vers le dos.
+    /// </summary>
     public void SwitchSwordToBack()
     {
         swordHand.SetActive(false);
         swordBack.SetActive(true);
     }
 
+    /// <summary>
+    /// Déplace l'arc du dos vers la main.
+    /// </summary>
     public void SwitchBowToHand()
     {
         bowBack.SetActive(false);
         bowHand.SetActive(true);
     }
 
+    /// <summary>
+    /// Replace l'arc de la main vers le dos.
+    /// </summary>
     public void SwitchBowToBack()
     {
         bowHand.SetActive(false);
         bowBack.SetActive(true);
     }
 
+    /// <summary>
+    /// Affiche la corde de l'arc.
+    /// </summary>
     public void ShowBowString() 
         => bowString.SetActive(true);
+
+    /// <summary>
+    /// Cache la corde de l'arc.
+    /// </summary>
     public void HideBowString() 
         => bowString.SetActive(false);
 }

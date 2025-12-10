@@ -2,16 +2,14 @@ using UnityEngine;
 
 public class PlayerAnimationEvents : MonoBehaviour
 {
-    private PlayerMovement player;
-    private PlayerCombat playerCombat;
-    private WeaponSwitcher weaponSwitcher;
+    [SerializeField] private PlayerMovement player;
+    [SerializeField] private PlayerCombat playerCombat;
+    [SerializeField] private WeaponSwitcher weaponSwitcher;
+    [SerializeField] private ArrowScript arrowScript;
 
 
     void Awake()
     {
-        player = transform.parent.parent.GetComponentInParent<PlayerMovement>();
-        playerCombat = transform.parent.parent.GetComponentInParent<PlayerCombat>();
-        weaponSwitcher = transform.parent.parent.GetComponent<WeaponSwitcher>();
         SwitchSwordToHand();
         SwitchBowToBack();
     }
@@ -39,6 +37,12 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     private void SwitchBowToBack()
         => weaponSwitcher.SwitchBowToBack();
+    
+    private void SetDamageToEnemyWithSword()
+        => playerCombat.SetDamageToEnemyWithSword();
+
+    private void ResetJumpTrigger() 
+        => player.ResetJumpTrigger();
 
     private void TakeArrowFromBack()
     {

@@ -1,40 +1,56 @@
+using System.Collections;
 using UnityEngine;
 
 public class ArrowScript : MonoBehaviour
 {
-    [SerializeField] private LayerMask enemyLayer;
-
-    private Rigidbody boxRb;
-    private BoxCollider boxCollider;
-
-    void Awake()
-    {
-        boxRb = gameObject.GetComponent<Rigidbody>();
-        boxCollider = gameObject.GetComponent<BoxCollider>();
-    }
-
-    private void StickyOnTarget(Transform target)
-    {
-        boxRb.linearVelocity = Vector3.zero;
-        boxRb.angularVelocity = Vector3.zero;
-        
-        transform.SetParent(target);
-        Debug.Log("Flèche plantée dans l'ennemi !");
-    }
-
-    private void UnabledRigidAndBox()
-    {
-        boxRb.isKinematic = true;
-        boxCollider.isTrigger = true;
-        // boxCollider.enabled = false;
-    }
-
+    #region Unity Methods
+    /// <summary>
+    /// Méthode appelée lorsqu'une collision se produit.
+    /// Gère la logique de contact avec les ennemis et détruit la flèche après collision.
+    /// </summary>
+    /// <param name="collision">L'objet Collision qui contient des informations sur la collision.</param>
     void OnCollisionEnter(Collision collision)
     {
-        if(((1 << collision.gameObject.layer) & enemyLayer.value) != 0)
+        // Ignore si c'est le joueur
+        if(collision.gameObject.layer != LayerMask.NameToLayer("Player"))
         {
-            StickyOnTarget(collision.transform);
-            UnabledRigidAndBox();
+            Rigidbody enemyRb = collision.gameObject.GetComponent<Rigidbody>();
+
+            // Si c'est un ennemi
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                HealthSystem enemy = collision.gameObject.GetComponentInParent<HealthSystem>();
+                enemy.ApplyDamage(10);
+                
+                if (enemyRb != null)
+                {
+                    // Gèle la position et la rotation de l'ennemi
+                    enemyRb.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+
+                    // Démarre la coroutine pour libérer le mouvement après un délai
+                    StartCoroutine(UnFreezeAfterDelay(enemyRb, 0.5f));
+                }
+            }
+
+            // Détruit la flèche après la collision
+            Destroy(gameObject);
         }
     }
+    #endregion
+
+    #region Coroutines
+    /// <summary>
+    /// Libère les contraintes de position de l'ennemi après un délai donné.
+    /// </summary>
+    /// <param name="enemyRb">Le Rigidbody de l'ennemi à débloquer.</param>
+    /// <param name="delay">Le temps en secondes avant de libérer les contraintes.</param>
+    /// <returns>Coroutine IEnumerator pour le StartCoroutine.</returns>
+    private IEnumerator UnFreezeAfterDelay(Rigidbody enemyRb, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (enemyRb != null)
+            enemyRb.constraints = RigidbodyConstraints.FreezeRotation;
+    }
+    #endregion
 }

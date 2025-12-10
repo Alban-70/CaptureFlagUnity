@@ -7,6 +7,7 @@ public class PlayerInputs : MonoBehaviour
     private float vertical;
     private float mouseX;
     private bool isRunning;
+    private bool isStoppingGame;
     private bool jumpPressed;
     private bool attackPressed;
     private bool bowHold;
@@ -14,8 +15,29 @@ public class PlayerInputs : MonoBehaviour
     private bool switchSword;
     private bool switchBow;
 
+    /// <summary>
+    /// Met à jour les valeurs des inputs du joueur à chaque frame.
+    /// </summary>
     void Update()
     {
+        isStoppingGame = Input.GetKeyDown(KeyCode.Escape);
+        
+        if (Time.timeScale == 0f)
+        {
+            // Réinitialise toutes les actions à false quand le jeu est en pause sauf isStoppingGame
+            horizontal = 0f;
+            vertical = 0f;
+            mouseX = 0f;
+            isRunning = false;
+            jumpPressed = false;
+            attackPressed = false;
+            bowHold = false;
+            bowShoot = false;
+            switchSword = false;
+            switchBow = false;
+            return;
+        }
+
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         mouseX = Input.GetAxis("Mouse X");
@@ -29,15 +51,60 @@ public class PlayerInputs : MonoBehaviour
         switchBow = Input.GetKeyDown(KeyCode.T);
     }
 
-    // Getter functions
+    #region Getter Methods
+    /// <summary>
+    /// Retourne la valeur de l'axe horizontal.
+    /// </summary>
     public float GetHorizontal() { return horizontal; }
+
+    /// <summary>
+    /// Retourne la valeur de l'axe vertical.
+    /// </summary>
     public float GetVertical() { return vertical; }
+
+    /// <summary>
+    /// Retourne la valeur de l'axe horizontal de la souris.
+    /// </summary>
     public float GetMouseX() { return mouseX; }
+
+    /// <summary>
+    /// Indique si le joueur est en train de courir (Shift).
+    /// </summary>
     public bool IsRunPressed() { return isRunning; }
+
+    /// <summary>
+    /// Indique si le joueur a mis le jeu en pause (Echap).
+    /// </summary>
+    public bool IsStoppingGame() { return isStoppingGame; }
+
+    /// <summary>
+    /// Indique si le joueur a appuyé sur la touche de saut (Space).
+    /// </summary>
     public bool IsJumpPressed() { return jumpPressed; }
+
+    /// <summary>
+    /// Indique si le joueur a appuyé sur le bouton d'attaque (Mouse0).
+    /// </summary>
     public bool IsAttackPressed() { return attackPressed; }
+
+    /// <summary>
+    /// Indique si le joueur maintient le bouton de l'arc (Mouse1).
+    /// </summary>
     public bool IsBowHold() { return bowHold; }
+
+    /// <summary>
+    /// Indique si le joueur a tiré une flèche (Mouse0).
+    /// </summary>
     public bool IsBowShoot() { return bowShoot; }
+
+    /// <summary>
+    /// Indique si le joueur a demandé à changer vers l'épée (R).
+    /// </summary>
     public bool IsSwitchSword() { return switchSword; }
+
+    /// <summary>
+    /// Indique si le joueur a demandé à changer vers l'arc (T).
+    /// </summary>
     public bool IsSwitchBow() { return switchBow; }
+    #endregion
 }
