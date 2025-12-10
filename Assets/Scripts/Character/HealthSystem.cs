@@ -4,6 +4,7 @@ public class HealthSystem : MonoBehaviour
 {
     [SerializeField] private GameObject playerCamera;
     [SerializeField] private Animator playerAnimator;
+    [SerializeField] private GameManager gameOverManager;
 
     public float maxHealth;
     public float currentHealth;
@@ -58,10 +59,19 @@ public class HealthSystem : MonoBehaviour
         Collider col = GetComponent<Collider>();
         if (col != null)
             col.enabled = false;
+
+        if (gameOverManager != null)
+            gameOverManager.ShowGameOver();
     }
 
     public void Die()
     {
+        if (gameObject.CompareTag("Player"))
+        {
+            Time.timeScale = 0f; // stoppe le jeu
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
         Destroy(gameObject);
     }
 }
