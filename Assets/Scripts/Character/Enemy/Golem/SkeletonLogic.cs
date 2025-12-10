@@ -12,7 +12,7 @@ public class SkeletonLogic : MonoBehaviour
     #endregion
 
     #region Private Variables
-    private float moveSpeed = 4f; // Vitesse de déplacement du Squelette
+    private float moveSpeed = 6f; // Vitesse de déplacement du Squelette
     private float attackDistance = 1f; // Distance à laquelle le Squelette attaque
     private float attackDamage = 5f; // Dégâts infligés au joueur
     private float distanceToPlayer; // Distance actuelle entre le Squelette et le joueur
@@ -70,6 +70,17 @@ public class SkeletonLogic : MonoBehaviour
         if (!canMove) 
             return;
 
+        if (targetPlayer == null) return;
+
+        HealthSystem playerHealth = targetPlayer.GetComponent<HealthSystem>();
+        if (playerHealth != null && playerHealth.IsDead())
+        {
+            targetPlayer = null;       // on enlève la cible
+            navMeshAgent.isStopped = true;
+            anim.SetBool("isMoving", false);
+            return;
+        }
+
         distanceToPlayer = Vector3.Distance(navMeshAgent.transform.position, targetPlayer.position);
 
         if (distanceToPlayer < attackDistance || isAttacking)
@@ -92,6 +103,8 @@ public class SkeletonLogic : MonoBehaviour
     /// </summary>
     public void SetDamageToPlayer()
     {
+        if (targetPlayer == null) return;
+        
         float distance = Vector3.Distance(transform.position, targetPlayer.position);
 
         if (distance <= attackDistance)

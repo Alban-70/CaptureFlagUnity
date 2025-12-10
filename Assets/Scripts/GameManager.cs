@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Sprite customCursor;
     [SerializeField] private AudioClip[] audioClips;
     
+    
     private AudioSource beginGame;
     private Texture2D cursorTexture;
     private float cursorScale = 0.5f;

@@ -6,6 +6,7 @@ public class PlayerAnimationEvents : MonoBehaviour
     [SerializeField] private PlayerCombat playerCombat;
     [SerializeField] private WeaponSwitcher weaponSwitcher;
     [SerializeField] private ArrowScript arrowScript;
+    [SerializeField] private HealthSystem healthSystem;
 
 
     void Awake()
@@ -48,7 +49,12 @@ public class PlayerAnimationEvents : MonoBehaviour
         => playerCombat.ResetSwordHitList();
 
     private void LaunchArrow()
+        => playerCombat.LaunchArrow();
+
+    private void Die()
     {
-        playerCombat.LaunchArrow();
+        if (healthSystem != null)
+            healthSystem.Die();
     }
+
 }
