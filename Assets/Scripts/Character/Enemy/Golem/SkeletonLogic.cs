@@ -57,7 +57,7 @@ public class SkeletonLogic : MonoBehaviour
     private void UpdateAttackState()
     {
         AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
-        isAttacking = state.IsTag("SwordAttack");
+        isAttacking = state.IsTag("Attack");
     }
     #endregion
 
@@ -76,7 +76,7 @@ public class SkeletonLogic : MonoBehaviour
         {
             navMeshAgent.isStopped = true;
             if (!isAttacking)
-                anim.SetTrigger("SwordAttack");
+                anim.SetTrigger("Attack");
         } 
         else
         {

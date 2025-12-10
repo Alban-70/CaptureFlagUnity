@@ -7,8 +7,5 @@ public class SkeletonAnimationEvents : MonoBehaviour
 
     private void DisableMovement() => skeleton.EnableMovement(false);
     private void EnableMovement() => skeleton.EnableMovement(true);
-    private void DealDamage() {
-        Debug.Log("dealdamage");
-        skeleton.SetDamageToPlayer();
-    }
+    private void DealDamage() => skeleton.SetDamageToPlayer();
 }
