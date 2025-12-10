@@ -12,7 +12,7 @@ public class SkeletonLogic : MonoBehaviour
     #endregion
 
     #region Private Variables
-    private float moveSpeed = 2f; // Vitesse de déplacement du Squelette
+    private float moveSpeed = 4f; // Vitesse de déplacement du Squelette
     private float attackDistance = 1f; // Distance à laquelle le Squelette attaque
     private float attackDamage = 5f; // Dégâts infligés au joueur
     private float distanceToPlayer; // Distance actuelle entre le Squelette et le joueur
@@ -57,7 +57,7 @@ public class SkeletonLogic : MonoBehaviour
     private void UpdateAttackState()
     {
         AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
-        isAttacking = state.IsTag("SwordAttack");
+        isAttacking = state.IsTag("Attack");
     }
     #endregion
 
@@ -76,7 +76,7 @@ public class SkeletonLogic : MonoBehaviour
         {
             navMeshAgent.isStopped = true;
             if (!isAttacking)
-                anim.SetTrigger("SwordAttack");
+                anim.SetTrigger("Attack");
         } 
         else
         {
