@@ -206,6 +206,8 @@ public class PlayerCombat : MonoBehaviour
     /// </summary>
     public void PrepareAirAttackFall() => airAttackRequested = true;
 
+    public void ResetSwordHitList() => enemiesHitThisAttack.Clear();
+
     /// <summary>
     /// Instancie et lance une flèche depuis l'arc du joueur.
     /// </summary>
@@ -237,7 +239,7 @@ public class PlayerCombat : MonoBehaviour
         foreach (Collider hit in hits)
         {
             HealthSystem enemy = hit.GetComponentInParent<HealthSystem>();
-            if (enemy != null)
+            if (enemy != null && !enemiesHitThisAttack.Contains(enemy))
             {
                 enemy.ApplyDamage(25f);
                 enemiesHitThisAttack.Add(enemy);

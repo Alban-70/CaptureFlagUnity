@@ -44,10 +44,8 @@ public class PlayerAnimationEvents : MonoBehaviour
     private void ResetJumpTrigger() 
         => player.ResetJumpTrigger();
 
-    private void TakeArrowFromBack()
-    {
-        
-    }
+    private void ResetSwordHitList()
+        => playerCombat.ResetSwordHitList();
 
     private void LaunchArrow()
     {
