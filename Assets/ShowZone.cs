@@ -9,6 +9,7 @@ public class ShowZone : MonoBehaviour
     [SerializeField] private Color[] colors;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private Image imageFill;
+    [SerializeField] private Image backgroundImage;
 
 
     private LineRenderer lr;
@@ -20,6 +21,8 @@ public class ShowZone : MonoBehaviour
 
     void Awake()
     {
+        backgroundImage.gameObject.SetActive(false);
+
         SphereCollider sphere = GetComponent<SphereCollider>();
         float radius = sphere.radius;
 
@@ -64,6 +67,7 @@ public class ShowZone : MonoBehaviour
 
         if (isCapturing && !isCaptured)
         {
+            backgroundImage.gameObject.SetActive(true);
             timer += Time.deltaTime;
 
             if (imageFill != null)
@@ -84,7 +88,11 @@ public class ShowZone : MonoBehaviour
 
             if (imageFill != null)
                 imageFill.fillAmount = Mathf.Clamp01(timer / captureDuration);
+            
+            if (timer <= 0f)
+                backgroundImage.gameObject.SetActive(false);
         }
+        
     }
 
 
