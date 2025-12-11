@@ -1,5 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -13,6 +16,9 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private GameObject arrowPreview; // Modèle de prévisualisation de la flèche
     [SerializeField] private Quaternion arrowModelOffset = Quaternion.identity; // Décalage de rotation pour le modèle
     [SerializeField] private Transform playerCamera;
+    [SerializeField] private TextMeshProUGUI numberOfArrows;
+    [SerializeField] private Image backgroundArrow;
+    [SerializeField] private TextMeshProUGUI cantShot;
     #endregion
 
     #region Private State
@@ -21,6 +27,9 @@ public class PlayerCombat : MonoBehaviour
     private Vector3 positionHold = new Vector3(0.1562f, -0.0224f, 0.0272f); // Position de prévisualisation
     private Quaternion rotationHold = Quaternion.Euler(77.569f, -275.068f, -362.837f); // Rotation de prévisualisation
     private Vector3 arrowVector; // Direction ou vecteur utilisé pour le tir de la flèche
+    private int nbArrows = 0;
+    private float cantShotFadeTime = 1f;
+    private Coroutine cantShotCoroutine;
     private float speedLaunchArrow = 65f; // Vitesse de lancement des flèches
     private float attackCount = 1; // Pour suivre les combos d'attaques au sol
     private bool continueAirAttack = false; // Indique si la deuxième partie de l'attaque aérienne peut être déclenchée
@@ -40,6 +49,7 @@ public class PlayerCombat : MonoBehaviour
         mrHead = arrowPreview.transform.GetChild(0).GetComponent<MeshRenderer>();
         mrStick = arrowPreview.transform.GetChild(1).GetComponent<MeshRenderer>();
         arrowPreview.SetActive(false); // Masque la flèche de prévisualisation au départ
+        cantShot.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -49,6 +59,8 @@ public class PlayerCombat : MonoBehaviour
     {
         HandleWeaponSwitch(); // Vérifie si le joueur change d'arme
         HandleAttack();       // Vérifie si le joueur attaque
+
+        ChangeBackgroundArrowColor();
     }
 
     /// <summary>
@@ -181,12 +193,65 @@ public class PlayerCombat : MonoBehaviour
     #endregion
 
     #region Bow Attacks
+    public void AddArrows(int add)
+    {
+        nbArrows += add;
+        numberOfArrows.text = nbArrows.ToString();
+    }
+
+    private void ChangeBackgroundArrowColor()
+    {
+        Color c = backgroundArrow.color; // créer une copie
+        if (nbArrows <= 0)
+            c.a = 0.3f;
+        else
+            c.a = 0f;            
+        backgroundArrow.color = c;
+    }
+
+    private void ShowCantShot()
+    {
+        // Si une coroutine est déjà en cours, l'arrêter
+        if (cantShotCoroutine != null)
+            StopCoroutine(cantShotCoroutine);
+
+        cantShot.gameObject.SetActive(true);
+        cantShot.color = new Color(cantShot.color.r, cantShot.color.g, cantShot.color.b, 1f); // opaque
+        cantShotCoroutine = StartCoroutine(FadeOutCantShot());
+    }
+
+    private IEnumerator FadeOutCantShot()
+    {
+        float elapsed = 0f;
+        Color startColor = cantShot.color;
+
+        while (elapsed < cantShotFadeTime)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, elapsed / cantShotFadeTime);
+            cantShot.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
+            yield return null;
+        }
+
+        cantShot.gameObject.SetActive(false);
+        cantShotCoroutine = null;
+    }
+
+
     /// <summary>
     /// Tire une flèche depuis la posture de tir.
     /// </summary>
     public void TryToAttackWhileHolding()
     {
-        anim.SetTrigger("ShotWhileHolding"); // Animation du tir
+        if (nbArrows > 0)
+        {
+            cantShot.gameObject.SetActive(false);
+            anim.SetTrigger("ShotWhileHolding");
+            nbArrows--;
+            numberOfArrows.text = nbArrows.ToString();
+        }
+        else
+            ShowCantShot();
     }
     #endregion
 
