@@ -24,6 +24,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Basic color")]
     [SerializeField] private Color baseColorText;
+
+    [Header("Differents Blocs de seetings")]
+    [SerializeField] private GameObject blocGame;
+    [SerializeField] private GameObject blocGraphics;
+    [SerializeField] private GameObject blocSounds;
+    [SerializeField] private GameObject blocKeybinds;
     
     
     private AudioSource audioSource;
@@ -32,6 +38,8 @@ public class GameManager : MonoBehaviour
     private bool isPaused = false;
     private bool isGameOver = false;
     private float fadeDuration = 5f;
+    private float lastVolume = -1f;
+    private float lastMusic = -1f;
 
     void Awake()
     {
@@ -56,8 +64,18 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        UpdateGeneralVolume(sliderVolume.value);
-        UpdateMusicVolume(sliderMusic.value);
+        if (sliderVolume.value != lastVolume)
+        {
+            audioSource.volume = sliderVolume.value;
+            UpdateSliderTextAndColor(sliderVolume.value, volumeText);
+            lastVolume = sliderVolume.value;
+        }
+
+        if (sliderMusic.value != lastMusic)
+        {
+            UpdateSliderTextAndColor(sliderMusic.value, musicText);
+            lastMusic = sliderMusic.value;
+        }
 
         if (startMenu.gameObject.activeSelf)
             SetVisibleCursor();
@@ -67,23 +85,10 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void UpdateGeneralVolume(float value)
+    private void UpdateSliderTextAndColor(float value, TextMeshProUGUI text)
     {
-        audioSource.volume = value;
-        volumeText.text = $"{Mathf.Round(value * 100)}%";
-        if (value == 0f)
-            volumeText.color = Color.red;
-        else 
-            volumeText.color = baseColorText;
-    }
-
-    private void UpdateMusicVolume(float value)
-    {
-        musicText.text = $"{Mathf.Round(value * 100)}%";
-        if (value == 0f)
-            musicText.color = Color.red;
-        else 
-            musicText.color = baseColorText;
+        text.text = $"{Mathf.Round(value * 100)}%";
+        text.color = (value <= 0.01f) ? Color.red : baseColorText;
     }
 
 
@@ -196,6 +201,21 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    private void ShowSettingsBloc(GameObject activeBloc)
+    {
+        blocGame.SetActive(activeBloc == blocGame);
+        blocGraphics.SetActive(activeBloc == blocGraphics);
+        blocSounds.SetActive(activeBloc == blocSounds);
+        blocKeybinds.SetActive(activeBloc == blocKeybinds);
+    }
+
+    public void ShowGame() => ShowSettingsBloc(blocGame);
+    public void ShowGraphics() => ShowSettingsBloc(blocGraphics);
+    public void ShowSounds() => ShowSettingsBloc(blocSounds);
+    public void ShowKeybinds() => ShowSettingsBloc(blocKeybinds);
+
+
 
     public void ShowGameOver()
     {
