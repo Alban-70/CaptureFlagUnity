@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,10 +12,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Canvas pauseCanvas;
     [SerializeField] private CanvasGroup gameOverPanel;
     [SerializeField] private Sprite customCursor;
-    [SerializeField] private AudioClip[] audioClips;
+    [SerializeField] private AudioClip[] audioClipsVolume;
+
+    [Header("Sliders")]
+    [SerializeField] private Slider sliderVolume; 
+    [SerializeField] private Slider sliderMusic; 
+
+    [Header("Texts")]
+    [SerializeField] private TextMeshProUGUI musicText;
+    [SerializeField] private TextMeshProUGUI volumeText;
+
+    [Header("Basic color")]
+    [SerializeField] private Color baseColorText;
     
     
-    private AudioSource beginGame;
+    private AudioSource audioSource;
     private Texture2D cursorTexture;
     private float cursorScale = 0.5f;
     private bool isPaused = false;
@@ -23,7 +36,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
 
-        beginGame = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
 
         if (startMenu != null)
             startMenu.gameObject.SetActive(true);
@@ -43,12 +56,34 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        UpdateGeneralVolume(sliderVolume.value);
+        UpdateMusicVolume(sliderMusic.value);
+
         if (startMenu.gameObject.activeSelf)
             SetVisibleCursor();
 
         if (playerInputs.IsStoppingGame())
             TogglePause();
 
+    }
+
+    private void UpdateGeneralVolume(float value)
+    {
+        audioSource.volume = value;
+        volumeText.text = $"{Mathf.Round(value * 100)}%";
+        if (value == 0f)
+            volumeText.color = Color.red;
+        else 
+            volumeText.color = baseColorText;
+    }
+
+    private void UpdateMusicVolume(float value)
+    {
+        musicText.text = $"{Mathf.Round(value * 100)}%";
+        if (value == 0f)
+            musicText.color = Color.red;
+        else 
+            musicText.color = baseColorText;
     }
 
 
@@ -121,7 +156,7 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         isPaused = false;
-        beginGame.PlayOneShot(audioClips[0]);
+        audioSource.PlayOneShot(audioClipsVolume[0]);
     }
 
 
