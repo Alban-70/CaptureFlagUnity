@@ -70,6 +70,17 @@ public class GolemLogic : MonoBehaviour
         if (!canMove) 
             return;
 
+        if (targetPlayer == null) return;
+
+        HealthSystem playerHealth = targetPlayer.GetComponent<HealthSystem>();
+        if (playerHealth != null && playerHealth.IsDead())
+        {
+            targetPlayer = null;       // on enlève la cible
+            navMeshAgent.isStopped = true;
+            anim.SetBool("isMoving", false);
+            return;
+        }
+        
         distanceToPlayer = Vector3.Distance(navMeshAgent.transform.position, targetPlayer.position);
 
         if (distanceToPlayer < attackDistance || isAttacking)
@@ -92,6 +103,8 @@ public class GolemLogic : MonoBehaviour
     /// </summary>
     public void SetDamageToPlayer()
     {
+        if (targetPlayer == null) return;
+
         float distance = Vector3.Distance(transform.position, targetPlayer.position);
 
         if (distance <= attackDistance)

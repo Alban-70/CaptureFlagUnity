@@ -3,9 +3,13 @@ using UnityEngine;
 public class HealthSystem : MonoBehaviour
 {
     [SerializeField] private GameObject playerCamera;
+    [SerializeField] private Animator playerAnimator;
+    [SerializeField] private GameManager gameOverManager;
 
     public float maxHealth;
     public float currentHealth;
+
+    private bool isDead = false;
 
     void Awake()
     {
@@ -14,11 +18,15 @@ public class HealthSystem : MonoBehaviour
 
     void Update()
     {
-        if (IsDead())
+        if (!isDead && IsDead())
         {
             if (gameObject.CompareTag("Player") && playerCamera != null)
-                playerCamera.transform.SetParent(null);
-            Die();
+            {
+                PlayerDeath();
+            }
+
+            else 
+                Die();
         }
     }
 
@@ -40,8 +48,30 @@ public class HealthSystem : MonoBehaviour
         return currentHealth <= 0f;
     }
 
-    private void Die()
+    private void PlayerDeath()
     {
+        isDead = true;
+
+        playerCamera.transform.SetParent(null);
+        if (playerAnimator != null)
+            playerAnimator.SetTrigger("Death");
+
+        Collider col = GetComponent<Collider>();
+        if (col != null)
+            col.enabled = false;
+
+        if (gameOverManager != null)
+            gameOverManager.ShowGameOver();
+    }
+
+    public void Die()
+    {
+        if (gameObject.CompareTag("Player"))
+        {
+            Time.timeScale = 0f; // stoppe le jeu
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
         Destroy(gameObject);
     }
 }

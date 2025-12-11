@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -7,13 +8,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerInputs playerInputs;
     [SerializeField] private Canvas startMenu;
     [SerializeField] private Canvas pauseCanvas;
+    [SerializeField] private CanvasGroup gameOverPanel;
     [SerializeField] private Sprite customCursor;
     [SerializeField] private AudioClip[] audioClips;
+    
     
     private AudioSource beginGame;
     private Texture2D cursorTexture;
     private float cursorScale = 0.5f;
     private bool isPaused = false;
+    private bool isGameOver = false;
+    private float fadeDuration = 5f;
 
     void Awake()
     {
@@ -157,5 +162,26 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
+    public void ShowGameOver()
+    {
+        if (isGameOver) return;
+        isGameOver = true;
+        gameOverPanel.gameObject.SetActive(true);
+        StartCoroutine(FadeInGameOver());
+
+        
+    }
+
+    private IEnumerator FadeInGameOver()
+    {
+        float timer = 0f;
+        while (timer < fadeDuration)
+        {
+            timer += Time.unscaledDeltaTime;
+            gameOverPanel.alpha = Mathf.Clamp01(timer / fadeDuration);
+            yield return null;
+        }
+        gameOverPanel.alpha = 1f;
+    }
 
 }
