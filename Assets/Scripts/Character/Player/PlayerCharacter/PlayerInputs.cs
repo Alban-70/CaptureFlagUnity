@@ -14,6 +14,8 @@ public class PlayerInputs : MonoBehaviour
     public KeyCode switchBowKey = KeyCode.T;
     public KeyCode runKey = KeyCode.LeftShift;
     public KeyCode pauseKey = KeyCode.Escape;
+    public KeyCode getItems = KeyCode.E;
+
     // Private fields
     private float horizontal;
     private float vertical;
@@ -26,6 +28,7 @@ public class PlayerInputs : MonoBehaviour
     private bool bowShoot;
     private bool switchSword;
     private bool switchBow;
+    private bool isGettingItems;
 
     /// <summary>
     /// Met à jour les valeurs des inputs du joueur à chaque frame.
@@ -57,6 +60,7 @@ public class PlayerInputs : MonoBehaviour
         bowShoot = Input.GetKeyDown(bowShootKey);
         switchSword = Input.GetKeyDown(switchSwordKey);
         switchBow = Input.GetKeyDown(switchBowKey);
+        isGettingItems = Input.GetKeyDown(getItems);
     }
 
     private void ResetInputs()
@@ -84,6 +88,7 @@ public class PlayerInputs : MonoBehaviour
     public KeyCode GetMoveBackwardKey() => moveBackwardKey;
     public KeyCode GetMoveLeftKey() => moveLeftKey;
     public KeyCode GetMoveRightKey() => moveRightKey;
+    public KeyCode GetItemsKey() => getItems;
 
 
     /// <summary>
@@ -140,5 +145,7 @@ public class PlayerInputs : MonoBehaviour
     /// Indique si le joueur a demandé à changer vers l'arc (T).
     /// </summary>
     public bool IsSwitchBow() { return switchBow; }
+
+    public bool IsGettingItems() { return isGettingItems; }
     #endregion
 }

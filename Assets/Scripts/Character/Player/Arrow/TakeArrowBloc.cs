@@ -7,6 +7,7 @@ public class TakeArrowBloc : MonoBehaviour
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private TextMeshProUGUI takeArrowsText;
     [SerializeField] private PlayerCombat playerCombat;
+    [SerializeField] private PlayerInputs playerInputs;
 
 
     private bool showCanva = false;
@@ -16,7 +17,7 @@ public class TakeArrowBloc : MonoBehaviour
     {
         takeArrowsText.gameObject.SetActive(showCanva);
         
-        if (showCanva && Input.GetKeyDown(KeyCode.E))
+        if (showCanva && playerInputs.IsGettingItems())
         {
             playerCombat.AddArrows(5);
             Debug.Log("ajout de 5 flèches");

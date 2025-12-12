@@ -71,7 +71,8 @@ public class GameManager : MonoBehaviour
             {"SwitchSword", k => playerInputs.switchSwordKey = k },
             {"SwitchBow", k => playerInputs.switchBowKey = k },
             {"Courir", k => playerInputs.runKey = k },
-            {"Pause", k => playerInputs.pauseKey = k }
+            {"Pause", k => playerInputs.pauseKey = k },
+            {"PrendreItems", k => playerInputs.getItems = k}
         };
 
         audioSource = GetComponent<AudioSource>();
@@ -157,6 +158,9 @@ public class GameManager : MonoBehaviour
                     break;
                 case "Pause":
                     kb.buttonText.text = playerInputs.GetPauseKey().ToString();
+                    break;
+                case "PrendreItems":
+                    kb.buttonText.text = playerInputs.GetItemsKey().ToString();
                     break;
             }
         }
