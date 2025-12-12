@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,20 +12,39 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Canvas pauseCanvas;
     [SerializeField] private CanvasGroup gameOverPanel;
     [SerializeField] private Sprite customCursor;
-    [SerializeField] private AudioClip[] audioClips;
+    [SerializeField] private AudioClip[] audioClipsVolume;
+
+    [Header("Sliders")]
+    [SerializeField] private Slider sliderVolume; 
+    [SerializeField] private Slider sliderMusic; 
+
+    [Header("Texts")]
+    [SerializeField] private TextMeshProUGUI musicText;
+    [SerializeField] private TextMeshProUGUI volumeText;
+
+    [Header("Basic color")]
+    [SerializeField] private Color baseColorText;
+
+    [Header("Differents Blocs de seetings")]
+    [SerializeField] private GameObject blocGame;
+    [SerializeField] private GameObject blocGraphics;
+    [SerializeField] private GameObject blocSounds;
+    [SerializeField] private GameObject blocKeybinds;
     
     
-    private AudioSource beginGame;
+    private AudioSource audioSource;
     private Texture2D cursorTexture;
     private float cursorScale = 0.5f;
     private bool isPaused = false;
     private bool isGameOver = false;
     private float fadeDuration = 5f;
+    private float lastVolume = -1f;
+    private float lastMusic = -1f;
 
     void Awake()
     {
 
-        beginGame = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
 
         if (startMenu != null)
             startMenu.gameObject.SetActive(true);
@@ -43,12 +64,31 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (sliderVolume.value != lastVolume)
+        {
+            audioSource.volume = sliderVolume.value;
+            UpdateSliderTextAndColor(sliderVolume.value, volumeText);
+            lastVolume = sliderVolume.value;
+        }
+
+        if (sliderMusic.value != lastMusic)
+        {
+            UpdateSliderTextAndColor(sliderMusic.value, musicText);
+            lastMusic = sliderMusic.value;
+        }
+
         if (startMenu.gameObject.activeSelf)
             SetVisibleCursor();
 
         if (playerInputs.IsStoppingGame())
             TogglePause();
 
+    }
+
+    private void UpdateSliderTextAndColor(float value, TextMeshProUGUI text)
+    {
+        text.text = $"{Mathf.Round(value * 100)}%";
+        text.color = (value <= 0.01f) ? Color.red : baseColorText;
     }
 
 
@@ -121,7 +161,7 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         isPaused = false;
-        beginGame.PlayOneShot(audioClips[0]);
+        audioSource.PlayOneShot(audioClipsVolume[0]);
     }
 
 
@@ -161,6 +201,21 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    private void ShowSettingsBloc(GameObject activeBloc)
+    {
+        blocGame.SetActive(activeBloc == blocGame);
+        blocGraphics.SetActive(activeBloc == blocGraphics);
+        blocSounds.SetActive(activeBloc == blocSounds);
+        blocKeybinds.SetActive(activeBloc == blocKeybinds);
+    }
+
+    public void ShowGame() => ShowSettingsBloc(blocGame);
+    public void ShowGraphics() => ShowSettingsBloc(blocGraphics);
+    public void ShowSounds() => ShowSettingsBloc(blocSounds);
+    public void ShowKeybinds() => ShowSettingsBloc(blocKeybinds);
+
+
 
     public void ShowGameOver()
     {
