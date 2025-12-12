@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     [Header("Basic color")]
     [SerializeField] private Color baseColorText;
 
-    [Header("Differents Blocs de seetings")]
+    [Header("Differents Blocs de settings")]
     [SerializeField] private GameObject blocGame;
     [SerializeField] private GameObject blocGraphics;
     [SerializeField] private GameObject blocSounds;
