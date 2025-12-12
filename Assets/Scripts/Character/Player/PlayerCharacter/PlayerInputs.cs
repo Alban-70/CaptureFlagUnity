@@ -2,6 +2,17 @@ using UnityEngine;
 
 public class PlayerInputs : MonoBehaviour
 {
+    public KeyCode moveForwardKey = KeyCode.Z;
+    public KeyCode moveBackwardKey = KeyCode.S;
+    public KeyCode moveLeftKey = KeyCode.Q;
+    public KeyCode moveRightKey = KeyCode.D;
+    public KeyCode jumpKey = KeyCode.Space;
+    public KeyCode attackKey = KeyCode.Mouse0;
+    public KeyCode bowKey = KeyCode.Mouse1;
+    public KeyCode switchSwordKey = KeyCode.R;
+    public KeyCode switchBowKey = KeyCode.T;
+    public KeyCode runKey = KeyCode.LeftShift;
+    public KeyCode pauseKey = KeyCode.Escape;
     // Private fields
     private float horizontal;
     private float vertical;
@@ -24,34 +35,55 @@ public class PlayerInputs : MonoBehaviour
         
         if (Time.timeScale == 0f)
         {
-            // Réinitialise toutes les actions à false quand le jeu est en pause sauf isStoppingGame
-            horizontal = 0f;
-            vertical = 0f;
-            mouseX = 0f;
-            isRunning = false;
-            jumpPressed = false;
-            attackPressed = false;
-            bowHold = false;
-            bowShoot = false;
-            switchSword = false;
-            switchBow = false;
+            ResetInputs();
             return;
         }
 
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
-        mouseX = Input.GetAxis("Mouse X");
+        horizontal = 0f;
+        vertical = 0f;
 
-        isRunning = Input.GetKey(KeyCode.LeftShift);
-        jumpPressed = Input.GetKeyDown(KeyCode.Space);
-        attackPressed = Input.GetKeyDown(KeyCode.Mouse0);
-        bowHold = Input.GetKey(KeyCode.Mouse1);
-        bowShoot = Input.GetKeyDown(KeyCode.Mouse0);
-        switchSword = Input.GetKeyDown(KeyCode.R);
-        switchBow = Input.GetKeyDown(KeyCode.T);
+        if (Input.GetKey(moveForwardKey)) vertical += 1f;
+        if (Input.GetKey(moveBackwardKey)) vertical -= 1f;
+        if (Input.GetKey(moveRightKey)) horizontal += 1f;
+        if (Input.GetKey(moveLeftKey)) horizontal -= 1f;
+
+        mouseX = Input.GetAxis("Mouse X"); 
+
+        isRunning = Input.GetKey(runKey);
+        jumpPressed = Input.GetKeyDown(jumpKey);
+        attackPressed = Input.GetKeyDown(attackKey);
+        bowHold = Input.GetKey(bowKey);
+        bowShoot = Input.GetKeyDown(attackKey);
+        switchSword = Input.GetKeyDown(switchSwordKey);
+        switchBow = Input.GetKeyDown(switchBowKey);
+    }
+
+    private void ResetInputs()
+    {
+        jumpPressed = false;
+        attackPressed = false;
+        bowHold = false;
+        bowShoot = false;
+        switchSword = false;
+        switchBow = false;
+        isRunning = false;
     }
 
     #region Getter Methods
+
+    public KeyCode GetJumpKey() => jumpKey;
+    public KeyCode GetAttackKey() => attackKey;
+    public KeyCode GetBowKey() => bowKey;
+    public KeyCode GetSwitchSwordKey() => switchSwordKey;
+    public KeyCode GetSwitchBowKey() => switchBowKey;
+    public KeyCode GetRunKey() => runKey;
+    public KeyCode GetPauseKey() => pauseKey;
+    public KeyCode GetMoveForwardKey() => moveForwardKey;
+    public KeyCode GetMoveBackwardKey() => moveBackwardKey;
+    public KeyCode GetMoveLeftKey() => moveLeftKey;
+    public KeyCode GetMoveRightKey() => moveRightKey;
+
+
     /// <summary>
     /// Retourne la valeur de l'axe horizontal.
     /// </summary>

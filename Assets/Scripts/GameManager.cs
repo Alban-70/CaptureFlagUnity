@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,20 +8,27 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 
+    [Serializable]
+    public class KeybindButton
+    {
+        public string actionName;
+        public TextMeshProUGUI buttonText;
+    }
+    [SerializeField] private List<KeybindButton> keybindButtons;
+
     [SerializeField] private PlayerInputs playerInputs;
+
+    [Header("UI References")]
     [SerializeField] private Canvas startMenu;
     [SerializeField] private Canvas pauseCanvas;
     [SerializeField] private CanvasGroup gameOverPanel;
     [SerializeField] private Sprite customCursor;
     [SerializeField] private AudioClip[] audioClipsVolume;
-
-    [Header("Sliders")]
     [SerializeField] private Slider sliderVolume; 
     [SerializeField] private Slider sliderMusic; 
-
-    [Header("Texts")]
     [SerializeField] private TextMeshProUGUI musicText;
     [SerializeField] private TextMeshProUGUI volumeText;
+
 
     [Header("Basic color")]
     [SerializeField] private Color baseColorText;
@@ -41,8 +49,29 @@ public class GameManager : MonoBehaviour
     private float lastVolume = -1f;
     private float lastMusic = -1f;
 
+    // Rebind System
+    private bool waitingForKey = false;
+    private string currentActionToRebind;
+    private TextMeshProUGUI currentButtonText;
+    private Dictionary<string, Action<KeyCode>> keyActions;
+
     void Awake()
     {
+        UpdateAllKeybindTexts();
+        keyActions = new Dictionary<string, Action<KeyCode>>()
+        {
+            {"Avancer", k => playerInputs.moveForwardKey = k },
+            {"Reculer", k => playerInputs.moveBackwardKey = k },
+            {"Droite", k => playerInputs.moveRightKey = k },
+            {"Gauche", k => playerInputs.moveLeftKey = k },
+            {"Sauter", k => playerInputs.jumpKey = k },
+            {"Attaquer", k => playerInputs.attackKey = k },
+            {"Arc", k => playerInputs.bowKey = k },
+            {"SwitchSword", k => playerInputs.switchSwordKey = k },
+            {"SwitchBow", k => playerInputs.switchBowKey = k },
+            {"Courir", k => playerInputs.runKey = k },
+            {"Pause", k => playerInputs.pauseKey = k }
+        };
 
         audioSource = GetComponent<AudioSource>();
 
@@ -64,31 +93,87 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (sliderVolume.value != lastVolume)
+        if (!string.IsNullOrEmpty(currentActionToRebind) && Input.anyKeyDown)
         {
-            audioSource.volume = sliderVolume.value;
-            UpdateSliderTextAndColor(sliderVolume.value, volumeText);
-            lastVolume = sliderVolume.value;
+            foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+            {
+                if (Input.GetKeyDown(key))
+                {
+                    AssignKey(currentActionToRebind, key);
+                    currentActionToRebind = "";
+                    break;
+                }
+            }
         }
-
-        if (sliderMusic.value != lastMusic)
-        {
-            UpdateSliderTextAndColor(sliderMusic.value, musicText);
-            lastMusic = sliderMusic.value;
-        }
+        UpdateSlider(sliderVolume, lastVolume, volumeText);
+        UpdateSlider(sliderMusic, lastMusic, musicText);
 
         if (startMenu.gameObject.activeSelf)
             SetVisibleCursor();
 
         if (playerInputs.IsStoppingGame())
             TogglePause();
-
     }
+
+    private void UpdateAllKeybindTexts()
+    {
+        foreach (var kb in keybindButtons)
+        {
+            switch (kb.actionName)
+            {
+                case "Avancer":
+                    kb.buttonText.text = playerInputs.GetMoveForwardKey().ToString();
+                    break;
+                case "Reculer":
+                    kb.buttonText.text = playerInputs.GetMoveBackwardKey().ToString();
+                    break;
+                case "Droite":
+                    kb.buttonText.text = playerInputs.GetMoveRightKey().ToString();
+                    break;
+                case "Gauche":
+                    kb.buttonText.text = playerInputs.GetMoveLeftKey().ToString();
+                    break;
+                case "Sauter":
+                    kb.buttonText.text = playerInputs.GetJumpKey().ToString();
+                    break;
+                case "Attaquer":
+                    kb.buttonText.text = playerInputs.GetAttackKey().ToString();
+                    break;
+                case "Arc":
+                    kb.buttonText.text = playerInputs.GetBowKey().ToString();
+                    break;
+                case "SwitchSword":
+                    kb.buttonText.text = playerInputs.GetSwitchSwordKey().ToString();
+                    break;
+                case "SwitchBow":
+                    kb.buttonText.text = playerInputs.GetSwitchBowKey().ToString();
+                    break;
+                case "Courir":
+                    kb.buttonText.text = playerInputs.GetRunKey().ToString();
+                    break;
+                case "Pause":
+                    kb.buttonText.text = playerInputs.GetPauseKey().ToString();
+                    break;
+            }
+        }
+    }
+
+
 
     private void UpdateSliderTextAndColor(float value, TextMeshProUGUI text)
     {
         text.text = $"{Mathf.Round(value * 100)}%";
         text.color = (value <= 0.01f) ? Color.red : baseColorText;
+    }
+
+    private void UpdateSlider(Slider slider, float lastValue, TextMeshProUGUI text)
+    {
+        if (slider.value != lastValue)
+        {
+            audioSource.volume = slider.value; // ou sliderMusic.value selon contexte
+            UpdateSliderTextAndColor(slider.value, text);
+            lastValue = slider.value;
+        }
     }
 
 
@@ -210,11 +295,51 @@ public class GameManager : MonoBehaviour
         blocKeybinds.SetActive(activeBloc == blocKeybinds);
     }
 
+    public void StartRebind(string actionName)
+    {
+        if (waitingForKey) return; // ignore si déjà en attente
+        currentActionToRebind = actionName;
+
+        KeybindButton kb = keybindButtons.Find(k => k.actionName == actionName);
+        if (kb != null)
+        {
+            currentButtonText = kb.buttonText;
+            currentButtonText.text = "> " + currentButtonText.text + " <";
+        }
+    } 
+
+    private void AssignKey(string actionName, KeyCode newKey)
+    {
+        if (keyActions.TryGetValue(actionName, out var assign))
+            assign(newKey);
+
+        // Met à jour le texte automatiquement
+        foreach (var kb in keybindButtons)
+            if (kb.actionName == actionName)
+                kb.buttonText.text = newKey.ToString();
+    }
+
+    #region Show Any Content
     public void ShowGame() => ShowSettingsBloc(blocGame);
     public void ShowGraphics() => ShowSettingsBloc(blocGraphics);
     public void ShowSounds() => ShowSettingsBloc(blocSounds);
     public void ShowKeybinds() => ShowSettingsBloc(blocKeybinds);
+    #endregion
 
+
+    #region Rebind Any Key
+    public void OnRebindButtonClicked(string actionName)
+    {
+        StartRebind(actionName);
+    }
+    // public void StartRebindForward(GameObject forwardButton) => StartRebind("Forward", forwardButton);
+    // public void StartRebindBackward(GameObject backwardButton) => StartRebind("Forward", backwardButton);
+    // public void StartRebindRight(GameObject rightButton) => StartRebind("Forward", rightButton);
+    // public void StartRebindLeft(GameObject leftButton) => StartRebind("Forward", leftButton);
+    // public void StartRebindRun(GameObject runButton) => StartRebind("Forward", runButton);
+    // public void StartRebindJump(GameObject jumpButton) => StartRebind("Forward", jumpButton);
+
+    #endregion
 
 
     public void ShowGameOver()
@@ -223,8 +348,6 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
         gameOverPanel.gameObject.SetActive(true);
         StartCoroutine(FadeInGameOver());
-
-        
     }
 
     private IEnumerator FadeInGameOver()
