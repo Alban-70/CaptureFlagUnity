@@ -8,6 +8,7 @@ public class PlayerInputs : MonoBehaviour
     public KeyCode moveRightKey = KeyCode.D;
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode attackKey = KeyCode.Mouse0;
+    public KeyCode bowShootKey = KeyCode.Mouse0;
     public KeyCode bowKey = KeyCode.Mouse1;
     public KeyCode switchSwordKey = KeyCode.R;
     public KeyCode switchBowKey = KeyCode.T;
@@ -53,7 +54,7 @@ public class PlayerInputs : MonoBehaviour
         jumpPressed = Input.GetKeyDown(jumpKey);
         attackPressed = Input.GetKeyDown(attackKey);
         bowHold = Input.GetKey(bowKey);
-        bowShoot = Input.GetKeyDown(attackKey);
+        bowShoot = Input.GetKeyDown(bowShootKey);
         switchSword = Input.GetKeyDown(switchSwordKey);
         switchBow = Input.GetKeyDown(switchBowKey);
     }
@@ -73,6 +74,7 @@ public class PlayerInputs : MonoBehaviour
 
     public KeyCode GetJumpKey() => jumpKey;
     public KeyCode GetAttackKey() => attackKey;
+    public KeyCode GetBowShootKey() => bowShootKey;
     public KeyCode GetBowKey() => bowKey;
     public KeyCode GetSwitchSwordKey() => switchSwordKey;
     public KeyCode GetSwitchBowKey() => switchBowKey;

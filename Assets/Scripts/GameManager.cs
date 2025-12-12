@@ -65,8 +65,9 @@ public class GameManager : MonoBehaviour
             {"Droite", k => playerInputs.moveRightKey = k },
             {"Gauche", k => playerInputs.moveLeftKey = k },
             {"Sauter", k => playerInputs.jumpKey = k },
-            {"Attaquer", k => playerInputs.attackKey = k },
-            {"Arc", k => playerInputs.bowKey = k },
+            {"AttaquerEpee", k => playerInputs.attackKey = k },
+            {"Viser", k => playerInputs.bowKey = k },
+            {"AttaquerArc", k => playerInputs.bowShootKey = k },
             {"SwitchSword", k => playerInputs.switchSwordKey = k },
             {"SwitchBow", k => playerInputs.switchBowKey = k },
             {"Courir", k => playerInputs.runKey = k },
@@ -136,11 +137,14 @@ public class GameManager : MonoBehaviour
                 case "Sauter":
                     kb.buttonText.text = playerInputs.GetJumpKey().ToString();
                     break;
-                case "Attaquer":
-                    kb.buttonText.text = playerInputs.GetAttackKey().ToString();
+                case "AttaquerEpee":
+                    kb.buttonText.text = KeyCodeForUser(playerInputs.GetAttackKey());
                     break;
-                case "Arc":
-                    kb.buttonText.text = playerInputs.GetBowKey().ToString();
+                case "Viser":
+                    kb.buttonText.text = KeyCodeForUser(playerInputs.GetBowKey());
+                    break;
+                case "AttaquerArc":
+                    kb.buttonText.text = KeyCodeForUser(playerInputs.GetBowShootKey());
                     break;
                 case "SwitchSword":
                     kb.buttonText.text = playerInputs.GetSwitchSwordKey().ToString();
@@ -149,7 +153,7 @@ public class GameManager : MonoBehaviour
                     kb.buttonText.text = playerInputs.GetSwitchBowKey().ToString();
                     break;
                 case "Courir":
-                    kb.buttonText.text = playerInputs.GetRunKey().ToString();
+                    kb.buttonText.text = KeyCodeForUser(playerInputs.GetRunKey());
                     break;
                 case "Pause":
                     kb.buttonText.text = playerInputs.GetPauseKey().ToString();
@@ -157,6 +161,31 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    private string KeyCodeForUser(KeyCode key)
+    {
+        switch (key)
+        {
+            case KeyCode.Mouse0: return "Clic gauche";
+            case KeyCode.Mouse1: return "Clic droit";
+            case KeyCode.Mouse2: return "Clic molette";
+            case KeyCode.Mouse3: return "Bouton souris 4";
+            case KeyCode.Mouse4: return "Bouton souris 5";
+            case KeyCode.Mouse5: return "Bouton souris 6";
+            case KeyCode.Mouse6: return "Bouton souris 7";
+
+            case KeyCode.LeftShift: return "Shift gauche";
+            case KeyCode.RightShift: return "Shift droit";
+            case KeyCode.LeftControl: return "Ctrl gauche";
+            case KeyCode.RightControl: return "Ctrl droit";
+            case KeyCode.LeftAlt: return "Alt gauche";
+            case KeyCode.RightAlt: return "Alt droit";
+
+            default:
+                return key.ToString();
+        }
+    }
+
 
 
 
