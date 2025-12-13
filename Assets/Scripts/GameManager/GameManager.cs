@@ -1,0 +1,106 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class GameManager : MonoBehaviour
+{
+
+    [Header("Manager scripts")]
+    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private PauseManager pauseManager; 
+    [SerializeField] private KeyBindManager keyBindManager; 
+    [SerializeField] private UI_Manager uI_Manager; 
+
+    [SerializeField] private Loader loader;
+
+    [SerializeField] private Slider sliderVolume; 
+    [SerializeField] private Slider sliderMusic; 
+    [SerializeField] private TextMeshProUGUI musicText;
+    [SerializeField] private TextMeshProUGUI volumeText;
+
+    [Header("Basic color")]
+    [SerializeField] private Color baseColorText;
+
+    private bool isGameOver = false;
+
+    void Awake()
+    {
+        uI_Manager.ShowStartMenu();
+    }
+
+
+    void Update()
+    {
+        
+        UpdateSlider(sliderVolume, volumeText);
+        UpdateSlider(sliderMusic, musicText);
+    }
+
+    private void UpdateSliderTextAndColor(float value, TextMeshProUGUI text)
+    {
+        text.text = $"{Mathf.Round(value * 100)}%";
+        text.color = (value <= 0.01f) ? Color.red : baseColorText;
+    }
+
+    private void UpdateSlider(Slider slider, TextMeshProUGUI text)
+    {
+        audioManager.SetVolume(slider.value);
+        UpdateSliderTextAndColor(slider.value, text);
+
+    }
+
+
+    public void StartGame()
+    {
+        Time.timeScale = 1f;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        audioManager.PlayDebutJeu();
+        uI_Manager.HideStartMenu();
+        // loader.StartLoading("Scenes/Castle"); // lance le loading UI
+    }
+
+    public void StartNewGame()
+    {
+        Debug.Log("Start new game");
+    }
+
+    public void GoToSettings()
+    {
+        uI_Manager.ShowSettings();
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        string currentScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentScene);
+    }
+
+    public void ShowCredits()
+    {
+        Debug.Log("Show credits");
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void ShowGameOver()
+    {
+        if (isGameOver) return;
+
+        Time.timeScale = 0f;
+        uI_Manager.showGameOverPanel();
+    }
+
+}

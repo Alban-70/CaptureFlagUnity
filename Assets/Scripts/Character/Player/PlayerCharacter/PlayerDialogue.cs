@@ -6,6 +6,7 @@ public class PlayerDialogue : MonoBehaviour
 {
 
     [SerializeField] private PlayerInputs playerInputs;
+    [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private Canvas dialogCanvas;
     [SerializeField] private TextMeshProUGUI textUI;
     
@@ -13,6 +14,7 @@ public class PlayerDialogue : MonoBehaviour
     private PNJ_Dialogue currentPNJ;
     private string[] currentDialogues;
 
+    private float rotationSpeed = 5f;
     private float letterDelay = 0.05f;
     private int currentIndex = 0;
     private bool isTyping = false;
@@ -40,38 +42,19 @@ public class PlayerDialogue : MonoBehaviour
 
     void StartDialogue(PNJ_Dialogue pnj)
     {
+        StartCoroutine(RotatePNJToPlayer(pnj.transform));
+
         dialogCanvas.gameObject.SetActive(true);
+        playerMovement.canMove = false;
+        playerMovement.canJump = false;
+
         currentDialogues = pnj.dialogues;
         currentIndex = 0;
         isDialoging = true;
 
         typingCoroutine = StartCoroutine(TypeText(currentDialogues[currentIndex]));
     }
-
-
-
-
-    IEnumerator TypeText(string sentence)
-    {
-        isTyping = true;
-        textUI.text = "";
-
-        foreach (char letter in sentence)
-        {
-            textUI.text += letter;
-            float delay = letterDelay;
-
-            if (letter == ',' || letter == ';' || letter == ':')
-                delay = 0.5f;
-
-            else if (letter == '.' || letter == '!' || letter == '?')
-                delay = 0.8f;
-
-            yield return new WaitForSecondsRealtime(delay);
-        }
-
-        isTyping = false;
-    }
+    
 
     void NextDialogue()
     {
@@ -107,6 +90,9 @@ public class PlayerDialogue : MonoBehaviour
         isDialoging = false;
         currentDialogues = null;
         currentPNJ = null;
+
+        playerMovement.canMove = true;
+        playerMovement.canJump = true;
     }
 
     public void SetCurrentPNJ(PNJ_Dialogue pnj)
@@ -119,4 +105,50 @@ public class PlayerDialogue : MonoBehaviour
         currentPNJ = null;
     }
 
+    IEnumerator TypeText(string sentence)
+    {
+        isTyping = true;
+        textUI.text = "";
+
+        foreach (char letter in sentence)
+        {
+            textUI.text += letter;
+            float delay = letterDelay;
+
+            if (letter == ',' || letter == ';' || letter == ':')
+                delay = 0.5f;
+
+            else if (letter == '.' || letter == '!' || letter == '?')
+                delay = 0.8f;
+
+            yield return new WaitForSecondsRealtime(delay);
+        }
+
+        isTyping = false;
+    }
+
+
+    IEnumerator RotatePNJToPlayer(Transform pnjTransform)
+    {
+        Vector3 direction = transform.position - pnjTransform.position;
+        direction.y = 0f;
+
+        if (direction == Vector3.zero)  // Si le PNJ regarde déjà le player
+            yield break;
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+        while (Quaternion.Angle(pnjTransform.rotation, targetRotation) > 0.5f)
+        {
+            pnjTransform.rotation = Quaternion.Slerp(
+                pnjTransform.rotation,
+                targetRotation,
+                Time.deltaTime * rotationSpeed
+            );
+
+            yield return null;
+        }
+
+        pnjTransform.rotation = targetRotation;
+    }
 }

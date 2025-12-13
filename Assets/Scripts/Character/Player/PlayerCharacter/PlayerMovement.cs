@@ -24,8 +24,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private bool wasGrounded;
     private bool isFalling;
-    private bool canMove = true;
-    private bool canJump = true;
+    public bool canMove = true;
+    public bool canJump = true;
 
     private float horizontal;
     private float vertical;
