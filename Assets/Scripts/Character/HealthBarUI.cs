@@ -14,7 +14,6 @@ public class HealthBarUI : MonoBehaviour
     void Update()
     {
         if (target == null) return;
-        Debug.Log("health player : " + target.currentHealth);
         
         targetFill = target.currentHealth / target.maxHealth;
         imageFill.fillAmount = Mathf.Lerp(imageFill.fillAmount, targetFill, Time.deltaTime * speed);

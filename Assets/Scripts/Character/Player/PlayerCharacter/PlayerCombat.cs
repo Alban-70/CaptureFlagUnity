@@ -35,8 +35,8 @@ public class PlayerCombat : MonoBehaviour
     private bool continueAirAttack = false; // Indique si la deuxième partie de l'attaque aérienne peut être déclenchée
     private bool airAttackRequested = false; // Marque qu'une attaque aérienne a été demandée
     private bool isHoldingBow = false; // Indique si le joueur tient son arc
-    private enum WeaponType { Sword, Bow } // Types d'armes disponibles
-    private WeaponType currentWeapon = WeaponType.Sword; // Arme actuellement équipée
+    [HideInInspector] public enum WeaponType { Sword, Bow } // Types d'armes disponibles
+    [HideInInspector] public WeaponType currentWeapon = WeaponType.Sword; // Arme actuellement équipée
     #endregion
 
     #region Bow Holding & Weapon Switching

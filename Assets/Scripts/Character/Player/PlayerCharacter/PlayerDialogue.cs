@@ -8,6 +8,7 @@ public class PlayerDialogue : MonoBehaviour
     [SerializeField] private PlayerInputs playerInputs;
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private Canvas dialogCanvas;
+    [SerializeField] private TextMeshProUGUI showTextForSpeak;
     [SerializeField] private TextMeshProUGUI textUI;
     
 
@@ -19,6 +20,7 @@ public class PlayerDialogue : MonoBehaviour
     private int currentIndex = 0;
     private bool isTyping = false;
     private bool isDialoging = false;
+    [HideInInspector] public bool canStartQuest = false;
     private Coroutine typingCoroutine;
 
 
@@ -91,24 +93,30 @@ public class PlayerDialogue : MonoBehaviour
 
     void EndDialogue()
     {
+        currentPNJ.StopSpeakAnimation();
         // Fin du dialogue
         dialogCanvas.gameObject.SetActive(false);
         isDialoging = false;
         currentDialogues = null;
-        // currentPNJ = null;
 
         playerMovement.canMove = true;
         playerMovement.canJump = true;
+
+        if (currentPNJ.tag == "Pretre")
+            canStartQuest = true;
     }
 
     public void SetCurrentPNJ(PNJ_Dialogue pnj)
     {   
         currentPNJ = pnj;
+        showTextForSpeak.text = $"Appuyez sur [{currentPNJ.playerInputs.GetDialogKey()}] pour parler";
+        showTextForSpeak.gameObject.SetActive(true);
     }
 
     public void ClearPNJ()
     {
         currentPNJ = null;
+        showTextForSpeak.gameObject.SetActive(false);
     }
 
     IEnumerator TypeText(string sentence)

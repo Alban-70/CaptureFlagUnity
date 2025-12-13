@@ -4,33 +4,35 @@ using UnityEngine;
 public class PNJ_Dialogue : MonoBehaviour
 {
     [SerializeField] private Animator animPNJ;
-    [SerializeField] private TextMeshProUGUI textSpeak; 
-    [SerializeField] private PlayerInputs playerInputs;
+    [SerializeField] public PlayerInputs playerInputs;
     [SerializeField] private LayerMask playerLayer;
     [TextArea(3, 5)] 
     [SerializeField] public string[] dialogues;
 
     [HideInInspector] public bool showText = false;
+    private Rigidbody rb;
 
     void Awake()
     {
-        textSpeak.text = $"Appuyez sur [{playerInputs.GetDialogKey()}] pour parler";
+        rb = GetComponent<Rigidbody>();
     }
 
-    void Update()
-    {
-        textSpeak.gameObject.SetActive(showText);
-    }
 
     public void StartSpeakAnimation()
     {
         animPNJ.SetTrigger("Speaking");
     }
 
+    public void StopSpeakAnimation()
+    {
+        animPNJ.ResetTrigger("Speaking");
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (((1 << other.gameObject.layer) & playerLayer) != 0)
         {
+            rb.isKinematic = true;
             showText = true;
             PlayerDialogue playerDialogue = other.GetComponentInParent<PlayerDialogue>();
             if (playerDialogue != null)
@@ -44,6 +46,7 @@ public class PNJ_Dialogue : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & playerLayer) != 0)
         {
+            rb.isKinematic = false;
             showText = false;
             PlayerDialogue playerDialogue = other.GetComponentInParent<PlayerDialogue>();
             if (playerDialogue != null)

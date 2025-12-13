@@ -406,6 +406,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 140045694}
   m_CullTransparentMesh: 1
+--- !u!1 &143968891
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 143968892}
+  - component: {fileID: 143968893}
+  m_Layer: 0
+  m_Name: CapsulePretre
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &143968892
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 143968891}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1387529357}
+  m_Father: {fileID: 2115058763}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &143968893
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 143968891}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1.8707066
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.95036006, z: 0}
 --- !u!1 &156705623
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,10 +635,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f1187fd9d00e6ad3b5c623845bc5a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCombat: {fileID: 645518341}
+  gameOverPanel: {fileID: 7646333800639340031}
   startMenu: {fileID: 1440551087}
   overlay: {fileID: 1590085223}
   settingsCanvas: {fileID: 929892093}
-  gameOverPanel: {fileID: 7646333800639340031}
+  crosshair: {fileID: 306093958}
   blocGame: {fileID: 1681633852}
   blocGraphics: {fileID: 1162885662}
   blocSounds: {fileID: 1473085824}
@@ -773,6 +831,18 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!114 &306093958 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7793200336915417621, guid: a61b94eebadab1e479ecf0906eeda6f2,
+    type: 3}
+  m_PrefabInstance: {fileID: 6459924788657287683}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &316515931
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1564,6 +1634,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1360560051}
+  - {fileID: 2115058763}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &576181966
@@ -4614,17 +4685,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animPNJ: {fileID: 1656480775}
-  textSpeak: {fileID: 1298578512}
   playerInputs: {fileID: 2053494163}
   playerLayer:
     serializedVersion: 2
     m_Bits: 256
   dialogues:
-  - Ah, bonjour, jeune homme.
-  - "Une relique ancienne fait l\u2019objet de nombreuses rumeurs, et certaines m\xE8neraient
-    jusqu\u2019au ch\xE2teau."
-  - "Je te serais reconnaissant d\u2019interroger les gens du village. Peut-\xEAtre
-    que l\u2019un d\u2019eux d\xE9tient une information pr\xE9cieuse."
+  - "Salut, \xE9tranger !"
+  - "Des objets anciens circulent dans les l\xE9gendes locales. Moi, je pr\xE9f\xE8re
+    vendre mes marchandises, mais j\u2019ai entendu des bribes de r\xE9cit."
+  - "Va demander aux habitants, ils adorent parler de myst\xE8res."
   showText: 0
 --- !u!114 &1365828371 stripped
 MonoBehaviour:
@@ -4638,6 +4707,86 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &1387529356
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 143968892}
+    m_Modifications:
+    - target: {fileID: 4754508615900690819, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754508615900690819, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754508615900690819, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754508615900690819, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754508615900690819, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754508615900690819, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754508615900690819, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754508615900690819, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754508615900690819, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754508615900690819, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5382004731742462777, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+        type: 3}
+      propertyPath: m_Name
+      value: PT_Priest_StPatrick
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca, type: 3}
+--- !u!4 &1387529357 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4754508615900690819, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+    type: 3}
+  m_PrefabInstance: {fileID: 1387529356}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1387529358 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1665000017619231737, guid: 016f4a7b359d4d448a0c5cfbb05fa8ca,
+    type: 3}
+  m_PrefabInstance: {fileID: 1387529356}
+  m_PrefabAsset: {fileID: 0}
 --- !u!223 &1404277290 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 4856659113949495963, guid: a55054a7d93b95a7bad1edebaf61b2c3,
@@ -4680,6 +4829,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1481057314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1481057315}
+  - component: {fileID: 1481057316}
+  m_Layer: 0
+  m_Name: DetectPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1481057315
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481057314}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2115058763}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1481057316
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481057314}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 2, z: 3}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1555770837 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 702219707647359890, guid: a61b94eebadab1e479ecf0906eeda6f2,
@@ -5217,7 +5419,9 @@ MonoBehaviour:
   playerInputs: {fileID: 2053494163}
   playerMovement: {fileID: 2053494165}
   dialogCanvas: {fileID: 601645837}
+  showTextForSpeak: {fileID: 1298578512}
   textUI: {fileID: 1335703009}
+  canStartQuest: 0
 --- !u!114 &2059363171 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6016476934836885228, guid: a61b94eebadab1e479ecf0906eeda6f2,
@@ -5380,6 +5584,91 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2115058762
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2115058763}
+  - component: {fileID: 2115058765}
+  - component: {fileID: 2115058764}
+  m_Layer: 0
+  m_Name: Pretre
+  m_TagString: Pretre
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2115058763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2115058762}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5.38, y: 0, z: -6.922}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 143968892}
+  - {fileID: 1481057315}
+  m_Father: {fileID: 565568053}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2115058764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2115058762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5c3b35b63b6fca88c21cf3ca7ea78f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animPNJ: {fileID: 1387529358}
+  playerInputs: {fileID: 2053494163}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  dialogues:
+  - Bonjour, jeune aventurier.
+  - "On raconte que le ch\xE2teau rec\xE8le des secrets anciens. Certains habitants
+    connaissent des histoires que peu osent raconter."
+  - Si tu leur poses les bonnes questions, tu pourrais en apprendre davantage.
+  showText: 0
+--- !u!54 &2115058765
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2115058762}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!224 &895408260525170323
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7497,6 +7786,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontColor.r
       value: 0.9607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 1303129337210902986, guid: a61b94eebadab1e479ecf0906eeda6f2,
+        type: 3}
+      propertyPath: m_Name
+      value: Crosshair
       objectReference: {fileID: 0}
     - target: {fileID: 1848924846013831178, guid: a61b94eebadab1e479ecf0906eeda6f2,
         type: 3}

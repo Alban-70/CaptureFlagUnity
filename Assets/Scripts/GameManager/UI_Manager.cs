@@ -4,11 +4,14 @@ using UnityEngine.UI;
 
 public class UI_Manager : MonoBehaviour
 {
+    [SerializeField] private PlayerCombat playerCombat;
+
     [Header("UI References")]
+    [SerializeField] private CanvasGroup gameOverPanel;
     [SerializeField] private Canvas startMenu;
     [SerializeField] private Image overlay;
     [SerializeField] private Image settingsCanvas;
-    [SerializeField] private CanvasGroup gameOverPanel;
+    [SerializeField] private RawImage crosshair;
 
     [Header("Differents Blocs de settings")]
     [SerializeField] private GameObject blocGame;
@@ -23,7 +26,7 @@ public class UI_Manager : MonoBehaviour
     private Texture2D cursorTexture;
     private float cursorScale = 0.5f;
     private float fadeDuration = 5f;
-
+    private bool showCrosshair = false;
 
 
 
@@ -46,6 +49,10 @@ public class UI_Manager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.Auto);
         }
+
+        crosshair.gameObject.SetActive(
+            playerCombat.currentWeapon == PlayerCombat.WeaponType.Bow
+        );
     }
 
 
