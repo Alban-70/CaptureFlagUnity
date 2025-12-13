@@ -14,7 +14,9 @@ public class PlayerInputs : MonoBehaviour
     public KeyCode switchBowKey = KeyCode.T;
     public KeyCode runKey = KeyCode.LeftShift;
     public KeyCode pauseKey = KeyCode.Escape;
-    public KeyCode getItems = KeyCode.E;
+    public KeyCode getItemsKey = KeyCode.E;
+    public KeyCode dialogKey = KeyCode.E;
+    public KeyCode nextDialogKey = KeyCode.Return;
 
     // Private fields
     private float horizontal;
@@ -29,6 +31,8 @@ public class PlayerInputs : MonoBehaviour
     private bool switchSword;
     private bool switchBow;
     private bool isGettingItems;
+    private bool isDialog;
+    private bool isNextDialog;
 
     /// <summary>
     /// Met à jour les valeurs des inputs du joueur à chaque frame.
@@ -60,7 +64,9 @@ public class PlayerInputs : MonoBehaviour
         bowShoot = Input.GetKeyDown(bowShootKey);
         switchSword = Input.GetKeyDown(switchSwordKey);
         switchBow = Input.GetKeyDown(switchBowKey);
-        isGettingItems = Input.GetKeyDown(getItems);
+        isGettingItems = Input.GetKeyDown(getItemsKey);
+        isDialog = Input.GetKeyDown(dialogKey);
+        isNextDialog = Input.GetKeyDown(nextDialogKey);
     }
 
     private void ResetInputs()
@@ -88,7 +94,9 @@ public class PlayerInputs : MonoBehaviour
     public KeyCode GetMoveBackwardKey() => moveBackwardKey;
     public KeyCode GetMoveLeftKey() => moveLeftKey;
     public KeyCode GetMoveRightKey() => moveRightKey;
-    public KeyCode GetItemsKey() => getItems;
+    public KeyCode GetItemsKey() => getItemsKey;
+    public KeyCode GetDialogKey() => dialogKey;
+    public KeyCode GetNextDialogKey() => nextDialogKey;
 
 
     /// <summary>
@@ -147,5 +155,9 @@ public class PlayerInputs : MonoBehaviour
     public bool IsSwitchBow() { return switchBow; }
 
     public bool IsGettingItems() { return isGettingItems; }
+
+    public bool IsDialog() { return isDialog; }
+
+    public bool IsNextDialog() { return isNextDialog; }
     #endregion
 }

@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
+    [SerializeField] private Loader loader;
 
     [Serializable]
     public class KeybindButton
@@ -72,7 +75,7 @@ public class GameManager : MonoBehaviour
             {"SwitchBow", k => playerInputs.switchBowKey = k },
             {"Courir", k => playerInputs.runKey = k },
             {"Pause", k => playerInputs.pauseKey = k },
-            {"PrendreItems", k => playerInputs.getItems = k}
+            {"PrendreItems", k => playerInputs.getItemsKey = k}
         };
 
         audioSource = GetComponent<AudioSource>();
@@ -270,16 +273,14 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        if (startMenu != null)
-            startMenu.gameObject.SetActive(false);
-
         Time.timeScale = 1f;
-
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-
         isPaused = false;
+
         audioSource.PlayOneShot(audioClipsVolume[0]);
+        startMenu.gameObject.SetActive(false);
+        // loader.StartLoading("Scenes/Castle"); // lance le loading UI
     }
 
 
@@ -307,7 +308,12 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        Debug.Log("Restart Game");
+        Time.timeScale = 1f;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        string currentScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentScene);
     }
 
     public void ShowCredits()
@@ -378,7 +384,10 @@ public class GameManager : MonoBehaviour
     public void ShowGameOver()
     {
         if (isGameOver) return;
-        isGameOver = true;
+
+        Time.timeScale = 0f;
+        
+        SetVisibleCursor();
         gameOverPanel.gameObject.SetActive(true);
         StartCoroutine(FadeInGameOver());
     }
