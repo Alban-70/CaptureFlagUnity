@@ -42,6 +42,8 @@ public class PlayerDialogue : MonoBehaviour
 
     void StartDialogue(PNJ_Dialogue pnj)
     {
+        currentPNJ.StartSpeakAnimation();
+        currentPNJ.showText = false;
         StartCoroutine(RotatePNJToPlayer(pnj.transform));
 
         dialogCanvas.gameObject.SetActive(true);
@@ -58,6 +60,10 @@ public class PlayerDialogue : MonoBehaviour
 
     void NextDialogue()
     {
+        if (currentPNJ == null)
+            return;
+        
+        currentPNJ.StartSpeakAnimation();
         if (currentDialogues == null || currentDialogues.Length == 0)
             return;
 
@@ -89,7 +95,7 @@ public class PlayerDialogue : MonoBehaviour
         dialogCanvas.gameObject.SetActive(false);
         isDialoging = false;
         currentDialogues = null;
-        currentPNJ = null;
+        // currentPNJ = null;
 
         playerMovement.canMove = true;
         playerMovement.canJump = true;

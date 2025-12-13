@@ -12,6 +12,11 @@ public class TakeArrowBloc : MonoBehaviour
 
     private bool showCanva = false;
 
+    void Awake()
+    {
+        takeArrowsText.text = $"Appuyez sur [{playerInputs.GetItemsKey()}] pour ramasser";
+    }
+
 
     void Update()
     {
