@@ -704,6 +704,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2199628841774520173}
   - component: {fileID: 5217009034759064855}
+  - component: {fileID: 5064465178654169669}
   m_Layer: 0
   m_Name: Skeleton_110
   m_TagString: Untagged
@@ -740,7 +741,7 @@ Animator:
   m_GameObject: {fileID: 1571042049591659991}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: be3776e9bd6e31341b3490a035f6ea50, type: 3}
-  m_Controller: {fileID: 9100000, guid: d0635c5725ebf5c49ba6eee6b99dadb6, type: 2}
+  m_Controller: {fileID: 9100000, guid: f82dbab48381a863f8b3baf49d27a9a3, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -752,6 +753,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5064465178654169669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571042049591659991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99254f91be19c05dabcbe3d7749e73dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeleton: {fileID: 1220923698111416758}
 --- !u!1 &1576138468227602216
 GameObject:
   m_ObjectHideFlags: 0
@@ -2004,7 +2018,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
@@ -2043,7 +2057,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPlayer: {fileID: 0}
-  anim: {fileID: 0}
+  anim: {fileID: 5217009034759064855}
   navMeshAgent: {fileID: 487316040551335561}
   healthSystem: {fileID: 0}
 --- !u!114 &1016394875746740037
@@ -2059,7 +2073,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
-  maxHealth: 50
+  playerAnimator: {fileID: 0}
+  gameOverManager: {fileID: 0}
+  maxHealth: 20
   currentHealth: 0
 --- !u!114 &2595370099504105389
 MonoBehaviour:

@@ -25,10 +25,7 @@ public class SkeletonLogic : MonoBehaviour
     /// Initialisation du Golem : vérifie le joueur et configure la vitesse du NavMeshAgent.
     /// </summary>
     void Awake()
-    {
-        if (targetPlayer == null)
-            Debug.LogError("Player is not assigned in EnemyLogic !");
-        
+    {        
         navMeshAgent.speed = moveSpeed;
     }
 
@@ -136,6 +133,20 @@ public class SkeletonLogic : MonoBehaviour
     /// Active ou désactive le mouvement du Golem.
     /// </summary>
     /// <param name="enable">true pour permettre le mouvement, false pour le bloquer.</param>
-    public void EnableMovement(bool enable) => canMove = enable;
+    public void EnableMovement(bool enable)
+    {
+        canMove = enable;
+
+        if (!enable)
+        {
+            navMeshAgent.isStopped = true;
+            navMeshAgent.velocity = Vector3.zero;
+            anim.SetBool("isMoving", false);
+        }
+        else
+            navMeshAgent.isStopped = false;
+    }
+
+    public void SetTarget(Transform player) => targetPlayer = player;
     #endregion
 }
