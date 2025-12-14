@@ -1,15 +1,7 @@
 fileFormatVersion: 2
 guid: db2072ae43366ab4eb84280e7bbae989
-timeCreated: 1455728056
-licenseType: Store
-NativeFormatImporter:
+PrefabImporter:
+  externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 56402
-  packageName: Stylized Cemetery Pack
-  packageVersion: 1.0
-  assetPath: Assets/Imports/ImportVillage/Cemetery/Prefabs/Floor/Floor22.prefab
-  uploadId: 106261
