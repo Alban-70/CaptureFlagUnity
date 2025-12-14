@@ -511,6 +511,8 @@ MonoBehaviour:
   playerDialogue: {fileID: 2053494168}
   skeletonPrefab: {fileID: 5626783858738028611, guid: 4ba03fddc54dad103b81963589df2809,
     type: 3}
+  golemPrefab: {fileID: 5046474455752584107, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
+    type: 3}
 --- !u!1 &258257552 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 641895328008670168, guid: 29a45661dc9fe6fb6878028f9a6a60bd,
@@ -2316,26 +2318,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 797071861}
     m_Modifications:
-    - target: {fileID: 2319452272939487960, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
-        type: 3}
-      propertyPath: m_Height
-      value: 3.0528321
-      objectReference: {fileID: 0}
-    - target: {fileID: 2319452272939487960, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2319452272939487960, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
-        type: 3}
-      propertyPath: m_Center.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2319452272939487960, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 1.4224412
-      objectReference: {fileID: 0}
     - target: {fileID: 3130079165867808371, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
         type: 3}
       propertyPath: healthSystem
@@ -2346,20 +2328,10 @@ PrefabInstance:
       propertyPath: targetPlayer
       value: 
       objectReference: {fileID: 474507029}
-    - target: {fileID: 3258713484751100633, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5046474455752584107, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
         type: 3}
       propertyPath: m_Name
       value: Golem
-      objectReference: {fileID: 0}
-    - target: {fileID: 5046474455752584107, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6379935896193249343, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
         type: 3}
@@ -2411,11 +2383,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9103609781108166532, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
-        type: 3}
-      propertyPath: anim
-      value: 
-      objectReference: {fileID: 1112323522}
     - target: {fileID: 9103609781108166532, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
         type: 3}
       propertyPath: playerAnimator
