@@ -159,7 +159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4839572531540142}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Arrowhead_place
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -615,7 +615,7 @@ GameObject:
   - component: {fileID: 4668755794025904}
   - component: {fileID: 33752806222745534}
   - component: {fileID: 23776686286094756}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: arrowhead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1205,7 +1205,7 @@ GameObject:
   - component: {fileID: 4115648698905132}
   - component: {fileID: 33521083997809630}
   - component: {fileID: 23773141280257056}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Arrow_stick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1353,7 +1353,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4534147065827568}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3759,9 +3759,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 1.972157
+  m_Height: 1.8668163
   m_Direction: 1
-  m_Center: {x: 0, y: 0.9119427, z: 0}
+  m_Center: {x: 0, y: 0.9646131, z: -0}
 --- !u!1 &4303801820518806671
 GameObject:
   m_ObjectHideFlags: 0
@@ -4659,9 +4659,10 @@ GameObject:
   - component: {fileID: 1148866184130539751}
   - component: {fileID: 6994848541587468914}
   - component: {fileID: 6349491591717341479}
+  - component: {fileID: 7997538808615666265}
   m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4727,6 +4728,8 @@ MonoBehaviour:
     m_Bits: 64
   anim: {fileID: 5689273850401907102}
   inputs: {fileID: 6347709075771110147}
+  canMove: 1
+  canJump: 1
   airAttackRequested: 0
 --- !u!114 &8379607917411347547
 MonoBehaviour:
@@ -4757,6 +4760,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad2302f6798da0972b01de212c516e53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveForwardKey: 122
+  moveBackwardKey: 115
+  moveLeftKey: 113
+  moveRightKey: 100
+  jumpKey: 32
+  attackKey: 323
+  bowShootKey: 323
+  bowKey: 324
+  switchSwordKey: 114
+  switchBowKey: 116
+  runKey: 304
+  pauseKey: 27
+  getItemsKey: 101
+  dialogKey: 101
+  nextDialogKey: 13
 --- !u!114 &1148866184130539751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4777,6 +4795,10 @@ MonoBehaviour:
   arrowPreview: {fileID: 1959729250425484}
   arrowModelOffset: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
   playerCamera: {fileID: 1392186731071320817}
+  numberOfArrows: {fileID: 0}
+  backgroundArrow: {fileID: 0}
+  cantShot: {fileID: 0}
+  currentWeapon: 0
 --- !u!114 &6994848541587468914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4790,6 +4812,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 6856167129349360144}
+  playerAnimator: {fileID: 5689273850401907102}
+  gameOverManager: {fileID: 0}
   maxHealth: 100
   currentHealth: 0
 --- !u!114 &6349491591717341479
@@ -4807,6 +4831,24 @@ MonoBehaviour:
   target: {fileID: 6994848541587468914}
   imageFill: {fileID: 0}
   text: {fileID: 0}
+--- !u!114 &7997538808615666265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5973836135623663487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43b041264fc35635d88d16e5c6560501, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInputs: {fileID: 6347709075771110147}
+  playerMovement: {fileID: 4468143555704870399}
+  dialogCanvas: {fileID: 0}
+  showTextForSpeak: {fileID: 0}
+  textUI: {fileID: 0}
+  canStartQuest: 0
 --- !u!1 &6079350324956701652
 GameObject:
   m_ObjectHideFlags: 0
@@ -5763,7 +5805,9 @@ MonoBehaviour:
   player: {fileID: 4468143555704870399}
   playerCombat: {fileID: 1148866184130539751}
   weaponSwitcher: {fileID: 8379607917411347547}
-  arrowScript: {fileID: 0}
+  arrowScript: {fileID: 658343502808117776, guid: 93bb459ec67d3ab8290221e5eddb16cf,
+    type: 3}
+  healthSystem: {fileID: 6994848541587468914}
 --- !u!1 &6995710126696949120
 GameObject:
   m_ObjectHideFlags: 0
