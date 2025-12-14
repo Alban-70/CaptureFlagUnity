@@ -1,15 +1,7 @@
 fileFormatVersion: 2
 guid: f06185b22b739c44c98bfebce43af781
-timeCreated: 1455727867
-licenseType: Store
-NativeFormatImporter:
+PrefabImporter:
+  externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 56402
-  packageName: Stylized Cemetery Pack
-  packageVersion: 1.0
-  assetPath: Assets/Imports/ImportVillage/Cemetery/Prefabs/Floor/Floor8.prefab
-  uploadId: 106261
