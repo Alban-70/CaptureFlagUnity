@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SpawnSkeleton : MonoBehaviour
+public class SpawnEnemies : MonoBehaviour
 {
     [SerializeField] private PlayerDialogue playerDialogue;
 
@@ -11,10 +11,25 @@ public class SpawnSkeleton : MonoBehaviour
     [SerializeField] private GameObject golemPrefab;
 
 
-    private int maxSkeletons = 15;
-    private int maxGolems = 3;
-    private float skeletonSpawnDelay = 7f;
-    private float golemSpawnDelay = 20f;
+    private int maxSkeletons;
+    private int maxGolems;
+    private float skeletonSpawnDelay;
+    private float golemSpawnDelay;
+
+    #region Easy values
+    private int easyMaxS = 15;  // Nombre maximum de squelettes
+    private int easyMaxG = 3;   // Nombre maximum de golems
+    private float easySpawnDelayS = 7f;     // Temps en secondes
+    private float easySpawnDelayG = 20f;    // Temps en secondes
+    #endregion
+
+    #region Hard values
+    private int hardMaxS = 30;  // Nombre maximum de squelettes
+    private int hardMaxG = 6;   // Nombre maximum de golems
+    private float hardSpawnDelayS = 4f;     // Temps en secondes
+    private float hardSpawnDelayG = 10f;    // Temps en secondes
+    #endregion
+    
 
     private BoxCollider boxCollider;
     private int currentSkeletons = 0;
@@ -28,6 +43,7 @@ public class SpawnSkeleton : MonoBehaviour
     void Awake()
     {
         boxCollider = GetComponent<BoxCollider>();
+        SetEasyLevel();
     }
 
     void Update()
@@ -117,4 +133,19 @@ public class SpawnSkeleton : MonoBehaviour
     }
 
 
+    public void SetEasyLevel()
+    {
+        maxSkeletons = easyMaxS;
+        maxGolems = easyMaxG;
+        skeletonSpawnDelay = easySpawnDelayS;
+        golemSpawnDelay = easySpawnDelayG;
+    }
+
+    public void SetHardLevel()
+    {
+        maxSkeletons = hardMaxS;
+        maxGolems = hardMaxG;
+        skeletonSpawnDelay = hardSpawnDelayS;
+        golemSpawnDelay = hardSpawnDelayG;
+    }
 }

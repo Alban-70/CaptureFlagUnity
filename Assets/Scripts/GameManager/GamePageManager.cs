@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GamePageManager : MonoBehaviour
 {
+
+    [SerializeField] private SpawnEnemies spawnEnemies;
 
     public Toggle easyLevelToggle;
     public Toggle hardLevelToggle;
@@ -17,7 +20,6 @@ public class GamePageManager : MonoBehaviour
         hardLevelToggle.isOn = false;
     }
 
-
     public void SelectEasyLevel()
     {
         if (isUpdating) return;
@@ -26,6 +28,8 @@ public class GamePageManager : MonoBehaviour
         easyLevelToggle.isOn = true;
         hardLevelToggle.isOn = false;
         isUpdating = false;
+
+        spawnEnemies.SetEasyLevel();
     }
 
 
@@ -37,6 +41,14 @@ public class GamePageManager : MonoBehaviour
         hardLevelToggle.isOn = true;
         easyLevelToggle.isOn = false;
         isUpdating = false;
+
+        spawnEnemies.SetHardLevel();
+    }
+
+    public void LockDifficulty()
+    {
+        easyLevelToggle.interactable = false;
+        hardLevelToggle.interactable = false;
     }
 
 
