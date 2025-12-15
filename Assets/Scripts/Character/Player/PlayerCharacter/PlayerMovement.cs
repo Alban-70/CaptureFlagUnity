@@ -17,10 +17,10 @@ public class PlayerMovement : MonoBehaviour
     private Transform groundCheck; // Point de référence pour checker le sol
     private Rigidbody rb; // Rigidbody du joueur
 
-    [SerializeField] private PlayerInputs inputs; // Référence au script des inputs
     #endregion
 
     #region Private State
+    private PlayerInputs playerInputs; // Référence au script des inputs
     private bool isGrounded;
     private bool wasGrounded;
     private bool isFalling;
@@ -45,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     void Awake()
     {
+        playerInputs = GetComponent<PlayerInputs>();
         rb = GetComponent<Rigidbody>();
         groundCheck = transform.Find("GroundCheck");
     }
@@ -60,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
         HandleRotation();
         HandleAnimations();
 
-        if (inputs.IsJumpPressed())
+        if (playerInputs.IsJumpPressed())
             TryToJump();
     }
 
@@ -79,8 +80,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void ReadInputs()
     {
-        horizontal = inputs.GetHorizontal();
-        vertical = inputs.GetVertical();
+        horizontal = playerInputs.GetHorizontal();
+        vertical = playerInputs.GetVertical();
 
         isFalling = rb.linearVelocity.y < -0.1f && !isGrounded;
     }
@@ -148,14 +149,14 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void HandleSprint()
     {
-        if (!moving || inputs.IsJumpPressed())
+        if (!moving || playerInputs.IsJumpPressed())
         {
             currentSpeed = speedDeplacement;
             anim.SetBool("isRunning", false);
             return;
         }
 
-        if (inputs.IsRunPressed() && vertical > 0)
+        if (playerInputs.IsRunPressed() && vertical > 0)
         {
             currentSpeed = speedDeplacementRunning;
             anim.SetBool("isRunning", true);
@@ -184,7 +185,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!canMove) return;
 
-        float mouseX = inputs.GetMouseX();
+        float mouseX = playerInputs.GetMouseX();
         if (Mathf.Abs(mouseX) > 0.01f)
             rotationVelocity = mouseX * speedRotation;
 

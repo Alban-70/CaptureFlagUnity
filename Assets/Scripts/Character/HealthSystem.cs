@@ -5,6 +5,7 @@ public class HealthSystem : MonoBehaviour
     [SerializeField] private GameObject playerCamera;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private GameManager gameOverManager;
+    [SerializeField] private AudioManager audioManager;
 
     public float maxHealth;
     public float currentHealth;
@@ -56,21 +57,18 @@ public class HealthSystem : MonoBehaviour
         if (playerAnimator != null)
             playerAnimator.SetTrigger("Death");
 
+        audioManager.PlayMort();
         Collider col = GetComponent<Collider>();
         if (col != null)
             col.enabled = false;
-
-        if (gameOverManager != null)
-            gameOverManager.ShowGameOver();
     }
 
     public void Die()
     {
         if (gameObject.CompareTag("Player"))
         {
-            Time.timeScale = 0f; // stoppe le jeu
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            if (gameOverManager != null)
+                gameOverManager.ShowGameOver();
         }
         Destroy(gameObject);
     }

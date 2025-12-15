@@ -30,6 +30,8 @@ public class EnemyLogic : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (targetPlayer == null) return;
+
         if (playerHealth == null) 
             playerHealth = targetPlayer.GetComponent<HealthSystem>();
 

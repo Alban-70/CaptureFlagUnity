@@ -5,13 +5,15 @@ using UnityEngine;
 public class PlayerDialogue : MonoBehaviour
 {
 
-    [SerializeField] private PlayerInputs playerInputs;
-    [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private Canvas dialogCanvas;
     [SerializeField] private TextMeshProUGUI showTextForSpeak;
     [SerializeField] private TextMeshProUGUI textUI;
     
 
+    private PlayerInputs playerInputs;
+    private PlayerMovement playerMovement;
+    private PlayerCombat playerCombat;
+    
     private PNJ_Dialogue currentPNJ;
     private string[] currentDialogues;
 
@@ -26,6 +28,10 @@ public class PlayerDialogue : MonoBehaviour
 
     void Awake()
     {
+        playerInputs = GetComponent<PlayerInputs>();
+        playerMovement = GetComponent<PlayerMovement>();
+        playerCombat = GetComponent<PlayerCombat>();
+
         dialogCanvas.gameObject.SetActive(false);
     }
 
@@ -104,6 +110,12 @@ public class PlayerDialogue : MonoBehaviour
 
         if (currentPNJ.tag == "Pretre")
             canStartQuest = true;
+
+        if (currentPNJ.tag =="Homeless")
+        {
+            playerCombat.getSword = true;
+            playerCombat.SwitchToSword();
+        }
     }
 
     public void SetCurrentPNJ(PNJ_Dialogue pnj)
