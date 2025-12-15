@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerDialogue : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class PlayerDialogue : MonoBehaviour
     [SerializeField] private Canvas dialogCanvas;
     [SerializeField] private TextMeshProUGUI showTextForSpeak;
     [SerializeField] private TextMeshProUGUI textUI;
+    [SerializeField] private Image textGetSword;
     
 
     private PlayerInputs playerInputs;
@@ -33,13 +35,17 @@ public class PlayerDialogue : MonoBehaviour
         playerCombat = GetComponent<PlayerCombat>();
 
         dialogCanvas.gameObject.SetActive(false);
+
+        Color c = textGetSword.color;
+        c.a = 0f;
+        textGetSword.color = c;
+        textGetSword.gameObject.SetActive(false);
     }
 
     void Update()
     {
         if (currentPNJ != null && !isDialoging && playerInputs.IsDialog())
         {
-            Debug.Log("dialog en cours");
             StartDialogue(currentPNJ);
         }
 
@@ -113,6 +119,7 @@ public class PlayerDialogue : MonoBehaviour
 
         if (currentPNJ.tag =="Homeless")
         {
+            StartCoroutine(FadeInTextGetSword(1));
             playerCombat.getSword = true;
             playerCombat.SwitchToSword();
         }
@@ -177,4 +184,34 @@ public class PlayerDialogue : MonoBehaviour
 
         pnjTransform.rotation = targetRotation;
     }
+
+    IEnumerator FadeInTextGetSword(float duration)
+    {
+        Time.timeScale = 0f;
+        textGetSword.gameObject.SetActive(true);
+
+        float elapsed = 0f;
+        Color c = textGetSword.color;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            c.a = Mathf.Lerp(0f, 0.5f, elapsed / duration);
+            textGetSword.color = c;
+            yield return null;
+        }
+
+        c.a = 0.5f;
+        textGetSword.color = c;
+
+        elapsed = 0f;
+        while (elapsed < duration * 5)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        textGetSword.gameObject.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
 }
