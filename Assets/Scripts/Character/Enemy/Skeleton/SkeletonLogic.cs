@@ -5,7 +5,7 @@ public class SkeletonLogic : EnemyLogic
 {
     protected override void Awake()
     {
-        moveSpeed = 6f;
+        moveSpeed = 25f;
         attackDistance = 2f;
         attackDamage = 5f;
         base.Awake();
