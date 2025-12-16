@@ -2059,7 +2059,6 @@ MonoBehaviour:
   targetPlayer: {fileID: 0}
   anim: {fileID: 5217009034759064855}
   navMeshAgent: {fileID: 487316040551335561}
-  healthSystem: {fileID: 0}
 --- !u!114 &1016394875746740037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2074,7 +2073,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
   playerAnimator: {fileID: 0}
-  gameOverManager: {fileID: 0}
+  pretreAnimator: {fileID: 0}
+  gameManager: {fileID: 0}
+  audioManager: {fileID: 0}
   maxHealth: 20
   currentHealth: 0
 --- !u!114 &2595370099504105389

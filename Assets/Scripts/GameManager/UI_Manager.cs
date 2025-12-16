@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +9,14 @@ public class UI_Manager : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private CanvasGroup gameOverPanel;
+    [SerializeField] private CanvasGroup winningImage;
     [SerializeField] private Canvas startMenu;
     [SerializeField] private Image overlay;
     [SerializeField] private Image settingsCanvas;
     [SerializeField] private RawImage crosshair;
+    public TextMeshProUGUI textQuest;
+    public Image targetQuestImage;
+    public Sprite questsDone;
 
     [Header("Differents Blocs de settings")]
     [SerializeField] private GameObject blocGame;
@@ -32,6 +37,8 @@ public class UI_Manager : MonoBehaviour
 
     void Awake()
     {
+        if (winningImage != null)
+            winningImage.gameObject.SetActive(false);
         if (startMenu != null)
             startMenu.gameObject.SetActive(true);
 
@@ -55,6 +62,17 @@ public class UI_Manager : MonoBehaviour
         );
     }
 
+    public void TextCaptureZone()
+    {
+        textQuest.text = "Capturer la zone";
+    }
+
+    public void ChangeQuestImage()
+    {
+        textQuest.text = "Quêtes terminées";
+        textQuest.color = Color.green;
+        targetQuestImage.sprite = questsDone;
+    }
 
     public void ShowStartMenu()
     {
@@ -90,11 +108,18 @@ public class UI_Manager : MonoBehaviour
         ShowOverlay();
     }
 
-    public void showGameOverPanel()
+    public void ShowGameOverPanel()
     {
         SetVisibleCursor();
         gameOverPanel.gameObject.SetActive(true);
-        StartCoroutine(FadeInGameOver());
+        StartCoroutine(FadeInCanvas(gameOverPanel));
+    }
+
+    public void ShowGameWinPanel()
+    {
+        SetVisibleCursor();
+        winningImage.gameObject.SetActive(true);
+        StartCoroutine(FadeInCanvas(winningImage));
     }
 
     private void ShowSettingsBloc(GameObject activeBloc)
@@ -112,16 +137,16 @@ public class UI_Manager : MonoBehaviour
     public void ShowKeybinds() => ShowSettingsBloc(blocKeybinds);
     #endregion
 
-    private IEnumerator FadeInGameOver()
+    private IEnumerator FadeInCanvas(CanvasGroup canvasGroup)
     {
         float timer = 0f;
         while (timer < fadeDuration)
         {
             timer += Time.unscaledDeltaTime;
-            gameOverPanel.alpha = Mathf.Clamp01(timer / fadeDuration);
+            canvasGroup.alpha = Mathf.Clamp01(timer / fadeDuration);
             yield return null;
         }
-        gameOverPanel.alpha = 1f;
+        canvasGroup.alpha = 1f;
     }
 
     private void SetVisibleCursor()

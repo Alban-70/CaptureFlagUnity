@@ -27,4 +27,14 @@ public class AudioManager : MonoBehaviour
     {
         audioSource.PlayOneShot(audioClipsVolume[1]);
     }
+
+    public void PlayGetCoin()
+    {
+        audioSource.PlayOneShot(audioClipsVolume[2]);
+    }
+
+    public void PlayWin()
+    {
+        audioSource.PlayOneShot(audioClipsVolume[3]);
+    }
 }

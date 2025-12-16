@@ -66,7 +66,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ade7b542c0d69d302ad6d24c39173c08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPlayer: {fileID: 0}
-  anim: {fileID: 0}
-  navMeshAgent: {fileID: 0}
-  healthSystem: {fileID: 0}
+  gameManager: {fileID: 0}
+  playerDialogue: {fileID: 0}
+  skeletonPrefab: {fileID: 5626783858738028611, guid: 4ba03fddc54dad103b81963589df2809,
+    type: 3}
+  golemPrefab: {fileID: 5046474455752584107, guid: e0507d91a8876aa9eb8ad0ca70bcd6c3,
+    type: 3}
+  getCoin: 0

@@ -7,9 +7,14 @@ public class PNJ_Dialogue : MonoBehaviour
     [SerializeField] public PlayerInputs playerInputs;
     [SerializeField] private LayerMask playerLayer;
     [TextArea(3, 5)] 
-    [SerializeField] public string[] dialogues;
 
     [HideInInspector] public bool showText = false;
+
+    [TextArea(3, 5)] 
+    public string[] dialogues;
+    [TextArea(3, 5)] 
+    public string[] dialogueVictoire;
+
     private Rigidbody rb;
 
     void Awake()

@@ -4,6 +4,8 @@ public class TakeCoins : MonoBehaviour
 {
     
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private UI_Manager uI_Manager;
+    [SerializeField] private AudioManager audioManager;
     [SerializeField] private LayerMask playerLayer;
 
 
@@ -12,6 +14,8 @@ public class TakeCoins : MonoBehaviour
         if (((1 << collider.gameObject.layer) & playerLayer) != 0)
         {
             gameManager.getCoin = true;
+            uI_Manager.textQuest.text = "Livrer le trésor";
+            audioManager.PlayGetCoin();
             Destroy(gameObject);
         }
     }

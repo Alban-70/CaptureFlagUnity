@@ -9,6 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2065748169026400265}
+  - component: {fileID: 4256890978001552238}
+  - component: {fileID: 2961354451093631399}
+  - component: {fileID: 5251182119690619478}
+  - component: {fileID: 3511857945883330440}
+  - component: {fileID: 4753662015500274809}
+  - component: {fileID: 2144206439661169234}
+  - component: {fileID: 8886191598348192186}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -31,3 +38,234 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4256890978001552238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641895328008670168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d767694184cfa387b84aaad0aea6a64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioManager: {fileID: 2961354451093631399}
+  pauseManager: {fileID: 5251182119690619478}
+  keyBindManager: {fileID: 3511857945883330440}
+  uI_Manager: {fileID: 4753662015500274809}
+  sliderVolume: {fileID: 0}
+  sliderMusic: {fileID: 0}
+  musicText: {fileID: 0}
+  volumeText: {fileID: 0}
+  coinImage: {fileID: 0}
+  loader: {fileID: 0}
+  baseColorText: {r: 0.9607843, g: 0.7176471, b: 0.3019608, a: 1}
+  getCoin: 0
+--- !u!114 &2961354451093631399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641895328008670168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 047fd24556d9dc37c8c9920efc3eea7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClipsVolume:
+  - {fileID: 8300000, guid: 9ee4496c4638b7d70a67ddab142a6c28, type: 3}
+  - {fileID: 8300000, guid: 6f75146e9f880874f9a9db61366eed1a, type: 3}
+  - {fileID: 8300000, guid: 2946ecdfbcbbc592396aaca59d195a2a, type: 3}
+  - {fileID: 8300000, guid: beb91cc2b5fff80e7a12c7fe8ce49d16, type: 3}
+  audioSource: {fileID: 2144206439661169234}
+--- !u!114 &5251182119690619478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641895328008670168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f0f8346b4716a4498554c99c376ef71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseCanvas: {fileID: 0}
+--- !u!114 &3511857945883330440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641895328008670168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c8ccc374e4b3f6f2b7eca36b92d0173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseManager: {fileID: 5251182119690619478}
+  keybindButtons:
+  - actionName: Avancer
+    buttonText: {fileID: 0}
+  - actionName: Reculer
+    buttonText: {fileID: 0}
+  - actionName: Droite
+    buttonText: {fileID: 0}
+  - actionName: Gauche
+    buttonText: {fileID: 0}
+  - actionName: Courir
+    buttonText: {fileID: 0}
+  - actionName: Sauter
+    buttonText: {fileID: 0}
+  - actionName: Attaquer
+    buttonText: {fileID: 0}
+  - actionName: Viser
+    buttonText: {fileID: 0}
+  - actionName: AttaquerArc
+    buttonText: {fileID: 0}
+  - actionName: PrendreItems
+    buttonText: {fileID: 0}
+  playerInputs: {fileID: 0}
+--- !u!114 &4753662015500274809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641895328008670168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1187fd9d00e6ad3b5c623845bc5a40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCombat: {fileID: 0}
+  gameOverPanel: {fileID: 0}
+  winningImage: {fileID: 0}
+  startMenu: {fileID: 0}
+  overlay: {fileID: 0}
+  settingsCanvas: {fileID: 0}
+  crosshair: {fileID: 0}
+  textQuest: {fileID: 0}
+  targetQuestImage: {fileID: 0}
+  questsDone: {fileID: 5751913276161307030, guid: a15945b5646387a4c8b90129c87a53dc,
+    type: 3}
+  blocGame: {fileID: 0}
+  blocGraphics: {fileID: 0}
+  blocSounds: {fileID: 0}
+  blocKeybinds: {fileID: 0}
+  customCursor: {fileID: -4676717269735476019, guid: 252d1f9f9eb6dfe46873735361f596d6,
+    type: 3}
+--- !u!82 &2144206439661169234
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641895328008670168}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &8886191598348192186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641895328008670168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd1c9d29436a6697c8be5a314340c2e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnEnemies: {fileID: 0}
+  easyLevelToggle: {fileID: 0}
+  hardLevelToggle: {fileID: 0}

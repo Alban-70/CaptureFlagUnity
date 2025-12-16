@@ -10051,13 +10051,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4000013555364002}
+  - component: {fileID: 8874704672612448599}
+  - component: {fileID: 2387492847041893403}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4000013555364002
 Transform:
   m_ObjectHideFlags: 0
@@ -10074,6 +10076,45 @@ Transform:
   - {fileID: 4000010444600384}
   m_Father: {fileID: 7585444368397371564}
   m_LocalEulerAnglesHint: {x: 0, y: 59.492004, z: 0}
+--- !u!65 &8874704672612448599
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000011365394840}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2, y: 0.2, z: 0.2}
+  m_Center: {x: 0, y: 0.95, z: 0}
+--- !u!114 &2387492847041893403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000011365394840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f734243d7c7c20986bf496dc749895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
+  uI_Manager: {fileID: 0}
+  audioManager: {fileID: 0}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &1000011614638508
 GameObject:
   m_ObjectHideFlags: 0
@@ -16709,3 +16750,4 @@ MonoBehaviour:
   imageFill: {fileID: 0}
   backgroundImage: {fileID: 0}
   pandoraBox: {fileID: 1000014038691284}
+  coin: {fileID: 1000011365394840}

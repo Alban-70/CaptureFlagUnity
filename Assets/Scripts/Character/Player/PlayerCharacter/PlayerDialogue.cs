@@ -10,11 +10,14 @@ public class PlayerDialogue : MonoBehaviour
     [SerializeField] private TextMeshProUGUI showTextForSpeak;
     [SerializeField] private TextMeshProUGUI textUI;
     [SerializeField] private Image textGetSword;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private UI_Manager uI_Manager;
     
 
     private PlayerInputs playerInputs;
     private PlayerMovement playerMovement;
     private PlayerCombat playerCombat;
+    private HealthSystem healthSystem;
     
     private PNJ_Dialogue currentPNJ;
     private string[] currentDialogues;
@@ -24,7 +27,9 @@ public class PlayerDialogue : MonoBehaviour
     private int currentIndex = 0;
     private bool isTyping = false;
     private bool isDialoging = false;
+    private bool getCoin = false;
     [HideInInspector] public bool canStartQuest = false;
+
     private Coroutine typingCoroutine;
 
 
@@ -33,6 +38,7 @@ public class PlayerDialogue : MonoBehaviour
         playerInputs = GetComponent<PlayerInputs>();
         playerMovement = GetComponent<PlayerMovement>();
         playerCombat = GetComponent<PlayerCombat>();
+        healthSystem = GetComponent<HealthSystem>();
 
         dialogCanvas.gameObject.SetActive(false);
 
@@ -44,6 +50,7 @@ public class PlayerDialogue : MonoBehaviour
 
     void Update()
     {
+        getCoin = gameManager.getCoin;
         if (currentPNJ != null && !isDialoging && playerInputs.IsDialog())
         {
             StartDialogue(currentPNJ);
@@ -64,7 +71,11 @@ public class PlayerDialogue : MonoBehaviour
         playerMovement.canMove = false;
         playerMovement.canJump = false;
 
-        currentDialogues = pnj.dialogues;
+        if (getCoin && currentPNJ.CompareTag("Pretre"))
+            currentDialogues = pnj.dialogueVictoire;
+        else 
+            currentDialogues = pnj.dialogues;
+        
         currentIndex = 0;
         isDialoging = true;
 
@@ -114,8 +125,21 @@ public class PlayerDialogue : MonoBehaviour
         playerMovement.canMove = true;
         playerMovement.canJump = true;
 
-        if (currentPNJ.tag == "Pretre")
-            canStartQuest = true;
+        if (currentPNJ.CompareTag("Pretre"))
+        {
+            if (!getCoin)
+            {
+                canStartQuest = true;
+                uI_Manager.TextCaptureZone();
+            }
+            else
+            {
+                uI_Manager.ChangeQuestImage();
+                healthSystem.PlayerWin();
+                gameManager.getCoin = false;
+            }
+        }
+            
 
         if (currentPNJ.tag =="Homeless")
         {

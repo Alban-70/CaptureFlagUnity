@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
     [Header("Basic color")]
     [SerializeField] private Color baseColorText;
 
-    private bool isGameOver = false;
     public bool getCoin = false;
 
     void Awake()
@@ -46,6 +45,8 @@ public class GameManager : MonoBehaviour
 
         if (getCoin)
             coinImage.gameObject.SetActive(true);
+        else 
+            coinImage.gameObject.SetActive(false);
     }
 
     private void UpdateSliderTextAndColor(float value, TextMeshProUGUI text)
@@ -71,6 +72,11 @@ public class GameManager : MonoBehaviour
         audioManager.PlayDebutJeu();
         uI_Manager.HideStartMenu();
         // loader.StartLoading("Scenes/Castle"); // lance le loading UI
+    }
+    public void ShowWinning()
+    {
+        Time.timeScale = 0f;
+        uI_Manager.ShowGameWinPanel();
     }
 
     public void StartNewGame()
@@ -105,10 +111,8 @@ public class GameManager : MonoBehaviour
 
     public void ShowGameOver()
     {
-        if (isGameOver) return;
-
         Time.timeScale = 0f;
-        uI_Manager.showGameOverPanel();
+        uI_Manager.ShowGameOverPanel();
     }
 
 }

@@ -4,16 +4,20 @@ public class HealthSystem : MonoBehaviour
 {
     [SerializeField] private GameObject playerCamera;
     [SerializeField] private Animator playerAnimator;
-    [SerializeField] private GameManager gameOverManager;
+    [SerializeField] private Animator pretreAnimator;
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private AudioManager audioManager;
 
     public float maxHealth;
     public float currentHealth;
 
+    private PlayerMovement playerMovement;
     private bool isDead = false;
 
     void Awake()
     {
+        if (gameObject.tag == "Player")
+            playerMovement = GetComponent<PlayerMovement>();
         currentHealth = maxHealth;
     }
 
@@ -63,13 +67,27 @@ public class HealthSystem : MonoBehaviour
             col.enabled = false;
     }
 
+    public void PlayerWin()
+    {
+        if (pretreAnimator != null)
+            pretreAnimator.SetTrigger("Applause");
+
+        audioManager.PlayWin();
+    }
+
+    public void ShowGameWinning()
+    {
+        gameManager.ShowWinning();
+    }
+
     public void Die()
     {
         if (gameObject.CompareTag("Player"))
         {
-            if (gameOverManager != null)
-                gameOverManager.ShowGameOver();
+            if (gameManager != null)
+                gameManager.ShowGameOver();
         }
         Destroy(gameObject);
     }
+    
 }

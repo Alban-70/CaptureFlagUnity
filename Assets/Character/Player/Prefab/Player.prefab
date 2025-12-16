@@ -4727,7 +4727,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   anim: {fileID: 5689273850401907102}
-  inputs: {fileID: 6347709075771110147}
   canMove: 1
   canJump: 1
   airAttackRequested: 0
@@ -4747,7 +4746,6 @@ MonoBehaviour:
   swordBack: {fileID: 1037715513984232}
   bowBack: {fileID: 8660298353331461213}
   bowHand: {fileID: 1717406733745140}
-  bowString: {fileID: 1798074416387974}
 --- !u!114 &6347709075771110147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4788,8 +4786,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 5689273850401907102}
-  inputs: {fileID: 6347709075771110147}
-  movement: {fileID: 4468143555704870399}
   arrowSocket: {fileID: 5728085183422281248}
   arrow: {fileID: 1959729250425484, guid: 93bb459ec67d3ab8290221e5eddb16cf, type: 3}
   arrowPreview: {fileID: 1959729250425484}
@@ -4798,7 +4794,8 @@ MonoBehaviour:
   numberOfArrows: {fileID: 0}
   backgroundArrow: {fileID: 0}
   cantShot: {fileID: 0}
-  currentWeapon: 0
+  getSword: 0
+  currentWeapon: 1
 --- !u!114 &6994848541587468914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4813,7 +4810,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 6856167129349360144}
   playerAnimator: {fileID: 5689273850401907102}
-  gameOverManager: {fileID: 0}
+  pretreAnimator: {fileID: 0}
+  gameManager: {fileID: 0}
+  audioManager: {fileID: 0}
   maxHealth: 100
   currentHealth: 0
 --- !u!114 &6349491591717341479
@@ -4843,11 +4842,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43b041264fc35635d88d16e5c6560501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInputs: {fileID: 6347709075771110147}
-  playerMovement: {fileID: 4468143555704870399}
   dialogCanvas: {fileID: 0}
   showTextForSpeak: {fileID: 0}
   textUI: {fileID: 0}
+  textGetSword: {fileID: 0}
+  gameManager: {fileID: 0}
+  uI_Manager: {fileID: 0}
   canStartQuest: 0
 --- !u!1 &6079350324956701652
 GameObject:
