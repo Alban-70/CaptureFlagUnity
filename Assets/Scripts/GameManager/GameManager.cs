@@ -15,20 +15,25 @@ public class GameManager : MonoBehaviour
     [SerializeField] private KeyBindManager keyBindManager; 
     [SerializeField] private UI_Manager uI_Manager; 
 
-    [SerializeField] private Loader loader;
-
+    [Header("UI Elements")]
     [SerializeField] private Slider sliderVolume; 
     [SerializeField] private Slider sliderMusic; 
     [SerializeField] private TextMeshProUGUI musicText;
     [SerializeField] private TextMeshProUGUI volumeText;
+    [SerializeField] private Image coinImage;
+
+    [SerializeField] private Loader loader;
+
 
     [Header("Basic color")]
     [SerializeField] private Color baseColorText;
 
     private bool isGameOver = false;
+    public bool getCoin = false;
 
     void Awake()
     {
+        coinImage.gameObject.SetActive(false);
         uI_Manager.ShowStartMenu();
     }
 
@@ -38,6 +43,9 @@ public class GameManager : MonoBehaviour
         
         UpdateSlider(sliderVolume, volumeText);
         UpdateSlider(sliderMusic, musicText);
+
+        if (getCoin)
+            coinImage.gameObject.SetActive(true);
     }
 
     private void UpdateSliderTextAndColor(float value, TextMeshProUGUI text)

@@ -11,6 +11,7 @@ public class ShowZone : MonoBehaviour
     [SerializeField] private Image imageFill;
     [SerializeField] private Image backgroundImage;
     [SerializeField] private GameObject pandoraBox;
+    [SerializeField] private GameObject coin;
 
 
     #region PandoraBox
@@ -30,6 +31,8 @@ public class ShowZone : MonoBehaviour
 
     void Awake()
     {
+        coin.SetActive(false);
+
         pandoraAnim = pandoraBox.gameObject.GetComponent<Animator>();
         pandoraTransform = pandoraBox.transform;
 
@@ -136,7 +139,7 @@ public class ShowZone : MonoBehaviour
 
     public void DestroyPandoraBox()
     {
-        
+        coin.SetActive(true);
         Destroy(pandoraBox);
     }
 }
