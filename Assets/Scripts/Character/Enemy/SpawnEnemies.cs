@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 public class SpawnEnemies : MonoBehaviour
 {
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private PlayerDialogue playerDialogue;
 
     [Header("Prefabs")]
@@ -38,24 +39,33 @@ public class SpawnEnemies : MonoBehaviour
     private Coroutine skeletonRoutine;
     private Coroutine golemRoutine;
 
+    [HideInInspector] public bool getCoin = false;
+
 
 
     void Awake()
     {
+        
         boxCollider = GetComponent<BoxCollider>();
         SetEasyLevel();
     }
 
     void Update()
     {
+        getCoin = gameManager.getCoin;
+
         if (!playerDialogue.canStartQuest)
             return;
         
-        if (skeletonRoutine == null)
-            skeletonRoutine = StartCoroutine(SkeletonSpawnLoop());
+        if (!getCoin)
+        {
+            if (skeletonRoutine == null)
+                skeletonRoutine = StartCoroutine(SkeletonSpawnLoop());
 
-        if (golemRoutine == null)
-            golemRoutine = StartCoroutine(GolemSpawnLoop());
+            if (golemRoutine == null)
+                golemRoutine = StartCoroutine(GolemSpawnLoop());
+        }
+        
     }
 
 
@@ -64,6 +74,8 @@ public class SpawnEnemies : MonoBehaviour
     {
         while (playerDialogue.canStartQuest)
         {
+            if (getCoin)
+                break;
             if (currentSkeletons < maxSkeletons)
                 SpawnEnemy(skeletonPrefab, OnSkeletonDeath, ref currentSkeletons);
 
@@ -75,6 +87,8 @@ public class SpawnEnemies : MonoBehaviour
     {
         while (playerDialogue.canStartQuest)
         {
+            if (getCoin)
+                break;
             if (currentGolems < maxGolems)
                 SpawnEnemy(golemPrefab, OnGolemDeath, ref currentGolems);
 
