@@ -6,7 +6,6 @@ public class WeaponSwitcher : MonoBehaviour
     [SerializeField] private GameObject swordBack;   // Épée dans le dos
     [SerializeField] private GameObject bowBack;     // Arc dans le dos
     [SerializeField] private GameObject bowHand;     // Arc dans la main
-    [SerializeField] private GameObject bowString;   // Cordage de l'arc
 
     /// <summary>
     /// Déplace l'épée du dos vers la main.
@@ -43,16 +42,4 @@ public class WeaponSwitcher : MonoBehaviour
         bowHand.SetActive(false);
         bowBack.SetActive(true);
     }
-
-    /// <summary>
-    /// Affiche la corde de l'arc.
-    /// </summary>
-    public void ShowBowString() 
-        => bowString.SetActive(true);
-
-    /// <summary>
-    /// Cache la corde de l'arc.
-    /// </summary>
-    public void HideBowString() 
-        => bowString.SetActive(false);
 }

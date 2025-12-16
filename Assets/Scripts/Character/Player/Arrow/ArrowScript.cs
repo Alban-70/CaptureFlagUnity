@@ -20,7 +20,7 @@ public class ArrowScript : MonoBehaviour
             if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 HealthSystem enemy = collision.gameObject.GetComponentInParent<HealthSystem>();
-                enemy.ApplyDamage(10);
+                enemy.ApplyDamage(25);
                 
                 if (enemyRb != null)
                 {

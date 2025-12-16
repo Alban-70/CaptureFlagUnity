@@ -11,8 +11,8 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     void Awake()
     {
-        SwitchSwordToHand();
-        SwitchBowToBack();
+        SwitchBowToHand();
+        SwitchSwordToBack();
     }
 
     private void DisableMovementAndJump() 

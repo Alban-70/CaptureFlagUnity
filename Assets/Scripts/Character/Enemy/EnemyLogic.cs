@@ -9,10 +9,10 @@ public class EnemyLogic : MonoBehaviour
     [SerializeField] private Transform targetPlayer; // Référence au joueur pour le suivi
     [SerializeField] private Animator anim; // Animator pour gérer les animations
     [SerializeField] private NavMeshAgent navMeshAgent; // NavMeshAgent pour le déplacement AI
-    [SerializeField] private HealthSystem healthSystem; // Référence à la santé du joueur
     #endregion
 
     #region Private Variables
+    private HealthSystem playerHealth; // Référence à la santé du joueur
     protected float moveSpeed = 0.8f; // Vitesse de déplacement du Golem
     protected float attackDistance = 2.5f; // Distance à laquelle le Golem attaque
     protected float attackDamage = 20f; // Dégâts infligés au joueur
@@ -30,6 +30,11 @@ public class EnemyLogic : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (targetPlayer == null) return;
+
+        if (playerHealth == null) 
+            playerHealth = targetPlayer.GetComponent<HealthSystem>();
+
         CalculateMovementDirection();
         UpdateAnimations();
     }
@@ -49,7 +54,7 @@ public class EnemyLogic : MonoBehaviour
     {
         if (!canMove || targetPlayer == null) return;
 
-        if (healthSystem != null && healthSystem.IsDead())
+        if (playerHealth != null && playerHealth.IsDead())
         {
             navMeshAgent.isStopped = true;
             anim.SetBool("isMoving", false);
@@ -85,9 +90,11 @@ public class EnemyLogic : MonoBehaviour
     {
         if (targetPlayer == null) return;
 
+        
+
         float distance = Vector3.Distance(transform.position, targetPlayer.position);
-        if (distance <= attackDistance && healthSystem != null)
-            healthSystem.ApplyDamage(attackDamage);
+        if (distance <= attackDistance && playerHealth != null)
+            playerHealth.ApplyDamage(attackDamage);
     }
 
     public void EnableMovement(bool enable)

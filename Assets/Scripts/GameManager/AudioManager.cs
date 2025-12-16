@@ -22,4 +22,9 @@ public class AudioManager : MonoBehaviour
     {
         audioSource.PlayOneShot(audioClipsVolume[0]);
     }
+
+    public void PlayMort()
+    {
+        audioSource.PlayOneShot(audioClipsVolume[1]);
+    }
 }

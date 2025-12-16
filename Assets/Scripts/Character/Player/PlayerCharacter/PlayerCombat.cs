@@ -9,8 +9,6 @@ public class PlayerCombat : MonoBehaviour
     #region Serialized Fields
     [Header("Animations")]
     [SerializeField] private Animator anim; // Animator pour gérer toutes les animations du joueur
-    [SerializeField] private PlayerInputs inputs; // Script qui récupère les inputs du joueur
-    [SerializeField] private PlayerMovement movement; // Référence au script de mouvement
     [SerializeField] private Transform arrowSocket; // Point de spawn des flèches
     [SerializeField] private GameObject arrow; // Prefab de la flèche
     [SerializeField] private GameObject arrowPreview; // Modèle de prévisualisation de la flèche
@@ -22,6 +20,8 @@ public class PlayerCombat : MonoBehaviour
     #endregion
 
     #region Private State
+    private PlayerInputs playerInputs; // Script qui récupère les inputs du joueur
+    private PlayerMovement playerMovement; // Référence au script de mouvement
     private HashSet<HealthSystem> enemiesHitThisAttack = new HashSet<HealthSystem>();
     private MeshRenderer mrHead, mrStick; // Composants MeshRenderer du modèle de flèche
     private Vector3 positionHold = new Vector3(0.1562f, -0.0224f, 0.0272f); // Position de prévisualisation
@@ -35,8 +35,9 @@ public class PlayerCombat : MonoBehaviour
     private bool continueAirAttack = false; // Indique si la deuxième partie de l'attaque aérienne peut être déclenchée
     private bool airAttackRequested = false; // Marque qu'une attaque aérienne a été demandée
     private bool isHoldingBow = false; // Indique si le joueur tient son arc
+    [HideInInspector] public bool getSword = false;
     [HideInInspector] public enum WeaponType { Sword, Bow } // Types d'armes disponibles
-    [HideInInspector] public WeaponType currentWeapon = WeaponType.Sword; // Arme actuellement équipée
+    [HideInInspector] public WeaponType currentWeapon = WeaponType.Bow; // Arme actuellement équipée
     #endregion
 
     #region Bow Holding & Weapon Switching
@@ -45,6 +46,8 @@ public class PlayerCombat : MonoBehaviour
     /// </summary>
     void Awake()
     {
+        playerInputs = GetComponent<PlayerInputs>();
+        playerMovement = GetComponent<PlayerMovement>();
         // Récupère les MeshRenderer de la prévisualisation de flèche
         mrHead = arrowPreview.transform.GetChild(0).GetComponent<MeshRenderer>();
         mrStick = arrowPreview.transform.GetChild(1).GetComponent<MeshRenderer>();
@@ -68,8 +71,8 @@ public class PlayerCombat : MonoBehaviour
     /// </summary>
     private void HandleWeaponSwitch()
     {
-        if (inputs.IsSwitchSword()) SwitchToSword(); // Si input pour switcher épée
-        if (inputs.IsSwitchBow()) SwitchToBow();     // Si input pour switcher arc
+        if (playerInputs.IsSwitchSword()) SwitchToSword(); // Si input pour switcher épée
+        if (playerInputs.IsSwitchBow()) SwitchToBow();     // Si input pour switcher arc
     }
 
     /// <summary>
@@ -79,7 +82,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (currentWeapon == WeaponType.Bow)
         {
-            if (inputs.IsBowHold()) // Si le joueur maintient le bouton pour l'arc
+            if (playerInputs.IsBowHold()) // Si le joueur maintient le bouton pour l'arc
             {
                 arrowPreview.SetActive(true); // Affiche le modèle de flèche
                 arrowPreview.transform.SetParent(arrowSocket); // Le parent est le socket
@@ -88,7 +91,7 @@ public class PlayerCombat : MonoBehaviour
                 arrowPreview.transform.SetLocalPositionAndRotation(positionHold, rotationHold); // Position correcte
                 EnterBowHold();
 
-                if (inputs.IsBowShoot()) // Si le joueur tire
+                if (playerInputs.IsBowShoot()) // Si le joueur tire
                 {
                     arrowPreview.SetActive(false); // Masque le modèle
                     TryToAttackWhileHolding(); // Instancie et tire la flèche
@@ -106,9 +109,9 @@ public class PlayerCombat : MonoBehaviour
         }
         else // Si l'arme équipée est l'épée
         {
-            if (inputs.IsAttackPressed()) // Vérifie si le joueur attaque
+            if (playerInputs.IsAttackPressed()) // Vérifie si le joueur attaque
             {
-                if (movement.IsGrounded())
+                if (playerMovement.IsGrounded())
                     TryToAttackSwordInGround(); // Attaque au sol
                 else
                     TryToAttackSwordInAir(); // Attaque en l'air
@@ -119,8 +122,10 @@ public class PlayerCombat : MonoBehaviour
     /// <summary>
     /// Change l'arme équipée en épée.
     /// </summary>
-    private void SwitchToSword()
+    public void SwitchToSword()
     {
+        if (!getSword) return;
+
         anim.SetLayerWeight(1, 1f); // Active le layer WeaponLayer
         if (currentWeapon == WeaponType.Sword) return; // Rien à faire si déjà épée
 
@@ -147,11 +152,11 @@ public class PlayerCombat : MonoBehaviour
     /// </summary>
     public void EnterBowHold()
     {
-        if (movement == null) return;
+        if (playerMovement == null) return;
 
         isHoldingBow = true;
         anim.SetBool("isHolding", true); // Active l'animation de posture
-        movement.SetBowHold(true);       // Informe le script de mouvement
+        playerMovement.SetBowHold(true);       // Informe le script de mouvement
     }
 
     /// <summary>
@@ -159,11 +164,11 @@ public class PlayerCombat : MonoBehaviour
     /// </summary>
     public void ExitBowHold()
     {
-        if (movement == null) return;
+        if (playerMovement == null) return;
 
         isHoldingBow = false;
         anim.SetBool("isHolding", false);
-        movement.SetBowHold(false);
+        playerMovement.SetBowHold(false);
     }
     #endregion
 
@@ -187,8 +192,8 @@ public class PlayerCombat : MonoBehaviour
         anim.SetTrigger("SwordAttackInAir");
         anim.applyRootMotion = false; // Ne pas appliquer le root motion pendant l'attaque
         airAttackRequested = true; // Permet l'attaque en chute
-        movement.airAttackRequested = true;
-        movement.EnableMovementAndJump(false); // Bloque le mouvement pendant l'attaque
+        playerMovement.airAttackRequested = true;
+        playerMovement.EnableMovementAndJump(false); // Bloque le mouvement pendant l'attaque
     }
     #endregion
 
@@ -262,7 +267,7 @@ public class PlayerCombat : MonoBehaviour
     public void ResetContinueAttackInAir()
     {
         continueAirAttack = false;
-        movement.EnableMovementAndJump(true); // Débloque le mouvement
+        playerMovement.EnableMovementAndJump(true); // Débloque le mouvement
         anim.applyRootMotion = true; // Réactive le root motion
     }
 
@@ -306,7 +311,7 @@ public class PlayerCombat : MonoBehaviour
             HealthSystem enemy = hit.GetComponentInParent<HealthSystem>();
             if (enemy != null && !enemiesHitThisAttack.Contains(enemy))
             {
-                enemy.ApplyDamage(25f);
+                enemy.ApplyDamage(10f);
                 enemiesHitThisAttack.Add(enemy);
             }
         }

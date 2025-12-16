@@ -10,17 +10,33 @@ public class ShowZone : MonoBehaviour
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private Image imageFill;
     [SerializeField] private Image backgroundImage;
+    [SerializeField] private GameObject pandoraBox;
+
+
+    #region PandoraBox
+    private Animator pandoraAnim;
+    private Transform pandoraTransform;
+    private GameObject boxNormal;
+    private GameObject boxDestroyed;
+    #endregion
 
 
     private LineRenderer lr;
     private float timer = 0f;
-    private float captureDuration = 120f; // Pour 2 minutes
+    private float captureDuration = 10f; // Pour 2 minutes
     private int segments = 64;
     private bool isCapturing = false;
     private bool isCaptured = false;
 
     void Awake()
     {
+        pandoraAnim = pandoraBox.gameObject.GetComponent<Animator>();
+        pandoraTransform = pandoraBox.transform;
+
+        boxNormal = pandoraTransform.GetChild(1).gameObject;
+        boxDestroyed = pandoraTransform.GetChild(2).gameObject;
+        boxDestroyed.SetActive(false);
+        
         backgroundImage.gameObject.SetActive(false);
 
         SphereCollider sphere = GetComponent<SphereCollider>();
@@ -79,6 +95,11 @@ public class ShowZone : MonoBehaviour
                 isCaptured = true;
                 isCapturing = false;
                 timer = captureDuration;
+
+                boxNormal.SetActive(false);
+                Destroy(boxNormal);
+                boxDestroyed.SetActive(true);
+                pandoraAnim.SetTrigger("zoneCaptured");
             }
         }
         else if (!isCapturing && !isCaptured)
@@ -100,7 +121,6 @@ public class ShowZone : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & playerLayer) != 0)
         {
-            Debug.Log("inZone");
             isCapturing = true;
         }
     }
@@ -109,9 +129,14 @@ public class ShowZone : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & playerLayer) != 0)
         {
-            Debug.Log("exitzone");
             isCapturing = false;
         }
     }
 
+
+    public void DestroyPandoraBox()
+    {
+        
+        Destroy(pandoraBox);
+    }
 }
