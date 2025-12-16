@@ -412,9 +412,9 @@ MonoBehaviour:
     buttonText: {fileID: 1365828371}
   - actionName: Viser
     buttonText: {fileID: 1473808295}
-  - actionName: Tirer
+  - actionName: AttaquerArc
     buttonText: {fileID: 1348308169}
-  - actionName: Ramasser
+  - actionName: PrendreItems
     buttonText: {fileID: 1911621601}
   playerInputs: {fileID: 2053494163}
 --- !u!114 &258257557
@@ -1341,7 +1341,7 @@ GameObject:
   - component: {fileID: 623427034}
   - component: {fileID: 623427033}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ButtonRetour
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3807,6 +3807,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: KeyBindManager, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 1810908559339568751, guid: bebf475c6256037628e834cf6163e9e5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: AttaquerArc
+      objectReference: {fileID: 0}
     - target: {fileID: 1821719872437097919, guid: bebf475c6256037628e834cf6163e9e5,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -4771,6 +4776,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: KeyBindManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7813809507310560115, guid: bebf475c6256037628e834cf6163e9e5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: PrendreItems
       objectReference: {fileID: 0}
     - target: {fileID: 7859944012628849929, guid: bebf475c6256037628e834cf6163e9e5,
         type: 3}
