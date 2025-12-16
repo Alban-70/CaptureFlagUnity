@@ -28,7 +28,7 @@ public class PlayerDialogue : MonoBehaviour
     private bool isTyping = false;
     private bool isDialoging = false;
     private bool getCoin = false;
-    [HideInInspector] public bool canStartQuest = false;
+    [HideInInspector] public bool canStartQuest = true;
 
     private Coroutine typingCoroutine;
 

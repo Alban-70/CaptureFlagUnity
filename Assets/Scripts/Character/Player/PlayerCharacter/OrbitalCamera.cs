@@ -11,7 +11,7 @@ public class OrbitCamera : MonoBehaviour
     private float yMin = -50f;
     private float yMax = 70f;
 
-    private Vector3 targetOffset = new Vector3(0.3f, 1.7f, 0); // hauteur caméra
+    private Vector3 targetOffset = new Vector3(0.3f, 5.1f, 0); // hauteur caméra
 
     private float x; // horizontal camera angle
     private float y; // vertical camera angle
