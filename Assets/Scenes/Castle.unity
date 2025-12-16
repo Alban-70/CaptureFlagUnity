@@ -20129,6 +20129,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Village
       objectReference: {fileID: 0}
+    - target: {fileID: 5690908740724433704, guid: d0cb0aaa1205aa6468d5800a85693c89,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -78.62345
+      objectReference: {fileID: 0}
+    - target: {fileID: 5690908740724433704, guid: d0cb0aaa1205aa6468d5800a85693c89,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -5.0727396
+      objectReference: {fileID: 0}
+    - target: {fileID: 5690908740724433704, guid: d0cb0aaa1205aa6468d5800a85693c89,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 103.28053
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
