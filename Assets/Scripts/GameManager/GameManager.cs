@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
 
     public void OnIntroCinematicFinished()
     {
-        Destroy(cinemachineCamera);
+        cinemachineCamera.gameObject.SetActive(false);
         uI_Manager.ShowUI_ElementsInGame();
 
         audioManager.PlayDebutJeu();
