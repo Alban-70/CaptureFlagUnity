@@ -13,7 +13,15 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private Canvas startMenu;
     [SerializeField] private Image overlay;
     [SerializeField] private Image settingsCanvas;
-    [SerializeField] private RawImage crosshair;
+    [SerializeField] private Image creditsCanvas;
+
+    [Header("Elements to hide during cinematic")]
+    [SerializeField] private GameObject miniMap;
+    [SerializeField] private GameObject crosshair;
+    [SerializeField] private GameObject healthBar;
+    [SerializeField] private GameObject arrowContainer;
+    [SerializeField] private GameObject questsContainer;
+
     public TextMeshProUGUI textQuest;
     public Image targetQuestImage;
     public Sprite questsDone;
@@ -32,6 +40,7 @@ public class UI_Manager : MonoBehaviour
     private float cursorScale = 0.5f;
     private float fadeDuration = 5f;
     private bool showCrosshair = false;
+    private bool isInCinematic = true;
 
 
 
@@ -57,9 +66,34 @@ public class UI_Manager : MonoBehaviour
             Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.Auto);
         }
 
-        crosshair.gameObject.SetActive(
-            playerCombat.currentWeapon == PlayerCombat.WeaponType.Bow
-        );
+        if (!isInCinematic)
+        {
+            crosshair.gameObject.SetActive(
+                playerCombat.currentWeapon == PlayerCombat.WeaponType.Bow
+            );
+        }
+        
+    }
+
+
+    public void ShowUI_ElementsInGame()
+    {
+        isInCinematic = false;
+        miniMap.SetActive(true);
+        crosshair.SetActive(true);
+        healthBar.SetActive(true);
+        arrowContainer.SetActive(true);
+        questsContainer.SetActive(true);
+    }
+
+    public void HideUI_ElementsInGame()
+    {
+        isInCinematic = true;
+        miniMap.SetActive(false);
+        crosshair.SetActive(false);
+        healthBar.SetActive(false);
+        arrowContainer.SetActive(false);
+        questsContainer.SetActive(false);
     }
 
     public void TextCaptureZone()
@@ -105,6 +139,17 @@ public class UI_Manager : MonoBehaviour
     public void HideSettings()
     {
         settingsCanvas.gameObject.SetActive(false);
+        ShowOverlay();
+    }
+
+    public void ShowCredits()
+    {
+        creditsCanvas.gameObject.SetActive(true);
+    }
+
+    public void HideCredits()
+    {
+        creditsCanvas.gameObject.SetActive(false);
         ShowOverlay();
     }
 

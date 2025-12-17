@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Playables;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PauseManager pauseManager; 
     [SerializeField] private KeyBindManager keyBindManager; 
     [SerializeField] private UI_Manager uI_Manager; 
+
+    
+
+    [Header("Timeline & Camera Cinemachine")]
+    [SerializeField] private PlayableDirector introTimeline;
+    [SerializeField] private Camera cinemachineCamera;
 
     [Header("UI Elements")]
     [SerializeField] private Slider sliderVolume; 
@@ -65,14 +72,32 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        Time.timeScale = 1f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        audioManager.PlayDebutJeu();
         uI_Manager.HideStartMenu();
-        // loader.StartLoading("Scenes/Castle"); // lance le loading UI
+        Time.timeScale = 1f;
+
+        if (introTimeline != null)
+        {
+            uI_Manager.HideUI_ElementsInGame();
+            introTimeline.Play();
+        }
+        else
+        {
+            // fallback si pas de Timeline
+            OnIntroCinematicFinished();
+        }
     }
+
+    public void OnIntroCinematicFinished()
+    {
+        Destroy(cinemachineCamera);
+        uI_Manager.ShowUI_ElementsInGame();
+
+        audioManager.PlayDebutJeu();
+    }
+
     public void ShowWinning()
     {
         Time.timeScale = 0f;
@@ -88,6 +113,10 @@ public class GameManager : MonoBehaviour
     {
         uI_Manager.ShowSettings();
     }
+    public void ShowCredits()
+    {
+        uI_Manager.ShowCredits();
+    }
 
     public void RestartGame()
     {
@@ -99,10 +128,6 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(currentScene);
     }
 
-    public void ShowCredits()
-    {
-        Debug.Log("Show credits");
-    }
 
     public void QuitGame()
     {
