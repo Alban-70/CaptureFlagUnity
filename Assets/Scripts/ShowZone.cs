@@ -24,7 +24,7 @@ public class ShowZone : MonoBehaviour
 
     private LineRenderer lr;
     private float timer = 0f;
-    private float captureDuration = 10f; // Pour 2 minutes
+    private float captureDuration = 30f; // Pour 30 secondes
     private int segments = 64;
     private bool isCapturing = false;
     private bool isCaptured = false;

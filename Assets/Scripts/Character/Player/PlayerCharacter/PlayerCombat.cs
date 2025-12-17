@@ -27,7 +27,7 @@ public class PlayerCombat : MonoBehaviour
     private Vector3 positionHold = new Vector3(0.1562f, -0.0224f, 0.0272f); // Position de prévisualisation
     private Quaternion rotationHold = Quaternion.Euler(77.569f, -275.068f, -362.837f); // Rotation de prévisualisation
     private Vector3 arrowVector; // Direction ou vecteur utilisé pour le tir de la flèche
-    private int nbArrows = 0;
+    private int nbArrows = 60;
     private float cantShotFadeTime = 1f;
     private Coroutine cantShotCoroutine;
     private float speedLaunchArrow = 65f; // Vitesse de lancement des flèches
@@ -46,6 +46,7 @@ public class PlayerCombat : MonoBehaviour
     /// </summary>
     void Awake()
     {
+        numberOfArrows.text = nbArrows.ToString();
         playerInputs = GetComponent<PlayerInputs>();
         playerMovement = GetComponent<PlayerMovement>();
         // Récupère les MeshRenderer de la prévisualisation de flèche

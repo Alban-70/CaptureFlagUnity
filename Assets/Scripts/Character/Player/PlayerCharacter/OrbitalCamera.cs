@@ -4,7 +4,7 @@ public class OrbitCamera : MonoBehaviour
 {
     [SerializeField] private Transform target; // Objet à suivre (le joueur)
 
-    private float distance = 3f;
+    private float distance = 5f;
     private float xSpeed = 200f;
     private float ySpeed = 120f;
 

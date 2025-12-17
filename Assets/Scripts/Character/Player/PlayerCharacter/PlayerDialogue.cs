@@ -12,6 +12,8 @@ public class PlayerDialogue : MonoBehaviour
     [SerializeField] private Image textGetSword;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private UI_Manager uI_Manager;
+    [SerializeField] private GameObject swordHand;
+    [SerializeField] private GameObject swordBack;
     
 
     private PlayerInputs playerInputs;
@@ -28,7 +30,7 @@ public class PlayerDialogue : MonoBehaviour
     private bool isTyping = false;
     private bool isDialoging = false;
     private bool getCoin = false;
-    [HideInInspector] public bool canStartQuest = true;
+    [HideInInspector] public bool canStartQuest = false;
 
     private Coroutine typingCoroutine;
 
@@ -40,6 +42,8 @@ public class PlayerDialogue : MonoBehaviour
         playerCombat = GetComponent<PlayerCombat>();
         healthSystem = GetComponent<HealthSystem>();
 
+        swordHand.SetActive(false);
+        swordBack.SetActive(false);
         dialogCanvas.gameObject.SetActive(false);
 
         Color c = textGetSword.color;
@@ -143,6 +147,8 @@ public class PlayerDialogue : MonoBehaviour
 
         if (currentPNJ.tag =="Homeless")
         {
+            swordHand.SetActive(true);
+            swordBack.SetActive(true);
             StartCoroutine(FadeInTextGetSword(1));
             playerCombat.getSword = true;
             playerCombat.SwitchToSword();
